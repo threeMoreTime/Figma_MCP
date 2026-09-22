@@ -35,7 +35,7 @@ test("Contract Validation: Anomaly 1 - Unknown schemaVersion is rejected", () =>
   assert.ok(err, "Must report schemaVersion validation error");
 });
 
-test("Contract Validation: Anomaly 2 - Duplicate business identity detected", () => {
+test("Contract Validation: Anomaly 2 - Duplicate compound business identity rejected by official validator", () => {
   const blueprintWithDuplicates = {
     schemaVersion: "1.0.0",
     blueprintId: "bp_dup_test",
@@ -43,31 +43,92 @@ test("Contract Validation: Anomaly 2 - Duplicate business identity detected", ()
     title: "Duplicate Check",
     dataSource: "SYNTHETIC",
     rootNode: {
-      identity: { screenId: "users", semanticId: "table_elem", instanceKey: "dup_key_1" },
+      identity: { screenId: "users", semanticId: "table_elem", state: "ready", breakpoint: "desktop", instanceKey: "dup_key_1" },
       intendedComponent: "Container",
       children: [
         {
-          identity: { screenId: "users", semanticId: "table_elem", instanceKey: "dup_key_1" },
+          identity: { screenId: "users", semanticId: "table_elem", state: "ready", breakpoint: "desktop", instanceKey: "dup_key_1" },
           intendedComponent: "Button",
         },
       ],
     },
   };
 
-  // Helper check for duplicate element identities in blueprint tree
-  function findDuplicateIdentities(node: any, seen = new Set<string>(), dups: string[] = []): string[] {
-    const key = `${node.identity.screenId}:${node.identity.semanticId}:${node.identity.instanceKey}`;
-    if (seen.has(key)) dups.push(key);
-    seen.add(key);
-    for (const child of node.children || []) {
-      findDuplicateIdentities(child, seen, dups);
-    }
-    return dups;
-  }
+  const res = validateContract("blueprint", blueprintWithDuplicates);
+  assert.equal(res.success, false, "Must reject duplicate compound element identity");
+  const dupErr = res.diagnostics.find((d) => d.code === "DUPLICATE_ELEMENT_IDENTITY");
+  assert.ok(dupErr, "Must emit DUPLICATE_ELEMENT_IDENTITY diagnostic");
+  assert.ok(dupErr.message.includes("users:ready:desktop:table_elem:dup_key_1"));
+});
 
-  const duplicates = findDuplicateIdentities(blueprintWithDuplicates.rootNode);
-  assert.equal(duplicates.length, 1);
-  assert.equal(duplicates[0], "users:table_elem:dup_key_1");
+test("Contract Validation: Legitimate different states/breakpoints/instanceKeys are accepted by official validator", () => {
+  const validDifferentIdentities = {
+    schemaVersion: "1.0.0",
+    blueprintId: "bp_valid_identities",
+    screenId: "users",
+    title: "Valid Check",
+    dataSource: "SYNTHETIC",
+    rootNode: {
+      identity: { screenId: "users", semanticId: "table_elem", state: "ready", breakpoint: "desktop", instanceKey: "k1" },
+      intendedComponent: "Container",
+      children: [
+        {
+          identity: { screenId: "users", semanticId: "table_elem", state: "loading", breakpoint: "desktop", instanceKey: "k1" },
+          intendedComponent: "Spinner",
+        },
+        {
+          identity: { screenId: "users", semanticId: "table_elem", state: "ready", breakpoint: "mobile", instanceKey: "k1" },
+          intendedComponent: "MobileCard",
+        },
+        {
+          identity: { screenId: "users", semanticId: "table_elem", state: "ready", breakpoint: "desktop", instanceKey: "k2" },
+          intendedComponent: "Button",
+        },
+      ],
+    },
+  };
+
+  const res = validateContract("blueprint", validDifferentIdentities);
+  assert.equal(res.success, true, "Legitimate distinct states, breakpoints, or instanceKeys must be accepted");
+});
+
+test("Contract Validation: Contradictory provenance declaration rejected by official validator", () => {
+  const contradictoryManifest = {
+    schemaVersion: "1.0.0",
+    packageId: "pkg_contradictory_prov",
+    screenId: "users",
+    revision: 1,
+    sourceFileRef: "figma://file/test",
+    rootNodeId: "0:1",
+    dataSource: "REAL", // Declares REAL
+    provenance: {
+      designOrigin: "SYNTHETIC_SPEC", // Contradiction: all synthetic!
+      componentOrigin: "SYNTHETIC_FIXTURE",
+      tokenOrigin: "SYNTHETIC_CANONICAL",
+      dataOrigin: "SYNTHETIC_MOCK",
+    },
+    exporterCommitSha: "abc",
+    canonicalTokenHash: "tok1",
+    contentHash: "hash1",
+    resourceHashes: {
+      "figma.raw.json": "hash",
+      "context.json": "hash",
+      "source-map.json": "hash",
+      "tokens.snapshot.json": "hash",
+      "components.used.json": "hash",
+      "interactions.json": "hash",
+      "diagnostics.json": "hash",
+    },
+    approval: {
+      status: "PENDING",
+      bindingContentHash: "hash1",
+    },
+  };
+
+  const res = validateContract("manifest", contradictoryManifest);
+  assert.equal(res.success, false, "Must reject contradictory provenance declarations");
+  const provErr = res.diagnostics.find((d) => d.code === "PROVENANCE_DECLARATION_CONTRADICTION");
+  assert.ok(provErr, "Must emit PROVENANCE_DECLARATION_CONTRADICTION diagnostic");
 });
 
 test("Contract Validation: Anomaly 6 - Boolean stringified ('false') is rejected", () => {

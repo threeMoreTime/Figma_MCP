@@ -2,31 +2,75 @@
   "id": "10:100",
   "name": "UsersScreen",
   "type": "FRAME",
+  "visible": true,
+  "x": 0,
+  "y": 0,
   "width": 1200,
   "height": 800,
-  "layoutMode": "VERTICAL",
-  "itemSpacing": 16,
+  "layout": {
+    "mode": "VERTICAL",
+    "wrap": "NO_WRAP",
+    "layoutSizingHorizontal": "FIXED",
+    "layoutSizingVertical": "FIXED",
+    "paddingTop": 16,
+    "paddingRight": 16,
+    "paddingBottom": 16,
+    "paddingLeft": 16,
+    "itemSpacing": 16
+  },
   "children": [
     {
       "id": "10:101",
       "name": "HeaderArea",
       "type": "FRAME",
-      "layoutMode": "HORIZONTAL",
-      "itemSpacing": 16,
+      "visible": true,
+      "x": 16,
+      "y": 16,
+      "width": 1168,
+      "height": 48,
+      "layout": {
+        "mode": "HORIZONTAL",
+        "wrap": "NO_WRAP",
+        "paddingTop": 0,
+        "paddingRight": 0,
+        "paddingBottom": 0,
+        "paddingLeft": 0,
+        "itemSpacing": 16
+      },
       "children": [
         {
           "id": "10:102",
           "name": "PageTitle",
           "type": "TEXT",
-          "characters": "用户管理"
+          "visible": true,
+          "x": 0,
+          "y": 0,
+          "width": 200,
+          "height": 32,
+          "text": {
+            "characters": "用户管理",
+            "fontFamily": "Inter",
+            "fontSize": 20,
+            "fontWeight": 600
+          }
         },
         {
           "id": "10:103",
           "name": "CreateButton",
           "type": "INSTANCE",
-          "mainComponentKey": "btn_primary",
-          "variantProperties": {
-            "type": "primary"
+          "visible": true,
+          "x": 1000,
+          "y": 0,
+          "width": 90,
+          "height": 32,
+          "component": {
+            "isInstance": true,
+            "mainComponentId": "cmp_btn",
+            "mainComponentKey": "btn_primary",
+            "mainComponentName": "PrimaryButton",
+            "variantProperties": {
+              "type": "primary"
+            }
           }
         }
       ]
@@ -35,7 +79,17 @@
       "id": "10:104",
       "name": "UserTable",
       "type": "INSTANCE",
-      "mainComponentKey": "table_users"
+      "visible": true,
+      "x": 16,
+      "y": 80,
+      "width": 1168,
+      "height": 600,
+      "component": {
+        "isInstance": true,
+        "mainComponentId": "cmp_table",
+        "mainComponentKey": "table_users",
+        "mainComponentName": "UserTable"
+      }
     }
   ]
 }

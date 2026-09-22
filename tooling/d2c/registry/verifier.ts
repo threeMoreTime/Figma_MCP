@@ -28,11 +28,24 @@ export function resolveModulePath(modulePath: string, repoRoot: string): string 
 
   // Handle external node module (e.g. antd)
   if (!modulePath.startsWith(".") && !modulePath.startsWith("@/") && !modulePath.startsWith("/")) {
-    // Check in repoRoot node_modules or current tooling node_modules
-    const localNodeModules = resolve(repoRoot, "node_modules", modulePath);
-    const toolingNodeModules = resolve("node_modules", modulePath);
-    if (existsSync(localNodeModules) || existsSync(toolingNodeModules)) {
-      return modulePath; // Node resolution succeeds
+    const candidateDirs = [
+      resolve(repoRoot, "node_modules", modulePath),
+      resolve("node_modules", modulePath),
+    ];
+    for (const dir of candidateDirs) {
+      if (existsSync(dir)) {
+        const pkgJsonPath = join(dir, "package.json");
+        if (existsSync(pkgJsonPath)) {
+          try {
+            const pkg = JSON.parse(readFileSync(pkgJsonPath, "utf-8"));
+            const typingsCandidate = pkg.typings || pkg.types || "index.d.ts";
+            const fullTypingsPath = resolve(dir, typingsCandidate);
+            if (existsSync(fullTypingsPath)) {
+              return fullTypingsPath;
+            }
+          } catch {}
+        }
+      }
     }
     return null;
   }
@@ -100,13 +113,23 @@ export function verifyComponentRecord(
     return { verified: false, resolvedFilePath: null, exportKind: "none", diagnostics };
   }
 
-  // 2. Check props boolean typing (Negative test: boolean stringified)
+  // 2. Check props typing and constraints
   for (const [propName, propMeta] of Object.entries(record.props || {})) {
     if (propMeta.type === "boolean" && propMeta.defaultValue !== undefined) {
       if (typeof propMeta.defaultValue === "string") {
         diagnostics.push({
           code: "BOOLEAN_STRINGIFIED",
           message: `Component '${componentName}' prop '${propName}' has stringified boolean defaultValue: "${propMeta.defaultValue}". Must be true or false boolean.`,
+          severity: "ERROR",
+          path: `components.${componentName}.props.${propName}.defaultValue`,
+        });
+      }
+    }
+    if (propMeta.type === "enum" && propMeta.enumOptions && propMeta.defaultValue !== undefined) {
+      if (!propMeta.enumOptions.includes(String(propMeta.defaultValue))) {
+        diagnostics.push({
+          code: "INVALID_PROP_ENUM",
+          message: `Component '${componentName}' prop '${propName}' defaultValue '${propMeta.defaultValue}' is not included in enumOptions: [${propMeta.enumOptions.join(", ")}].`,
           severity: "ERROR",
           path: `components.${componentName}.props.${propName}.defaultValue`,
         });
@@ -126,17 +149,7 @@ export function verifyComponentRecord(
     return { verified: false, resolvedFilePath: null, exportKind: "none", diagnostics };
   }
 
-  // If it is an external package like antd
-  if (!resolvedPath.includes("/") && !resolvedPath.includes("\\")) {
-    return {
-      verified: diagnostics.filter((d) => d.severity === "ERROR").length === 0,
-      resolvedFilePath: resolvedPath,
-      exportKind: record.exportName === "default" ? "default" : "named",
-      diagnostics,
-    };
-  }
-
-  // 4. Static AST export verification for local source files
+  // 4. Static AST export verification for local and external module definitions
   try {
     const fileContent = readFileSync(resolvedPath, "utf-8");
     const sourceFile = ts.createSourceFile(
@@ -147,7 +160,8 @@ export function verifyComponentRecord(
     );
 
     let hasDefaultExport = false;
-    const namedExports = new Set<string>();
+    const namedValueExports = new Set<string>();
+    const namedTypeExports = new Set<string>();
 
     function visit(node: ts.Node) {
       // export default ...
@@ -164,35 +178,50 @@ export function verifyComponentRecord(
         hasDefaultExport = true;
       }
 
-      // export const / function / class (named)
+      // export const / function / class (named values)
       if (
         (ts.isVariableStatement(node) ||
           ts.isFunctionDeclaration(node) ||
-          ts.isClassDeclaration(node) ||
-          ts.isTypeAliasDeclaration(node) ||
-          ts.isInterfaceDeclaration(node)) &&
+          ts.isClassDeclaration(node)) &&
         node.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword) &&
         !node.modifiers?.some((m) => m.kind === ts.SyntaxKind.DefaultKeyword)
       ) {
         if (ts.isVariableStatement(node)) {
           for (const decl of node.declarationList.declarations) {
             if (ts.isIdentifier(decl.name)) {
-              namedExports.add(decl.name.text);
+              namedValueExports.add(decl.name.text);
             }
           }
         } else if (node.name && ts.isIdentifier(node.name)) {
-          namedExports.add(node.name.text);
+          namedValueExports.add(node.name.text);
         }
       }
 
-      // export { A, B as C, D as default }
+      // export type / interface (type declarations cannot masquerade as components)
+      if (
+        (ts.isTypeAliasDeclaration(node) || ts.isInterfaceDeclaration(node)) &&
+        node.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)
+      ) {
+        if (node.name && ts.isIdentifier(node.name)) {
+          namedTypeExports.add(node.name.text);
+        }
+      }
+
+      // export { A, B as C, D as default } or export type { T }
       if (ts.isExportDeclaration(node) && node.exportClause && ts.isNamedExports(node.exportClause)) {
+        const isDeclarationTypeOnly = node.isTypeOnly;
         for (const spec of node.exportClause.elements) {
           const exportId = spec.name.text;
-          if (exportId === "default") {
-            hasDefaultExport = true;
+          const isSpecTypeOnly = isDeclarationTypeOnly || spec.isTypeOnly;
+
+          if (isSpecTypeOnly) {
+            namedTypeExports.add(exportId);
           } else {
-            namedExports.add(exportId);
+            if (exportId === "default") {
+              hasDefaultExport = true;
+            } else {
+              namedValueExports.add(exportId);
+            }
           }
         }
       }
@@ -205,11 +234,10 @@ export function verifyComponentRecord(
     // Check if export matches
     if (record.exportName === "default") {
       if (!hasDefaultExport) {
-        // Module exists but default export does not exist
-        if (namedExports.size > 0) {
+        if (namedValueExports.size > 0 || namedTypeExports.size > 0) {
           diagnostics.push({
             code: "EXPORT_KIND_MISMATCH",
-            message: `Component '${componentName}' requested export 'default', but file has named exports: [${Array.from(namedExports).join(", ")}] and no default export.`,
+            message: `Component '${componentName}' requested export 'default', but file has named exports: [${Array.from(namedValueExports).join(", ")}] and no default export.`,
             severity: "ERROR",
             path: `components.${componentName}.exportName`,
           });
@@ -223,8 +251,17 @@ export function verifyComponentRecord(
         }
       }
     } else {
-      // Named export
-      if (!namedExports.has(record.exportName)) {
+      // Named export requested
+      if (namedValueExports.has(record.exportName)) {
+        // Valid named component export
+      } else if (namedTypeExports.has(record.exportName)) {
+        diagnostics.push({
+          code: "TYPE_ONLY_EXPORT",
+          message: `Component '${componentName}' references '${record.exportName}', which is a type or interface declaration, not a renderable component value.`,
+          severity: "ERROR",
+          path: `components.${componentName}.exportName`,
+        });
+      } else {
         if (hasDefaultExport) {
           diagnostics.push({
             code: "EXPORT_KIND_MISMATCH",
@@ -235,7 +272,7 @@ export function verifyComponentRecord(
         } else {
           diagnostics.push({
             code: "EXPORT_NOT_FOUND",
-            message: `Component '${componentName}' named export '${record.exportName}' not found in '${resolvedPath}'. Available: [${Array.from(namedExports).join(", ")}]`,
+            message: `Component '${componentName}' named export '${record.exportName}' not found in '${resolvedPath}'. Available: [${Array.from(namedValueExports).join(", ")}]`,
             severity: "ERROR",
             path: `components.${componentName}.exportName`,
           });
@@ -265,8 +302,11 @@ export function verifyComponentRecord(
     }
 
     const hasErrors = diagnostics.some((d) => d.severity === "ERROR");
+    // Unverified external dependencies strictly prevent verified=true
+    const verified = !hasErrors && unresolvableDeps.length === 0;
+
     return {
-      verified: !hasErrors,
+      verified,
       resolvedFilePath: resolvedPath,
       exportKind: record.exportName === "default" ? "default" : "named",
       diagnostics,

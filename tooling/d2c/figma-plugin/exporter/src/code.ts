@@ -39,6 +39,8 @@ interface RawNodePayload {
   layout?: {
     mode: "NONE" | "HORIZONTAL" | "VERTICAL";
     wrap?: "NO_WRAP" | "WRAP";
+    layoutSizingHorizontal?: "FIXED" | "HUG" | "FILL";
+    layoutSizingVertical?: "FIXED" | "HUG" | "FILL";
     paddingTop: number;
     paddingRight: number;
     paddingBottom: number;
@@ -137,6 +139,8 @@ async function runExport(): Promise<void> {
       payload.layout = {
         mode: node.layoutMode === "NONE" ? "NONE" : node.layoutMode === "HORIZONTAL" ? "HORIZONTAL" : "VERTICAL",
         wrap: "layoutWrap" in node && node.layoutWrap === "WRAP" ? "WRAP" : "NO_WRAP",
+        layoutSizingHorizontal: "layoutSizingHorizontal" in node ? ((node as any).layoutSizingHorizontal as "FIXED" | "HUG" | "FILL") : undefined,
+        layoutSizingVertical: "layoutSizingVertical" in node ? ((node as any).layoutSizingVertical as "FIXED" | "HUG" | "FILL") : undefined,
         paddingTop: "paddingTop" in node ? (node.paddingTop as number) : 0,
         paddingRight: "paddingRight" in node ? (node.paddingRight as number) : 0,
         paddingBottom: "paddingBottom" in node ? (node.paddingBottom as number) : 0,
@@ -178,6 +182,15 @@ async function runExport(): Promise<void> {
         characters: textNode.characters,
         fontSize: typeof textNode.fontSize === "number" ? textNode.fontSize : undefined,
       };
+
+      try {
+        if (typeof (textNode as any).getStyledTextSegments === "function") {
+          const segs = (textNode as any).getStyledTextSegments(["fontSize", "fontName", "fontWeight", "fills", "lineHeight"]);
+          if (segs && Array.isArray(segs)) {
+            payload.text.segments = segs;
+          }
+        }
+      } catch {}
 
       // Record font dependency
       if (typeof textNode.fontName === "object" && textNode.fontName !== null) {
@@ -274,6 +287,12 @@ async function runExport(): Promise<void> {
                 modes: coll.modes,
                 defaultModeId: coll.defaultModeId,
               };
+            } else {
+              diagnostics.push({
+                code: "COLLECTION_NOT_FOUND",
+                message: `Variable collection '${v.variableCollectionId}' returned null from Figma API.`,
+                severity: "WARNING",
+              });
             }
           } catch (e: any) {
             diagnostics.push({
@@ -283,6 +302,12 @@ async function runExport(): Promise<void> {
             });
           }
         }
+      } else {
+        diagnostics.push({
+          code: "VARIABLE_NOT_FOUND",
+          message: `Variable '${varId}' was referenced but returned null from Figma API.`,
+          severity: "WARNING",
+        });
       }
     } catch (e: any) {
       diagnostics.push({
@@ -292,6 +317,7 @@ async function runExport(): Promise<void> {
       });
     }
   }
+
 
   // 3. Render PNG Screenshot of root node
   let screenshotBase64 = "";

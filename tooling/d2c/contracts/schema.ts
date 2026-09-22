@@ -143,6 +143,7 @@ export const DesignNodeContextSchema: z.ZodType<any> = z.lazy(() =>
     children: z.array(DesignNodeContextSchema).default([]),
   })
 );
+export type DesignNodeContext = z.infer<typeof DesignNodeContextSchema>;
 
 export const DesignContextSchema = z.object({
   schemaVersion: z.literal(SCHEMA_VERSION),

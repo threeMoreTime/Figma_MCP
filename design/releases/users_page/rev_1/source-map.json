@@ -1,18 +1,26 @@
 {
-  "version": "1.0.0",
   "screenId": "users_page",
+  "revision": 1,
   "elements": {
-    "users.header.title": {
+    "users_page": {
+      "figmaNodeId": "10:100",
+      "targetDomId": "users_page-usersscreen"
+    },
+    "users_page.headerarea": {
+      "figmaNodeId": "10:101",
+      "targetDomId": "users_page-headerarea"
+    },
+    "users_page.headerarea.pagetitle": {
       "figmaNodeId": "10:102",
-      "targetDomId": "users-page-title"
+      "targetDomId": "users_page-pagetitle"
     },
-    "users.header.create_btn": {
+    "users_page.headerarea.createbutton": {
       "figmaNodeId": "10:103",
-      "targetDomId": "users-create-btn"
+      "targetDomId": "users_page-createbutton"
     },
-    "users.content.table": {
+    "users_page.usertable": {
       "figmaNodeId": "10:104",
-      "targetDomId": "users-table-container"
+      "targetDomId": "users_page-usertable"
     }
   }
 }

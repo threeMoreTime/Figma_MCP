@@ -43,6 +43,9 @@ const initialUsers: UserItem[] = [
 
 export interface UsersPageProps {
   initialState?: "ready" | "loading" | "empty" | "error";
+  revision?: number;
+  contentHash?: string;
+  spacing?: number;
   titleText?: string;
   createButtonText?: string;
   createButtonVariant?: "primary" | "dashed" | "default";
@@ -50,6 +53,9 @@ export interface UsersPageProps {
 
 export const UsersPage: React.FC<UsersPageProps> = ({
   initialState = "ready",
+  revision = 1,
+  contentHash = "",
+  spacing = 16,
   titleText = "用户管理",
   createButtonText = "新建用户",
   createButtonVariant = "primary",
@@ -112,8 +118,11 @@ export const UsersPage: React.FC<UsersPageProps> = ({
     <ConfigProvider theme={antdTheme}>
       <div
         id="fixture-app-root"
+        data-d2c-revision={revision}
+        data-d2c-content-hash={contentHash}
+        data-d2c-spacing={spacing}
         style={{
-          padding: "var(--d2c-spacing-md, 16px)",
+          padding: spacing !== undefined ? `${spacing}px` : "var(--d2c-spacing-md, 16px)",
           backgroundColor: "var(--d2c-color-bg-container, #ffffff)",
           borderRadius: "var(--d2c-borderRadius-base, 6px)",
           border: "1px solid var(--d2c-color-border, #d9d9d9)",
@@ -156,7 +165,7 @@ export const UsersPage: React.FC<UsersPageProps> = ({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: 16,
+            marginBottom: spacing !== undefined ? spacing : 16,
           }}
         >
           <Title

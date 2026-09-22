@@ -192,36 +192,58 @@
 
 依据总控规范，当前各维度评级如下：
 
-| 验证维度 | 当前状态 | 判定依据与说明 |
-| :--- | :---: | :--- |
-| **UNIT_VERIFIED** | **PASS** | 契约校验、AST 模块分析、Token 规则、哈希确定性与 37 项单元测试全绿。 |
-| **LIVE_FIGMA_EXPORT** | **BLOCKED** | **插件已构建就绪，保持离线与零 MCP。因尚未获得用户在真实 Figma 画布中执行导出，实机导出保持 BLOCKED，绝不造假。** |
-| **DESIGN_TO_FIXTURE** | **PASS** | 基于离线合成设计包完成用户管理页原型开发，4 种状态及表单交互全部通过 Playwright 自动化验证。 |
-| **DESIGN_CHANGE_PROPAGATION**| **PASS** | 离线设计包完成 Rev 1 -> Rev 2 变更传播、精确定位元素、内容哈希变动、审批失效与组件响应更新。 |
-| **PRODUCTION_REPO_INTEGRATION**| **NOT_RUN** | 严格遵循约束，停留在 `examples/fixture-app`，不修改业务仓库、不写入业务路由。 |
+| 验证维度 | 当前状态 | 判定依据与说明 | 运行分类 |
+| :--- | :---: | :--- | :--- |
+| **UNIT_VERIFIED** | **PASS** | 契约校验、AST 模块分析、Token 暂存隔离、进件流、安全防线与变更传播共 60 项测试全绿（60 passed, 0 failed）。`tsc --noEmit` 全量 0 错误。 | **Module Implemented** |
+| **LIVE_FIGMA_EXPORT** | **BLOCKED** | **插件已构建就绪（dist/manifest.json），保持离线与零 MCP。因尚未获得用户在真实 Figma 画布中执行导出，实机导出保持 BLOCKED，绝不造假。** | **Waiting for Live User Action** |
+| **DESIGN_TO_FIXTURE** | **PASS** | 独立 `fixture-app` 经 Playwright 1.63.0 自动化测试 100% 通过（四状态、过滤、新建弹窗、表单异常拦截与恢复、DOM 坐标测量）。 | **Mock Integrated & Browser Captured** |
+| **DESIGN_CHANGE_PROPAGATION**| **PASS** | 真实单页适配器 `page-adapter.ts` 动态消费 Rev 1 与 Rev 2 设计包，Playwright 验证间距 16px -> 24px、标题变动、按钮样式变动，旧审批严格失效。 | **Module Implemented & Browser Verified** |
+| **PRODUCTION_REPO_INTEGRATION**| **NOT_RUN** | 严格遵循约束，停留在 `examples/fixture-app`，不修改业务仓库 `..\workspace\cs_admin-client`、不写入业务路由。 | **Inspected (Read-Only)** |
 
 ---
 
-## 七、最小人工操作清单 (Human Action Checklist)
+## 七、阶段 3A 深度加固与缺陷修复追溯表 (Remediation Traceability Matrix)
 
-由于本系统**严禁使用 Figma MCP**，且不自动修改业务仓库，若您希望在后续环节打通真实 Figma 画布导出，只需执行以下最小操作：
+遵循“每个问题必须先有调用真实模块/CLI 的失败回归用例，再修复”原则，记录追溯全链路：
 
-1. **加载只读导出插件**：
-   - 打开桌面版或网页版 Figma；
-   - 点击菜单：`Plugins` -> `Development` -> `Import plugin from manifest...`；
-   - 选择本工作区下的 Manifest 文件：
-     `C:\Users\Administrator\Desktop\Antigravity_No_Figma_MCP_Prompts\tooling\d2c\figma-plugin\exporter\dist\manifest.json`
-2. **选择目标 Frame**：
-   - 打开您的授权设计文件，选中需要导出的页面顶级 Frame（例如“用户管理”设计稿）。
-3. **导出设计包**：
-   - 在插件面板中点击 `Download Full Release JSON`；
-   - 将导出的 JSON 保存到本地工作区的 `design/releases/<screen>/rev_1/` 目录。
-4. **组件与主题审核**：
-   - 审阅生成的绑定提案文件 `docs/d2c/proposals/users_page-rev1-binding-proposal.json`；
-   - 确认 `AuthButton` 是否需配置具体权限字（如 `permission="user.create"`）。
+| 缺陷编号 | 责任入口 | 失败测试输入 | 断言要求 | 核心修复措施 | 回归结果 |
+| :--- | :--- | :--- | :--- | :--- | :---: |
+| **P1-01** | `figma-plugin/build.ts` | `dist/manifest.json` 加载路径 | `main` 与 `ui` 必须相对于 `dist/manifest.json` 正确解析为同目录文件，杜绝 `dist/dist/` 路径冗余 | 修正 `build.ts` 输出相对路径 `"main": "code.js"`, `"ui": "ui.html"`, `editorType: ["figma", "dev"]` | **PASS** (`tests/plugin-packaging.test.ts`) |
+| **P1-02** | `cli/intake.ts` & `normalizer/export-adapter.ts` | 原始插件导出的 Raw Export 结构 | 进件后生成的 `context.json` 必须通过 `validateContract("context")`；`--all` 必须同时校验 `design/releases/` 候选包 | 实现 `export-adapter.ts`、`cli/intake.ts` 与 `validateAllReleases`，支持 raw export -> 契约校验 -> 暂存隔离 -> 磁盘发布 | **PASS** (`tests/intake-pipeline.test.ts`) |
+| **P1-03** | `contracts/validate.ts` | 重复复合业务身份与矛盾 Provenance | 移除测试内置临时函数，由官方校验器直接拦截重复业务身份及 `dataSource: REAL` 但无 `REAL_*` 来源的矛盾声明 | 在 `contracts/validate.ts` 内置树遍历复合身份校验器与 Provenance 一致性校验器 | **PASS** (`tests/contracts.test.ts`) |
+| **P1-04** | `registry/verifier.ts` & `cli/resolve.ts` | 缺失导出（`DefinitelyMissingComponent`）、Type/Interface 假冒组件、未安装依赖 | 外部包组件必须真实存在于导出 AST/类型定义中；Type 不得伪装为组件；未安装依赖必须置 `verified: false` | 引入基于 TypeScript Compiler Host 的符号/类型定义解析；拦截类型别名与接口；主链路上接入 AST 验证 | **PASS** (`tests/targeted-verification.test.ts`) |
+| **P1-05** | `registry/binding-proposal.ts` | 动态 `components.used.json` 与差异 Token 快照 | 动态遍历所有用到的组件键名；标记 `SyntheticTag` 为提案级；根据快照真实差异动态计算 `diffCount` 与 `hasDivergence` | 移除硬编码映射，动态遍历消费组件并在候选表中索引；逐字段比对 Token 叶子节点生成差异与预览配置 | **PASS** (`tests/binding-proposal.test.ts`) |
+| **P1-06** | `adapter/page-adapter.ts`, `App.tsx`, `UsersPage.tsx` | Rev 1 与 Rev 2 真实设计包文件 | 测试不得手写预期对象；通过单页适配器动态转换为组件 props；Playwright 真实浏览器断言标题、按钮变体、16px/24px 间距，旧审批失效 | 创建 `page-adapter.ts`；`App.tsx` 与 `UsersPage.tsx` 消费参数并在 DOM 渲染 `data-d2c-*` 属性；Playwright 双版本演进验证 | **PASS** (`tests/change-propagation.test.ts`) |
+| **P1-07** | `tests/browser-verification.test.ts` & `contracts/measure.ts` | Playwright DOM 测量与异常提交 | 表单提交后重置沙箱状态；断言 `.ant-spin-spinning`；校验失败表单不关闭并反馈；尺寸比对负向测试拦截超差 | 每次提交后状态重置；断言 AntD 激活 Spinner；增加异常与恢复用例；新增 `compareDimensions` 负向拦截测试；区分草稿截图与正式基线 | **PASS** (`tests/browser-verification.test.ts`) |
+| **P1-08** | `normalizer/variables.ts` & `exporter/src/code.ts` | 跨集合别名同名 Mode、数值 `0`、布尔 `false`、API null | 跨集合引用按目标集合同名 Mode 解析，无同名则回退默认 Mode；数值 0 与布尔 false 严禁丢失；Figma API null 记诊断 | 升级 `resolveVariableToLiteral` 支持跨集合 Mode 解析及原始 Figma 变量格式；`code.ts` 捕获 Auto Layout 尺寸模式、分段并拦截 null | **PASS** (`tests/normalizer.test.ts`) |
+| **P1-09** | `contracts/hash.ts`, `cli/package.ts`, `tokens/builder.ts`, `ui.html` | 路径穿越（`../`）、缺失必备资源、构建报错覆盖、UI 原始 HTML 插值 | 拦截所有路径穿越；强制 7 项必备包资源；构建报错不覆写旧文件；插件 UI 绝不使用未转义 `innerHTML` | 实现 `.staging/` 暂存隔离与原子重命名；校验必需资源文件与相对路径安全；`ui.html` 全面重构为安全 DOM API | **PASS** (`tests/package-security.test.ts`) |
 
 ---
 
-## 八、停止点声明
+## 八、最小实机执行清单 (Minimal Live Action Checklist)
 
-本阶段工作已全部收拢于当前 D2C 工具工作区内，所有补验与阶段 3A 任务均已完成并验证。**按照总控约定，当前进程完全停止，不自动进入阶段 3B、阶段 4 或阶段 5，不修改业务仓库，不执行自动 Git 提交与推送。**
+本任务严格保持**零 Figma MCP**，业务仓库只读。
+在获得后续授权前，不执行任何自动推送与路由合并。若需在实机 Figma 中打通导出，仅需执行以下最小操作：
+
+1. **载入只读导出插件**：
+   - 打开桌面版 Figma（Figma Desktop）；
+   - 顶部菜单：`Plugins` -> `Development` -> `Import plugin from manifest...`；
+   - 选中工作区交付清单：
+     `tooling\d2c\figma-plugin\exporter\dist\manifest.json`
+2. **在 Figma 画布中执行导出**：
+   - 打开您的授权设计稿，选中需要导出的顶级 Frame（如用户管理页）；
+   - 右键运行 `Antigravity D2C Exporter`，在面板中点击 `Download Full Release JSON` 保存到本地。
+3. **执行官方进件管线**：
+   - 在终端运行：
+     ```bash
+     pnpm run d2c:intake --input <导出的json路径> --screen users_page --rev 3
+     ```
+   - 管线将自动执行：格式适配 -> 契约校验 -> 暂存隔离 -> 计算内容哈希 -> 写入 `design/releases/`。
+
+---
+
+## 九、停止点声明
+
+本轮“阶段 3A 修复与深度加固”工作已全部完成并闭环验证。
+**严格遵守指令约束，停止在阶段 3A 结束处，不进入阶段 3B、阶段 4 或阶段 5，不对业务仓库进行任何写入，不自动执行 Git 提交或推送。**
+

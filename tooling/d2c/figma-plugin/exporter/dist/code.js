@@ -68,6 +68,8 @@
           payload.layout = {
             mode: node.layoutMode === "NONE" ? "NONE" : node.layoutMode === "HORIZONTAL" ? "HORIZONTAL" : "VERTICAL",
             wrap: "layoutWrap" in node && node.layoutWrap === "WRAP" ? "WRAP" : "NO_WRAP",
+            layoutSizingHorizontal: "layoutSizingHorizontal" in node ? node.layoutSizingHorizontal : void 0,
+            layoutSizingVertical: "layoutSizingVertical" in node ? node.layoutSizingVertical : void 0,
             paddingTop: "paddingTop" in node ? node.paddingTop : 0,
             paddingRight: "paddingRight" in node ? node.paddingRight : 0,
             paddingBottom: "paddingBottom" in node ? node.paddingBottom : 0,
@@ -104,6 +106,15 @@
             characters: textNode.characters,
             fontSize: typeof textNode.fontSize === "number" ? textNode.fontSize : void 0
           };
+          try {
+            if (typeof textNode.getStyledTextSegments === "function") {
+              const segs = textNode.getStyledTextSegments(["fontSize", "fontName", "fontWeight", "fills", "lineHeight"]);
+              if (segs && Array.isArray(segs)) {
+                payload.text.segments = segs;
+              }
+            }
+          } catch (e) {
+          }
           if (typeof textNode.fontName === "object" && textNode.fontName !== null) {
             payload.text.fontFamily = textNode.fontName.family;
             payload.text.fontWeight = textNode.fontName.style;
@@ -176,6 +187,12 @@
                     modes: coll.modes,
                     defaultModeId: coll.defaultModeId
                   };
+                } else {
+                  diagnostics.push({
+                    code: "COLLECTION_NOT_FOUND",
+                    message: `Variable collection '${v.variableCollectionId}' returned null from Figma API.`,
+                    severity: "WARNING"
+                  });
                 }
               } catch (e) {
                 diagnostics.push({
@@ -185,6 +202,12 @@
                 });
               }
             }
+          } else {
+            diagnostics.push({
+              code: "VARIABLE_NOT_FOUND",
+              message: `Variable '${varId}' was referenced but returned null from Figma API.`,
+              severity: "WARNING"
+            });
           }
         } catch (e) {
           diagnostics.push({

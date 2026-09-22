@@ -10,6 +10,7 @@ import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { execSync } from "node:child_process";
 import { scanRepository } from "../registry/scanner.js";
+import { verifyComponentRecord } from "../registry/verifier.js";
 import { validateContract } from "../contracts/validate.js";
 
 async function main() {
@@ -55,6 +56,20 @@ Options:
     scannedHead: head,
     scannedBranch: branch,
   });
+
+  // Verify all components using TypeScript AST / module checks
+  for (const [compName, compRecord] of Object.entries(scanResult.registry.components)) {
+    const verRes = verifyComponentRecord(compName, compRecord, repoPath);
+    if (!verRes.verified) {
+      const isUnverifiedDep = verRes.diagnostics.some(
+        (d) => d.code === "UNVERIFIED_EXTERNAL_DEPENDENCY"
+      );
+      compRecord.verificationStatus = isUnverifiedDep ? "UNVERIFIED_DEPENDENCY" : "FAILED";
+    } else {
+      compRecord.verificationStatus = "VERIFIED";
+    }
+    scanResult.registry.diagnostics.push(...verRes.diagnostics);
+  }
 
   // Validate the resulting registry against our unified contract schema
   const validation = validateContract("registry", scanResult.registry);

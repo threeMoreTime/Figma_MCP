@@ -5,28 +5,28 @@
   "revision": 1,
   "sourceFileRef": "figma://file/demo_offline_workspace",
   "rootNodeId": "10:100",
-  "dataSource": "SYNTHETIC",
+  "dataSource": "REAL",
   "provenance": {
-    "designOrigin": "SYNTHETIC_SPEC",
-    "componentOrigin": "SYNTHETIC_FIXTURE",
-    "tokenOrigin": "SYNTHETIC_CANONICAL",
-    "dataOrigin": "SYNTHETIC_MOCK"
+    "designOrigin": "REAL_FIGMA",
+    "componentOrigin": "REAL_REPO",
+    "tokenOrigin": "REAL_FIGMA_VARIABLES",
+    "dataOrigin": "REAL_BACKEND"
   },
-  "exporterCommitSha": "0.2.0-standalone",
-  "canonicalTokenHash": "d8a31b84134c3ca79ff83af2335528b69774f0f1b7f21f73e556ff36bf4f94d6",
-  "contentHash": "d490a9930e09ec2bcfd9e2d5b05494b4b207ea491996503b99b997f76cd27a50",
+  "exporterCommitSha": "a6149d2dd9b9ddff182252e7ed6483b271231ea6",
+  "canonicalTokenHash": "fe69dba176d2480d6c33e094d2d0d3b04c4f157996365ef084d66f2b646c8573",
+  "contentHash": "bb282b4ffc4a25bf6fb92c6758f81d7a9b63ed4831f7ff10c830ec4cb4dc14ad",
   "resourceHashes": {
-    "figma.raw.json": "4f4c2bd8e116b7d5c0c8a28905f9fbabe73501136247595645252504eb107ca2",
-    "context.json": "1e883f007d7eed6cc1bc917cab43706e98c3d1f6bee0ac52b31da631055a6d6e",
-    "source-map.json": "c5cb864c561ff79986d2279b419d39b403bfc5b9af887a224b993d15ef60edb8",
+    "figma.raw.json": "3d0935f6a6f3753bfa56716605171a30d919b3116ae4de53676d649f43744070",
+    "context.json": "b17d608256333e748e609bfb4f66a6dafa118e0d4211fcb4c2bbad2cd5fb5b58",
+    "source-map.json": "6c36190a8e1d9c031e98c7d15f69c28fb844d1867a4445081f089ef01b6c6aa2",
     "tokens.snapshot.json": "d8a31b84134c3ca79ff83af2335528b69774f0f1b7f21f73e556ff36bf4f94d6",
-    "components.used.json": "1fc349ea81e03ce8fafe7701e12b1c508e7e28962766a8dffa5c6151088cf5ec",
-    "interactions.json": "05e014e6ba79337c254b28ee4651bbfbd7f30e81ea203111928b2a170e267d73",
-    "diagnostics.json": "5656fb50829591681ef18bdaee9b69b707f185e552e7af14b14a99e37792b06b"
+    "components.used.json": "74c6b41d35b8bb18468db85cfea987fbaeed6701ff924f7ed3bb2ee0fc9972b2",
+    "interactions.json": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "diagnostics.json": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
   },
   "approval": {
     "status": "PENDING",
-    "bindingContentHash": "d490a9930e09ec2bcfd9e2d5b05494b4b207ea491996503b99b997f76cd27a50",
+    "bindingContentHash": "bb282b4ffc4a25bf6fb92c6758f81d7a9b63ed4831f7ff10c830ec4cb4dc14ad",
     "notes": "Pending human design review and binding approval"
   }
 }

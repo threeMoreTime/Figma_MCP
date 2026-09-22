@@ -72,6 +72,16 @@ export interface PackageIntegrityResult {
   diagnostics: Diagnostic[];
 }
 
+export const REQUIRED_PACKAGE_RESOURCES = [
+  "figma.raw.json",
+  "context.json",
+  "source-map.json",
+  "tokens.snapshot.json",
+  "components.used.json",
+  "interactions.json",
+  "diagnostics.json",
+] as const;
+
 export function verifyPackageDiskIntegrity(
   packageDir: string,
   manifest: DesignPackageManifest
@@ -80,8 +90,58 @@ export function verifyPackageDiskIntegrity(
   const tamperedResources: string[] = [];
   const missingResources: string[] = [];
 
-  for (const [relPath, expectedHash] of Object.entries(manifest.resourceHashes || {})) {
+  const resourceEntries = Object.entries(manifest.resourceHashes || {});
+  if (resourceEntries.length === 0) {
+    diagnostics.push({
+      code: "EMPTY_RESOURCE_HASHES",
+      message: "Package manifest has an empty resourceHashes map; design package must declare resources.",
+      severity: "ERROR",
+    });
+  }
+
+  // Check required resources
+  for (const req of REQUIRED_PACKAGE_RESOURCES) {
+    if (!manifest.resourceHashes || !manifest.resourceHashes[req]) {
+      diagnostics.push({
+        code: "REQUIRED_RESOURCE_MISSING",
+        message: `Package manifest is missing required resource '${req}' in resourceHashes.`,
+        severity: "ERROR",
+        path: req,
+      });
+    }
+  }
+
+  for (const [relPath, expectedHash] of resourceEntries) {
+    // Path traversal and escaping guards
+    if (
+      relPath.includes("..") ||
+      relPath.startsWith("/") ||
+      relPath.startsWith("\\") ||
+      /^[a-zA-Z]:/.test(relPath) ||
+      relPath.startsWith("\\\\")
+    ) {
+      diagnostics.push({
+        code: "PATH_TRAVERSAL_DETECTED",
+        message: `Resource path '${relPath}' contains illegal path traversal or absolute prefixes.`,
+        severity: "ERROR",
+        path: relPath,
+      });
+      continue;
+    }
+
     const fullPath = resolve(packageDir, relPath);
+    // Ensure resolved path does not escape packageDir
+    const normalizedPkgDir = resolve(packageDir);
+    if (!fullPath.startsWith(normalizedPkgDir)) {
+      diagnostics.push({
+        code: "DIRECTORY_ESCAPE_DETECTED",
+        message: `Resource path '${relPath}' escapes package directory '${packageDir}'.`,
+        severity: "ERROR",
+        path: relPath,
+      });
+      continue;
+    }
+
     if (!existsSync(fullPath)) {
       missingResources.push(relPath);
       diagnostics.push({

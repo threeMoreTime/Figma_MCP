@@ -1,14 +1,1 @@
-[
-  {
-    "trigger": "onClick",
-    "targetElementIdentity": {
-      "screenId": "users_page",
-      "semanticId": "users.header.create_btn",
-      "instanceKey": "main"
-    },
-    "expectedEffect": "openModal",
-    "payload": {
-      "modalId": "create_user_modal"
-    }
-  }
-]
+[]

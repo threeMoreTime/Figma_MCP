@@ -1,18 +1,196 @@
 {
+  "schemaVersion": "1.0.0",
+  "sourceFileRef": "figma://file/demo_offline_workspace",
   "rootNodeId": "10:100",
-  "screenTitle": "用户管理",
-  "nodes": {
-    "10:102": {
-      "semanticId": "users.header.title",
-      "text": "用户管理"
+  "exporter": {
+    "tool": "Antigravity D2C Plugin",
+    "version": "1.0.0",
+    "commitSha": "a6149d2dd9b9ddff182252e7ed6483b271231ea6"
+  },
+  "dataSource": "REAL",
+  "exportedTree": {
+    "sourceNodeId": "10:100",
+    "sourceFileRef": "figma://file/demo_offline_workspace",
+    "identity": {
+      "screenId": "users_page",
+      "semanticId": "users_page",
+      "state": "ready",
+      "breakpoint": "desktop",
+      "instanceKey": "10:100"
     },
-    "10:103": {
-      "semanticId": "users.header.create_btn",
-      "variant": "primary",
-      "text": "新建用户"
+    "name": "UsersScreen",
+    "isComponentInstance": false,
+    "isSynthesized": false,
+    "variantProps": {},
+    "instanceOverrides": {},
+    "layout": {
+      "layoutMode": "VERTICAL",
+      "layoutWrap": "NO_WRAP",
+      "layoutSizingHorizontal": "FIXED",
+      "layoutSizingVertical": "FIXED",
+      "padding": {
+        "top": 16,
+        "right": 16,
+        "bottom": 16,
+        "left": 16
+      },
+      "itemSpacing": 16,
+      "width": 1200,
+      "height": 800
     },
-    "10:104": {
-      "semanticId": "users.content.table"
-    }
-  }
+    "textRuns": [],
+    "tokenBindings": {},
+    "children": [
+      {
+        "sourceNodeId": "10:101",
+        "sourceFileRef": "figma://file/demo_offline_workspace",
+        "identity": {
+          "screenId": "users_page",
+          "semanticId": "users_page.headerarea",
+          "state": "ready",
+          "breakpoint": "desktop",
+          "instanceKey": "10:101"
+        },
+        "name": "HeaderArea",
+        "isComponentInstance": false,
+        "isSynthesized": false,
+        "variantProps": {},
+        "instanceOverrides": {},
+        "layout": {
+          "layoutMode": "HORIZONTAL",
+          "layoutWrap": "NO_WRAP",
+          "layoutSizingHorizontal": "FIXED",
+          "layoutSizingVertical": "FIXED",
+          "padding": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "itemSpacing": 16,
+          "width": 1168,
+          "height": 48
+        },
+        "textRuns": [],
+        "tokenBindings": {},
+        "children": [
+          {
+            "sourceNodeId": "10:102",
+            "sourceFileRef": "figma://file/demo_offline_workspace",
+            "identity": {
+              "screenId": "users_page",
+              "semanticId": "users_page.headerarea.pagetitle",
+              "state": "ready",
+              "breakpoint": "desktop",
+              "instanceKey": "10:102"
+            },
+            "name": "PageTitle",
+            "isComponentInstance": false,
+            "isSynthesized": false,
+            "variantProps": {},
+            "instanceOverrides": {},
+            "layout": {
+              "layoutMode": "NONE",
+              "layoutWrap": "NO_WRAP",
+              "layoutSizingHorizontal": "FIXED",
+              "layoutSizingVertical": "FIXED",
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "itemSpacing": 0,
+              "width": 200,
+              "height": 32
+            },
+            "textRuns": [
+              {
+                "characters": "用户管理",
+                "fontFamily": "Inter",
+                "fontSize": 20,
+                "fontWeight": 600
+              }
+            ],
+            "tokenBindings": {},
+            "children": []
+          },
+          {
+            "sourceNodeId": "10:103",
+            "sourceFileRef": "figma://file/demo_offline_workspace",
+            "identity": {
+              "screenId": "users_page",
+              "semanticId": "users_page.headerarea.createbutton",
+              "state": "ready",
+              "breakpoint": "desktop",
+              "instanceKey": "10:103"
+            },
+            "name": "CreateButton",
+            "isComponentInstance": true,
+            "isSynthesized": false,
+            "nativeComponentKey": "btn_primary",
+            "variantProps": {
+              "type": "primary"
+            },
+            "instanceOverrides": {},
+            "layout": {
+              "layoutMode": "NONE",
+              "layoutWrap": "NO_WRAP",
+              "layoutSizingHorizontal": "FIXED",
+              "layoutSizingVertical": "FIXED",
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "itemSpacing": 0,
+              "width": 90,
+              "height": 32
+            },
+            "textRuns": [],
+            "tokenBindings": {},
+            "children": []
+          }
+        ]
+      },
+      {
+        "sourceNodeId": "10:104",
+        "sourceFileRef": "figma://file/demo_offline_workspace",
+        "identity": {
+          "screenId": "users_page",
+          "semanticId": "users_page.usertable",
+          "state": "ready",
+          "breakpoint": "desktop",
+          "instanceKey": "10:104"
+        },
+        "name": "UserTable",
+        "isComponentInstance": true,
+        "isSynthesized": false,
+        "nativeComponentKey": "table_users",
+        "variantProps": {},
+        "instanceOverrides": {},
+        "layout": {
+          "layoutMode": "NONE",
+          "layoutWrap": "NO_WRAP",
+          "layoutSizingHorizontal": "FIXED",
+          "layoutSizingVertical": "FIXED",
+          "padding": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "itemSpacing": 0,
+          "width": 1168,
+          "height": 600
+        },
+        "textRuns": [],
+        "tokenBindings": {},
+        "children": []
+      }
+    ]
+  },
+  "tokenCollections": {},
+  "diagnostics": []
 }

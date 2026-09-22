@@ -28,14 +28,33 @@ export async function buildFigmaPlugin(): Promise<boolean> {
     minify: false, // Keep readable for security audit
   });
 
-  // 2. Copy ui.html and manifest.json
+  // 2. Copy ui.html and generate delivered dist/manifest.json
   const uiSrc = resolve(pluginDir, "src/ui.html");
   const uiDist = resolve(distDir, "ui.html");
   copyFileSync(uiSrc, uiDist);
 
   const manifestSrc = resolve(pluginDir, "manifest.json");
   const manifestDist = resolve(distDir, "manifest.json");
-  copyFileSync(manifestSrc, manifestDist);
+  
+  const rawManifest = JSON.parse(readFileSync(manifestSrc, "utf-8"));
+  // Delivery layout: dist/manifest.json references adjacent code.js and ui.html
+  const deliveredManifest = {
+    ...rawManifest,
+    main: "code.js",
+    ui: "ui.html",
+    documentAccess: "dynamic-page",
+  };
+  writeFileSync(manifestDist, JSON.stringify(deliveredManifest, null, 2), "utf-8");
+
+  // Verify that delivered manifest files actually exist relative to dist/manifest.json
+  const resolvedMain = resolve(distDir, deliveredManifest.main);
+  const resolvedUi = resolve(distDir, deliveredManifest.ui);
+  if (!existsSync(resolvedMain)) {
+    throw new Error(`Delivered manifest 'main' target does not exist at: ${resolvedMain}`);
+  }
+  if (!existsSync(resolvedUi)) {
+    throw new Error(`Delivered manifest 'ui' target does not exist at: ${resolvedUi}`);
+  }
 
   // 3. Security & Integrity Audit on the generated code.js bundle
   const bundledCode = readFileSync(outputCode, "utf-8");

@@ -149,7 +149,7 @@
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentPayload, null, 2));
       const downloadAnchor = document.createElement('a');
       downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `${currentPayload.rootNodeName}_export.json`);
+      downloadAnchor.setAttribute("download", `${currentPayload.rootNodeName || "export"}_export.json`);
       document.body.appendChild(downloadAnchor);
       downloadAnchor.click();
       downloadAnchor.remove();
@@ -159,7 +159,7 @@
       if (!currentPayload || !currentPayload.screenshotBase64) return;
       const link = document.createElement('a');
       link.href = "data:image/png;base64," + currentPayload.screenshotBase64;
-      link.download = `${currentPayload.rootNodeName}_screenshot.png`;
+      link.download = `${currentPayload.rootNodeName || "export"}_screenshot.png`;
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -173,79 +173,157 @@
       });
     }
 
+    function renderEmptyState(messageText) {
+      const container = document.getElementById('content');
+      container.textContent = ''; // Clear safely
+
+      const emptyDiv = document.createElement('div');
+      emptyDiv.className = 'empty-state';
+
+      const p1 = document.createElement('p');
+      p1.style.color = '#ff4d4f';
+      p1.style.fontWeight = '500';
+      p1.textContent = messageText || 'No frame selected.';
+
+      const p2 = document.createElement('p');
+      p2.textContent = 'Select a Frame or Component on canvas, then click refresh.';
+
+      const btn = document.createElement('button');
+      btn.className = 'secondary';
+      btn.textContent = 'Re-check Selection';
+      btn.onclick = triggerExport;
+
+      emptyDiv.appendChild(p1);
+      emptyDiv.appendChild(p2);
+      emptyDiv.appendChild(btn);
+      container.appendChild(emptyDiv);
+    }
+
+    function createStatRow(label, value) {
+      const row = document.createElement('div');
+      row.className = 'stat-row';
+
+      const labelSpan = document.createElement('span');
+      labelSpan.className = 'stat-label';
+      labelSpan.textContent = label;
+
+      const valueSpan = document.createElement('span');
+      valueSpan.className = 'stat-value';
+      valueSpan.textContent = value;
+
+      row.appendChild(labelSpan);
+      row.appendChild(valueSpan);
+      return row;
+    }
+
+    function renderExportSuccess(p) {
+      const container = document.getElementById('content');
+      container.textContent = ''; // Clear safely
+
+      // Stats Card
+      const statsCard = document.createElement('div');
+      statsCard.className = 'card';
+
+      statsCard.appendChild(createStatRow('Frame Name:', String(p.rootNodeName || '')));
+      statsCard.appendChild(createStatRow('Node ID:', String(p.rootNodeId || '')));
+      statsCard.appendChild(createStatRow('Components Used:', String(Object.keys(p.componentsUsed || {}).length)));
+      statsCard.appendChild(createStatRow('Bound Variables:', `${Object.keys(p.variables || {}).length} (${Object.keys(p.collections || {}).length} collections)`));
+      statsCard.appendChild(createStatRow('Dimensions:', `${p.tree?.width || 0} × ${p.tree?.height || 0} px`));
+      container.appendChild(statsCard);
+
+      // Screenshot Card (if exists)
+      if (p.screenshotBase64) {
+        const shotCard = document.createElement('div');
+        shotCard.className = 'card';
+
+        const shotTitle = document.createElement('div');
+        shotTitle.style.fontWeight = '600';
+        shotTitle.textContent = 'Frame Screenshot';
+        shotCard.appendChild(shotTitle);
+
+        const img = document.createElement('img');
+        img.id = 'preview-img';
+        img.alt = 'Screenshot';
+        img.src = 'data:image/png;base64,' + p.screenshotBase64;
+        shotCard.appendChild(img);
+
+        container.appendChild(shotCard);
+      }
+
+      // Diagnostics Card (if exists)
+      const diags = Array.isArray(p.diagnostics) ? p.diagnostics : [];
+      if (diags.length > 0) {
+        const diagCard = document.createElement('div');
+        diagCard.className = 'card';
+        diagCard.style.marginTop = '12px';
+
+        const diagTitle = document.createElement('div');
+        diagTitle.style.fontWeight = '600';
+        diagTitle.style.marginBottom = '6px';
+        diagTitle.textContent = `Diagnostics (${diags.length})`;
+        diagCard.appendChild(diagTitle);
+
+        for (const d of diags) {
+          const item = document.createElement('div');
+          const severity = ['INFO', 'WARNING', 'ERROR'].includes(d.severity) ? d.severity : 'INFO';
+          item.className = `diag-item diag-${severity}`;
+
+          const strong = document.createElement('strong');
+          strong.textContent = `[${severity}] `;
+          item.appendChild(strong);
+
+          const textSpan = document.createElement('span');
+          textSpan.textContent = String(d.message || '');
+          item.appendChild(textSpan);
+
+          diagCard.appendChild(item);
+        }
+
+        container.appendChild(diagCard);
+      }
+
+      // Action Buttons
+      const btnGroup = document.createElement('div');
+      btnGroup.className = 'button-group';
+
+      const dlJsonBtn = document.createElement('button');
+      dlJsonBtn.textContent = 'Download Full Release JSON';
+      dlJsonBtn.onclick = downloadJson;
+      btnGroup.appendChild(dlJsonBtn);
+
+      if (p.screenshotBase64) {
+        const dlShotBtn = document.createElement('button');
+        dlShotBtn.className = 'secondary';
+        dlShotBtn.textContent = 'Save PNG Screenshot';
+        dlShotBtn.onclick = downloadScreenshot;
+        btnGroup.appendChild(dlShotBtn);
+      }
+
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'secondary';
+      copyBtn.textContent = 'Copy JSON to Clipboard';
+      copyBtn.onclick = copyJson;
+      btnGroup.appendChild(copyBtn);
+
+      const refreshBtn = document.createElement('button');
+      refreshBtn.className = 'secondary';
+      refreshBtn.textContent = 'Re-Export Selection';
+      refreshBtn.onclick = triggerExport;
+      btnGroup.appendChild(refreshBtn);
+
+      container.appendChild(btnGroup);
+    }
+
     window.onmessage = (event) => {
+      if (!event || !event.data || typeof event.data !== 'object') return;
       const msg = event.data.pluginMessage;
-      if (!msg) return;
+      if (!msg || typeof msg !== 'object') return;
 
       if (msg.type === 'SELECTION_EMPTY') {
-        document.getElementById('content').innerHTML = `
-          <div class="empty-state">
-            <p style="color: #ff4d4f; font-weight: 500;">No frame selected.</p>
-            <p>Select a Frame or Component on canvas, then click refresh.</p>
-            <button onclick="triggerExport()" class="secondary">Re-check Selection</button>
-          </div>
-        `;
-      } else if (msg.type === 'EXPORT_SUCCESS') {
+        renderEmptyState(msg.message);
+      } else if (msg.type === 'EXPORT_SUCCESS' && msg.payload && typeof msg.payload === 'object') {
         currentPayload = msg.payload;
-        const p = msg.payload;
-
-        const componentsCount = Object.keys(p.componentsUsed || {}).length;
-        const variablesCount = Object.keys(p.variables || {}).length;
-        const collectionsCount = Object.keys(p.collections || {}).length;
-        const diags = p.diagnostics || [];
-
-        let diagsHtml = "";
-        if (diags.length > 0) {
-          diagsHtml = `<div class="card" style="margin-top: 12px;">
-            <div style="font-weight: 600; margin-bottom: 6px;">Diagnostics (${diags.length})</div>
-            ${diags.map(d => `<div class="diag-item diag-${d.severity}"><strong>[${d.severity}]</strong> ${d.message}</div>`).join('')}
-          </div>`;
-        }
-
-        let screenshotHtml = "";
-        if (p.screenshotBase64) {
-          screenshotHtml = `
-            <div class="card">
-              <div style="font-weight: 600;">Frame Screenshot</div>
-              <img id="preview-img" src="data:image/png;base64,${p.screenshotBase64}" alt="Screenshot" />
-            </div>
-          `;
-        }
-
-        document.getElementById('content').innerHTML = `
-          <div class="card">
-            <div class="stat-row">
-              <span class="stat-label">Frame Name:</span>
-              <span class="stat-value">${p.rootNodeName}</span>
-            </div>
-            <div class="stat-row">
-              <span class="stat-label">Node ID:</span>
-              <span class="stat-value"><code>${p.rootNodeId}</code></span>
-            </div>
-            <div class="stat-row">
-              <span class="stat-label">Components Used:</span>
-              <span class="stat-value">${componentsCount}</span>
-            </div>
-            <div class="stat-row">
-              <span class="stat-label">Bound Variables:</span>
-              <span class="stat-value">${variablesCount} (${collectionsCount} collections)</span>
-            </div>
-            <div class="stat-row">
-              <span class="stat-label">Dimensions:</span>
-              <span class="stat-value">${p.tree.width} × ${p.tree.height} px</span>
-            </div>
-          </div>
-
-          ${screenshotHtml}
-          ${diagsHtml}
-
-          <div class="button-group">
-            <button onclick="downloadJson()">Download Full Release JSON</button>
-            ${p.screenshotBase64 ? '<button class="secondary" onclick="downloadScreenshot()">Save PNG Screenshot</button>' : ''}
-            <button class="secondary" onclick="copyJson()">Copy JSON to Clipboard</button>
-            <button class="secondary" onclick="triggerExport()">Re-Export Selection</button>
-          </div>
-        `;
+        renderExportSuccess(msg.payload);
       }
     };
   </script>

@@ -20,7 +20,12 @@ export type RawValue =
   | { kind: "FLOAT"; value: number }
   | { kind: "STRING"; value: string }
   | { kind: "BOOLEAN"; value: boolean }
-  | { kind: "ALIAS"; id: string; name?: string };
+  | { kind: "ALIAS"; id: string; name?: string }
+  | { type: "VARIABLE_ALIAS"; id: string }
+  | number
+  | boolean
+  | string
+  | Rgba;
 
 export interface RawVariable {
   id: string;
@@ -71,14 +76,14 @@ export function resolveVariableToLiteral(
   let rawVal: RawValue | undefined = variable.valuesByMode[modeId];
   let rationale: ResolutionResult["resolutionRationale"] = "EXPLICIT_MODE";
 
-  if (!rawVal && coll && coll.defaultModeId) {
+  if (rawVal === undefined && coll && coll.defaultModeId) {
     rawVal = variable.valuesByMode[coll.defaultModeId];
-    if (rawVal) {
+    if (rawVal !== undefined) {
       rationale = "INHERITED_DEFAULT";
     }
   }
 
-  if (!rawVal) {
+  if (rawVal === undefined || rawVal === null) {
     return {
       value: null,
       resolvedPath: currentPath,
@@ -88,36 +93,87 @@ export function resolveVariableToLiteral(
     };
   }
 
-  if (rawVal.kind === "COLOR") {
-    return { value: rgbaToHex(rawVal.rgba), resolvedPath: currentPath, isAlias: false, resolutionRationale: rationale };
-  }
-  if (rawVal.kind === "FLOAT" || rawVal.kind === "STRING" || rawVal.kind === "BOOLEAN") {
-    return { value: rawVal.value, resolvedPath: currentPath, isAlias: false, resolutionRationale: rationale };
+  // Primitive direct types (from Figma API raw VariableValue)
+  if (typeof rawVal === "number" || typeof rawVal === "boolean" || typeof rawVal === "string") {
+    return { value: rawVal, resolvedPath: currentPath, isAlias: false, resolutionRationale: rationale };
   }
 
-  // Handle ALIAS
-  const targetVar = varById[rawVal.id];
-  if (!targetVar) {
-    return {
-      value: null,
-      resolvedPath: [...currentPath, `alias:${rawVal.id}`],
-      isAlias: true,
-      resolutionRationale: rationale,
-      error: "TARGET_NOT_FOUND",
-    };
+  // Object-wrapped types
+  if (typeof rawVal === "object") {
+    // Wrapped DTCG/custom kind
+    if ("kind" in rawVal) {
+      if (rawVal.kind === "COLOR") {
+        return { value: rgbaToHex(rawVal.rgba), resolvedPath: currentPath, isAlias: false, resolutionRationale: rationale };
+      }
+      if (rawVal.kind === "FLOAT" || rawVal.kind === "STRING" || rawVal.kind === "BOOLEAN") {
+        return { value: rawVal.value, resolvedPath: currentPath, isAlias: false, resolutionRationale: rationale };
+      }
+    }
+
+    // Direct RGBA object { r, g, b, a? }
+    if ("r" in rawVal && "g" in rawVal && "b" in rawVal) {
+      return { value: rgbaToHex(rawVal as any), resolvedPath: currentPath, isAlias: false, resolutionRationale: rationale };
+    }
+
+    // ALIAS (kind: "ALIAS" or type: "VARIABLE_ALIAS")
+    const isAlias =
+      ("kind" in rawVal && rawVal.kind === "ALIAS") ||
+      ("type" in rawVal && (rawVal as any).type === "VARIABLE_ALIAS");
+
+    if (isAlias && "id" in rawVal && typeof (rawVal as any).id === "string") {
+      const targetId = (rawVal as any).id;
+      const targetVar = varById[targetId];
+      if (!targetVar) {
+        return {
+          value: null,
+          resolvedPath: [...currentPath, `alias:${targetId}`],
+          isAlias: true,
+          resolutionRationale: rationale,
+          error: "TARGET_NOT_FOUND",
+        };
+      }
+
+      // Cross-collection mode resolution:
+      // When alias points to another collection, resolve mode using target collection's matching mode name or defaultModeId
+      let targetModeId = modeId;
+      if (targetVar.collectionId !== variable.collectionId) {
+        const targetColl = collById[targetVar.collectionId];
+        const currentModeName = coll?.modes?.find((m) => m.id === modeId)?.name;
+        const matchingTargetMode = targetColl?.modes?.find(
+          (m) => currentModeName && m.name.toLowerCase() === currentModeName.toLowerCase()
+        );
+
+        if (matchingTargetMode) {
+          targetModeId = matchingTargetMode.id;
+        } else if (targetColl?.defaultModeId) {
+          targetModeId = targetColl.defaultModeId;
+        } else if (targetVar.valuesByMode) {
+          targetModeId = Object.keys(targetVar.valuesByMode)[0] || modeId;
+        }
+      }
+
+      const sub = resolveVariableToLiteral(
+        targetVar,
+        targetModeId,
+        varById,
+        collById,
+        new Set(seenIds),
+        currentPath
+      );
+      return {
+        ...sub,
+        isAlias: true,
+        resolutionRationale: rationale,
+      };
+    }
   }
 
-  const sub = resolveVariableToLiteral(
-    targetVar,
-    modeId,
-    varById,
-    collById,
-    new Set(seenIds),
-    currentPath
-  );
   return {
-    ...sub,
-    isAlias: true,
-    resolutionRationale: rationale,
+    value: null,
+    resolvedPath: currentPath,
+    isAlias: false,
+    resolutionRationale: "UNKNOWN_MODE",
+    error: "UNRESOLVED_MODE",
   };
 }
+

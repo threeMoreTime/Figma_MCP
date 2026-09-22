@@ -8,6 +8,7 @@
     "d2c:validate": "tsx tooling/d2c/cli/validate.ts",
     "d2c:tokens": "tsx tooling/d2c/cli/tokens.ts",
     "d2c:resolve": "tsx tooling/d2c/cli/resolve.ts",
+    "d2c:intake": "tsx tooling/d2c/cli/intake.ts",
     "d2c:plugin:build": "tsx tooling/d2c/figma-plugin/build.ts",
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test tests/*.test.ts"

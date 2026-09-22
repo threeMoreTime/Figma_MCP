@@ -49,6 +49,29 @@ export function scanRepository(targetInfo: ScanTargetInfo): ScanReport {
   const components: Record<string, ComponentRecord> = {};
   const details: ScanReport["details"] = [];
 
+  // Check if target repository actually exists on disk
+  if (!existsSync(targetRepoPath) || !existsSync(join(targetRepoPath, "package.json"))) {
+    diagnostics.push({
+      code: "TARGET_REPO_NOT_FOUND",
+      message: `Target repository path '${targetRepoPath}' does not exist or lacks package.json. Real scan aborted to prevent fabricated registry results.`,
+      severity: "ERROR",
+    });
+    return {
+      registry: {
+        schemaVersion: "1.0.0",
+        registryId: `reg_${targetRepoName}_unresolved`,
+        targetRepo: targetRepoName,
+        scannedHead: "NONE",
+        components: {},
+        diagnostics,
+      },
+      fileHashes: {},
+      summary: { reuseCount: 0, extendCount: 0, missingCount: 0, conflictCount: 0 },
+      details: [],
+      diagnostics,
+    };
+  }
+
   // 1. Ant Design standard components directly referenced in the business project
   // Based on cs_admin-client package.json ("antd": "5.7.3") and App.tsx / pages
   const coreAntdComponents: Array<{

@@ -8,8 +8,8 @@
  */
 
 import StyleDictionary from "style-dictionary";
-import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
-import { resolve, dirname } from "node:path";
+import { readFileSync, mkdirSync, writeFileSync, rmSync, copyFileSync, existsSync } from "node:fs";
+import { resolve, dirname, join } from "node:path";
 import { createHash } from "node:crypto";
 import type { ThemeConfig } from "antd";
 import type { Diagnostic } from "../contracts/schema.js";
@@ -212,7 +212,8 @@ export default antdTheme;
     return lines.join("\n");
   };
 
-  mkdirSync(outDir, { recursive: true });
+  const stagingDir = resolve(outDir, ".staging");
+  mkdirSync(stagingDir, { recursive: true });
 
   const sd = new StyleDictionary({
     tokens: rawJson,
@@ -225,7 +226,7 @@ export default antdTheme;
     },
     platforms: {
       antd: {
-        buildPath: `${outDir}/`,
+        buildPath: `${stagingDir}/`,
         files: [
           {
             destination: "antd.theme.ts",
@@ -234,7 +235,7 @@ export default antdTheme;
         ],
       },
       css: {
-        buildPath: `${outDir}/`,
+        buildPath: `${stagingDir}/`,
         files: [
           {
             destination: "tokens.css",
@@ -243,7 +244,7 @@ export default antdTheme;
         ],
       },
       less: {
-        buildPath: `${outDir}/`,
+        buildPath: `${stagingDir}/`,
         files: [
           {
             destination: "tokens.less",
@@ -256,9 +257,43 @@ export default antdTheme;
 
   await sd.buildAllPlatforms();
 
+  const hasErrors = diagnostics.some((d) => d.severity === "ERROR");
+
+  if (hasErrors) {
+    // If there were ERROR diagnostics, clean up staging and do NOT overwrite outDir!
+    try {
+      rmSync(stagingDir, { recursive: true, force: true });
+    } catch {}
+
+    return {
+      success: false,
+      artifacts: {
+        antdThemePath: resolve(outDir, "antd.theme.ts"),
+        cssTokensPath: resolve(outDir, "tokens.css"),
+        lessTokensPath: resolve(outDir, "tokens.less"),
+      },
+      hashes: {
+        antdThemeHash: "",
+        cssTokensHash: "",
+        lessTokensHash: "",
+      },
+      diagnostics,
+    };
+  }
+
+  // Safe to promote from staging to outDir
+  mkdirSync(outDir, { recursive: true });
   const antdThemePath = resolve(outDir, "antd.theme.ts");
   const cssTokensPath = resolve(outDir, "tokens.css");
   const lessTokensPath = resolve(outDir, "tokens.less");
+
+  copyFileSync(resolve(stagingDir, "antd.theme.ts"), antdThemePath);
+  copyFileSync(resolve(stagingDir, "tokens.css"), cssTokensPath);
+  copyFileSync(resolve(stagingDir, "tokens.less"), lessTokensPath);
+
+  try {
+    rmSync(stagingDir, { recursive: true, force: true });
+  } catch {}
 
   const antdContent = readFileSync(antdThemePath, "utf-8");
   const cssContent = readFileSync(cssTokensPath, "utf-8");
@@ -269,7 +304,7 @@ export default antdTheme;
   const lessTokensHash = createHash("sha256").update(lessContent).digest("hex");
 
   return {
-    success: diagnostics.filter((d) => d.severity === "ERROR").length === 0,
+    success: true,
     artifacts: {
       antdThemePath,
       cssTokensPath,

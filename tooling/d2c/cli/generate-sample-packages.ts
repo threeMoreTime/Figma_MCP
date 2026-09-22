@@ -1,148 +1,176 @@
 /**
  * Sample Design Packages Generator for Users Page (rev_1 and rev_2)
  *
- * Sourced: Explicitly SYNTHETIC_SPEC (Demonstrates package ingestion, validation & change propagation)
+ * Uses the official runIntakePipeline to ensure:
+ * 1. Raw ExportResult payload → export-adapter → canonical DesignContext (validateContract('context', ...)).
+ * 2. Generated packages strictly conform to unified contracts and pass disk integrity.
+ * 3. exporterCommitSha is real git commit hash.
+ * 4. Separate canonicalTokenHash and tokens.snapshot.json hash.
  */
 
-import { createDesignPackage } from "./package.js";
 import { resolve } from "node:path";
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { runIntakePipeline } from "./intake.js";
+import { validateContract } from "../contracts/validate.js";
 
-export function generateSamplePackages(): void {
+export async function generateSamplePackages(): Promise<void> {
   const canonicalTokens = JSON.parse(
     readFileSync("tooling/d2c/tokens/canonical-tokens.json", "utf-8")
   );
 
-  // 1. Revision 1 Baseline Package
-  const rev1Input = {
+  const buildDir = resolve("build");
+  mkdirSync(buildDir, { recursive: true });
+
+  // 1. Raw Export Payload for Revision 1
+  const rawRev1 = {
+    rootNodeId: "10:100",
+    rootNodeName: "UsersScreen",
+    documentTitle: "Admin Platform Design",
+    exportedAt: new Date().toISOString(),
+    tree: {
+      id: "10:100",
+      name: "UsersScreen",
+      type: "FRAME",
+      visible: true,
+      x: 0,
+      y: 0,
+      width: 1200,
+      height: 800,
+      layout: {
+        mode: "VERTICAL",
+        wrap: "NO_WRAP",
+        layoutSizingHorizontal: "FIXED",
+        layoutSizingVertical: "FIXED",
+        paddingTop: 16,
+        paddingRight: 16,
+        paddingBottom: 16,
+        paddingLeft: 16,
+        itemSpacing: 16,
+      },
+      children: [
+        {
+          id: "10:101",
+          name: "HeaderArea",
+          type: "FRAME",
+          visible: true,
+          x: 16,
+          y: 16,
+          width: 1168,
+          height: 48,
+          layout: {
+            mode: "HORIZONTAL",
+            wrap: "NO_WRAP",
+            paddingTop: 0,
+            paddingRight: 0,
+            paddingBottom: 0,
+            paddingLeft: 0,
+            itemSpacing: 16,
+          },
+          children: [
+            {
+              id: "10:102",
+              name: "PageTitle",
+              type: "TEXT",
+              visible: true,
+              x: 0,
+              y: 0,
+              width: 200,
+              height: 32,
+              text: {
+                characters: "用户管理",
+                fontFamily: "Inter",
+                fontSize: 20,
+                fontWeight: 600,
+              },
+            },
+            {
+              id: "10:103",
+              name: "CreateButton",
+              type: "INSTANCE",
+              visible: true,
+              x: 1000,
+              y: 0,
+              width: 90,
+              height: 32,
+              component: {
+                isInstance: true,
+                mainComponentId: "cmp_btn",
+                mainComponentKey: "btn_primary",
+                mainComponentName: "PrimaryButton",
+                variantProperties: { type: "primary" },
+              },
+            },
+          ],
+        },
+        {
+          id: "10:104",
+          name: "UserTable",
+          type: "INSTANCE",
+          visible: true,
+          x: 16,
+          y: 80,
+          width: 1168,
+          height: 600,
+          component: {
+            isInstance: true,
+            mainComponentId: "cmp_table",
+            mainComponentKey: "table_users",
+            mainComponentName: "UserTable",
+          },
+        },
+      ],
+    },
+    componentsUsed: {
+      btn_primary: { id: "cmp_btn", key: "btn_primary", name: "PrimaryButton" },
+      table_users: { id: "cmp_table", key: "table_users", name: "UserTable" },
+    },
+    variables: canonicalTokens,
+    diagnostics: [],
+  };
+
+  const rawRev1Path = resolve(buildDir, "raw-export-users-rev1.json");
+  writeFileSync(rawRev1Path, JSON.stringify(rawRev1, null, 2), "utf-8");
+
+  const res1 = await runIntakePipeline({
+    rawExportPath: rawRev1Path,
     screenId: "users_page",
     revision: 1,
     sourceFileRef: "figma://file/demo_offline_workspace",
-    rootNodeId: "10:100",
-    provenance: {
-      designOrigin: "SYNTHETIC_SPEC" as const,
-      componentOrigin: "SYNTHETIC_FIXTURE" as const,
-      tokenOrigin: "SYNTHETIC_CANONICAL" as const,
-      dataOrigin: "SYNTHETIC_MOCK" as const,
-    },
-    rawFigmaTree: {
-      id: "10:100",
-      name: "UsersScreen",
-      type: "FRAME",
-      width: 1200,
-      height: 800,
-      layoutMode: "VERTICAL",
-      itemSpacing: 16,
-      children: [
-        {
-          id: "10:101",
-          name: "HeaderArea",
-          type: "FRAME",
-          layoutMode: "HORIZONTAL",
-          itemSpacing: 16,
-          children: [
-            { id: "10:102", name: "PageTitle", type: "TEXT", characters: "用户管理" },
-            { id: "10:103", name: "CreateButton", type: "INSTANCE", mainComponentKey: "btn_primary", variantProperties: { type: "primary" } },
-          ],
-        },
-        {
-          id: "10:104",
-          name: "UserTable",
-          type: "INSTANCE",
-          mainComponentKey: "table_users",
-        },
-      ],
-    },
-    contextTree: {
-      rootNodeId: "10:100",
-      screenTitle: "用户管理",
-      nodes: {
-        "10:102": { semanticId: "users.header.title", text: "用户管理" },
-        "10:103": { semanticId: "users.header.create_btn", variant: "primary", text: "新建用户" },
-        "10:104": { semanticId: "users.content.table" },
-      },
-    },
-    sourceMap: {
-      version: "1.0.0",
-      screenId: "users_page",
-      elements: {
-        "users.header.title": { figmaNodeId: "10:102", targetDomId: "users-page-title" },
-        "users.header.create_btn": { figmaNodeId: "10:103", targetDomId: "users-create-btn" },
-        "users.content.table": { figmaNodeId: "10:104", targetDomId: "users-table-container" },
-      },
-    },
-    tokensSnapshot: canonicalTokens,
-    componentsUsed: {
-      btn_primary: { name: "Button", variant: "primary" },
-      table_users: { name: "Table", variant: "default" },
-    },
-    interactions: [
-      {
-        trigger: "onClick",
-        targetElementIdentity: { screenId: "users_page", semanticId: "users.header.create_btn", instanceKey: "main" },
-        expectedEffect: "openModal",
-        payload: { modalId: "create_user_modal" },
-      },
-    ],
-    diagnostics: [
-      {
-        code: "OFFLINE_SYNTHETIC_FIXTURE",
-        message: "This design package is an offline fixture generated for contract verification, not from live Figma API.",
-        severity: "INFO",
-      },
-    ],
-  };
+    allowOverwrite: true,
+  });
 
-  const res1 = createDesignPackage(rev1Input);
-  console.log("✓ Created Rev 1 package at:", res1.packagePath, "ContentHash:", res1.contentHash);
+  if (!res1.success) {
+    throw new Error(`Failed to generate sample package rev_1: ${JSON.stringify(res1.diagnostics)}`);
+  }
+  console.log("✓ Ingested and validated Rev 1 package at:", res1.packagePath, "ContentHash:", res1.manifest?.contentHash);
 
-  // 2. Revision 2 Delta Package (Text change, spacing change, variant change)
-  const rev2Input = {
-    ...rev1Input,
+  // 2. Raw Export Payload for Revision 2 (spacing 16->24, title text, button variant primary->dashed)
+  const rawRev2 = JSON.parse(JSON.stringify(rawRev1));
+  rawRev2.tree.layout.itemSpacing = 24; // Spacing change
+  rawRev2.tree.children[0].layout.itemSpacing = 24;
+  rawRev2.tree.children[0].children[0].text.characters = "系统用户列表"; // Title change
+  rawRev2.tree.children[0].children[1].component.variantProperties.type = "dashed"; // Button variant change
+
+  const rawRev2Path = resolve(buildDir, "raw-export-users-rev2.json");
+  writeFileSync(rawRev2Path, JSON.stringify(rawRev2, null, 2), "utf-8");
+
+  const res2 = await runIntakePipeline({
+    rawExportPath: rawRev2Path,
+    screenId: "users_page",
     revision: 2,
-    rawFigmaTree: {
-      id: "10:100",
-      name: "UsersScreen",
-      type: "FRAME",
-      width: 1200,
-      height: 800,
-      layoutMode: "VERTICAL",
-      itemSpacing: 24, // CHANGED: 16 -> 24px
-      children: [
-        {
-          id: "10:101",
-          name: "HeaderArea",
-          type: "FRAME",
-          layoutMode: "HORIZONTAL",
-          itemSpacing: 24,
-          children: [
-            { id: "10:102", name: "PageTitle", type: "TEXT", characters: "系统用户列表" }, // CHANGED: "用户管理" -> "系统用户列表"
-            { id: "10:103", name: "CreateButton", type: "INSTANCE", mainComponentKey: "btn_primary", variantProperties: { type: "dashed" } }, // CHANGED: "primary" -> "dashed"
-          ],
-        },
-        {
-          id: "10:104",
-          name: "UserTable",
-          type: "INSTANCE",
-          mainComponentKey: "table_users",
-        },
-      ],
-    },
-    contextTree: {
-      rootNodeId: "10:100",
-      screenTitle: "系统用户列表",
-      nodes: {
-        "10:102": { semanticId: "users.header.title", text: "系统用户列表" },
-        "10:103": { semanticId: "users.header.create_btn", variant: "dashed", text: "添加新账号" },
-        "10:104": { semanticId: "users.content.table" },
-      },
-    },
-  };
+    sourceFileRef: "figma://file/demo_offline_workspace",
+    allowOverwrite: true,
+  });
 
-  const res2 = createDesignPackage(rev2Input);
-  console.log("✓ Created Rev 2 package at:", res2.packagePath, "ContentHash:", res2.contentHash);
+  if (!res2.success) {
+    throw new Error(`Failed to generate sample package rev_2: ${JSON.stringify(res2.diagnostics)}`);
+  }
+  console.log("✓ Ingested and validated Rev 2 package at:", res2.packagePath, "ContentHash:", res2.manifest?.contentHash);
 }
 
 if (process.argv[1]?.includes("generate-sample-packages.ts")) {
-  generateSamplePackages();
+  generateSamplePackages().catch((err) => {
+    console.error("Failed to generate sample packages:", err);
+    process.exit(1);
+  });
 }

@@ -26,9 +26,11 @@ import type { ComponentRecord, DesignPackageManifest } from "../tooling/d2c/cont
 // A. Real Module & Export Static Verification
 // ============================================================================
 
+const fixtureRepoPath = resolve("tests/fixtures/test-repo");
+
 test("Section A: Negative - Non-empty string but module does not exist", () => {
   const record: ComponentRecord = {
-    designComponentId: "btn_missing",
+    designComponentId: "non_existent",
     modulePath: "@/components/NonExistentModule",
     exportName: "default",
     sourceType: "REAL",
@@ -39,7 +41,7 @@ test("Section A: Negative - Non-empty string but module does not exist", () => {
     knownConstraints: [],
   };
 
-  const res = verifyComponentRecord("NonExistent", record, "../workspace/cs_admin-client");
+  const res = verifyComponentRecord("NonExistent", record, fixtureRepoPath);
   assert.equal(res.verified, false);
   const diag = res.diagnostics.find((d) => d.code === "MODULE_NOT_FOUND");
   assert.ok(diag, "Must report MODULE_NOT_FOUND error");
@@ -58,14 +60,13 @@ test("Section A: Negative - Module exists but export does not exist", () => {
     knownConstraints: [],
   };
 
-  const res = verifyComponentRecord("AuthButton", record, "../workspace/cs_admin-client");
+  const res = verifyComponentRecord("AuthButton", record, fixtureRepoPath);
   assert.equal(res.verified, false);
   const diag = res.diagnostics.find((d) => d.code === "EXPORT_NOT_FOUND" || d.code === "EXPORT_KIND_MISMATCH");
   assert.ok(diag, "Must report export not found or mismatch error");
 });
 
 test("Section A: Negative - default / named export mismatch", () => {
-  // AuthButton in real repo has export default, not named export AuthButton
   const record: ComponentRecord = {
     designComponentId: "auth_btn",
     modulePath: "@/components/AuthButton",
@@ -78,7 +79,7 @@ test("Section A: Negative - default / named export mismatch", () => {
     knownConstraints: [],
   };
 
-  const res = verifyComponentRecord("AuthButton", record, "../workspace/cs_admin-client");
+  const res = verifyComponentRecord("AuthButton", record, fixtureRepoPath);
   assert.equal(res.verified, false);
   const diag = res.diagnostics.find((d) => d.code === "EXPORT_KIND_MISMATCH");
   assert.ok(diag, "Must report EXPORT_KIND_MISMATCH when asking for named from default-only file");
@@ -103,13 +104,96 @@ test("Section A: Negative - Boolean converted to string ('false')", () => {
     knownConstraints: [],
   };
 
-  const res = verifyComponentRecord("Button", record, "../workspace/cs_admin-client");
+  const res = verifyComponentRecord("Button", record, fixtureRepoPath);
   assert.equal(res.verified, false);
   const diag = res.diagnostics.find((d) => d.code === "BOOLEAN_STRINGIFIED");
   assert.ok(diag, "Must report BOOLEAN_STRINGIFIED");
 });
 
-test("Section A: Unverified Dependency - External Monorepo Import flagged without crashing", () => {
+test("Section A: Negative - External package (antd) with DefinitelyMissingComponent must fail", () => {
+  const record: ComponentRecord = {
+    designComponentId: "missing_antd_comp",
+    modulePath: "antd",
+    exportName: "DefinitelyMissingComponent",
+    sourceType: "REAL",
+    codeVersionHash: "antd@5.7.3",
+    props: {},
+    supportedStates: ["ready"],
+    bindingStatus: "UNBOUND",
+    knownConstraints: [],
+  };
+
+  const res = verifyComponentRecord("DefinitelyMissingComponent", record, fixtureRepoPath);
+  assert.equal(res.verified, false, "Package with DefinitelyMissingComponent must NOT be verified");
+  const notFound = res.diagnostics.find((d) => d.code === "EXPORT_NOT_FOUND");
+  assert.ok(notFound, "Must report EXPORT_NOT_FOUND for DefinitelyMissingComponent in antd");
+});
+
+test("Section A: Negative - TypeScript type/interface cannot masquerade as renderable component", () => {
+  const record: ComponentRecord = {
+    designComponentId: "fake_type_comp",
+    modulePath: "@/components/TypeOnly",
+    exportName: "FakeComponentInterface",
+    sourceType: "REAL",
+    codeVersionHash: "h1",
+    props: {},
+    supportedStates: ["ready"],
+    bindingStatus: "UNBOUND",
+    knownConstraints: [],
+  };
+
+  const res = verifyComponentRecord("FakeComponentInterface", record, fixtureRepoPath);
+  assert.equal(res.verified, false, "Type or interface must NOT be verified as a renderable component");
+  const typeDiag = res.diagnostics.find((d) => d.code === "TYPE_ONLY_EXPORT");
+  assert.ok(typeDiag, "Must report TYPE_ONLY_EXPORT diagnostic");
+});
+
+test("Section A: Negative - Prop enum value mismatch detected", () => {
+  const record: ComponentRecord = {
+    designComponentId: "auth_btn_bad_enum",
+    modulePath: "@/components/AuthButton",
+    exportName: "default",
+    sourceType: "REAL",
+    codeVersionHash: "h1",
+    props: {
+      type: {
+        name: "type",
+        type: "enum",
+        required: false,
+        enumOptions: ["primary", "default", "link"],
+        defaultValue: "invalid_color_danger", // INVALID: Not in enum options!
+      },
+    },
+    supportedStates: ["ready"],
+    bindingStatus: "UNBOUND",
+    knownConstraints: [],
+  };
+
+  const res = verifyComponentRecord("AuthButton", record, fixtureRepoPath);
+  assert.equal(res.verified, false);
+  const enumDiag = res.diagnostics.find((d) => d.code === "INVALID_PROP_ENUM");
+  assert.ok(enumDiag, "Must report INVALID_PROP_ENUM when defaultValue is not in enumOptions");
+});
+
+test("Section A: Positive - Aliased re-export is successfully verified", () => {
+  const record: ComponentRecord = {
+    designComponentId: "aliased_sub",
+    modulePath: "@/components/ReExport",
+    exportName: "AliasedSubComponent",
+    sourceType: "REAL",
+    codeVersionHash: "h1",
+    props: {},
+    supportedStates: ["ready"],
+    bindingStatus: "UNBOUND",
+    knownConstraints: [],
+  };
+
+  const res = verifyComponentRecord("AliasedSubComponent", record, fixtureRepoPath);
+  assert.equal(res.verified, true, "Aliased re-export must be verified successfully");
+  assert.equal(res.exportKind, "named");
+});
+
+test("Section A: Unverified Dependency - External Monorepo Import marks UNVERIFIED_DEPENDENCY (verified=false)", () => {
   const record: ComponentRecord = {
     designComponentId: "auth_btn",
     modulePath: "@/components/AuthButton",
@@ -122,8 +206,9 @@ test("Section A: Unverified Dependency - External Monorepo Import flagged withou
     knownConstraints: [],
   };
 
-  const res = verifyComponentRecord("AuthButton", record, "../workspace/cs_admin-client");
-  // It has a warning about @monorepo/utils dependency not installed in standalone
+  const res = verifyComponentRecord("AuthButton", record, fixtureRepoPath);
+  // Unverified dependency must NOT pass verified=true
+  assert.equal(res.verified, false, "Component with unverified external dependencies must be verified=false");
   const warn = res.diagnostics.find((d) => d.code === "UNVERIFIED_EXTERNAL_DEPENDENCY");
   assert.ok(warn, "Must flag unverified monorepo dependency @monorepo/utils");
 });
@@ -377,8 +462,25 @@ test("Section D: On-disk resource tampering detected without updating manifest",
 
   const tokenFilePath = resolve(pkgDir, "tokens.snapshot.json");
   writeFileSync(tokenFilePath, JSON.stringify({ token: "original" }), "utf-8");
-
   const originalTokenHash = createHash("sha256").update(JSON.stringify({ token: "original" })).digest("hex");
+
+  const resourceHashes: Record<string, string> = {
+    "tokens.snapshot.json": originalTokenHash,
+  };
+
+  const otherRequired = [
+    "figma.raw.json",
+    "context.json",
+    "source-map.json",
+    "components.used.json",
+    "interactions.json",
+    "diagnostics.json",
+  ];
+  for (const req of otherRequired) {
+    const fPath = resolve(pkgDir, req);
+    writeFileSync(fPath, "{}", "utf-8");
+    resourceHashes[req] = createHash("sha256").update("{}").digest("hex");
+  }
 
   const manifest: DesignPackageManifest = {
     schemaVersion: "1.0.0",
@@ -397,9 +499,7 @@ test("Section D: On-disk resource tampering detected without updating manifest",
     exporterCommitSha: "abc",
     canonicalTokenHash: "tok1",
     contentHash: "",
-    resourceHashes: {
-      "tokens.snapshot.json": originalTokenHash,
-    },
+    resourceHashes,
     approval: {
       status: "PENDING",
       bindingContentHash: "temp",

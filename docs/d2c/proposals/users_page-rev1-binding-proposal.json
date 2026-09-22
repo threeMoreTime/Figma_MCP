@@ -1,7 +1,7 @@
 {
   "screenId": "users_page",
   "revision": 1,
-  "generatedAt": "2026-09-22T02:15:30.416Z",
+  "generatedAt": "2026-09-22T03:38:46.193Z",
   "overallStatus": "REVIEW_REQUIRED",
   "bindings": [
     {
@@ -31,32 +31,6 @@
       ]
     },
     {
-      "designComponentKey": "table_users",
-      "sourceDesignName": "UserTable",
-      "targetImplementation": {
-        "modulePath": "antd",
-        "exportName": "Table",
-        "isSyntheticFixture": false
-      },
-      "bindingStatus": "PROPOSED_PENDING_REVIEW",
-      "propMappings": {
-        "dataSource": {
-          "figmaProp": "rows",
-          "targetProp": "dataSource",
-          "transform": "synthetic mock array"
-        },
-        "columns": {
-          "figmaProp": "headers",
-          "targetProp": "columns",
-          "transform": "schema-inferred column defs"
-        }
-      },
-      "evidence": "Matched against REUSE candidate Table in Ant Design 5.7.3 core registry.",
-      "knownLimitations": [
-        "Figma design does not declare server pagination or sorting contracts. Handled via draft client-side state."
-      ]
-    },
-    {
       "designComponentKey": "tag_status",
       "sourceDesignName": "UserStatusTag",
       "targetImplementation": {
@@ -74,16 +48,16 @@
       },
       "evidence": "Proposal to satisfy MISSING candidate UserStatusTag using standard antd <Tag /> wrapper in fixture.",
       "knownLimitations": [
-        "Explicitly marked SYNTHETIC. NOT a production business component; does not exist in cs_admin-client."
+        "PROPOSAL-ONLY: Wrapper is a proposed fixture pattern and does NOT physically exist in production repo cs_admin-client."
       ]
     }
   ],
   "themeProposal": {
-    "hasDivergence": false,
-    "diffCount": 0,
+    "hasDivergence": true,
+    "diffCount": 1,
     "previewThemeConfig": {
       "token": {
-        "colorPrimary": "#1677ff",
+        "colorPrimary": "#52c41a",
         "borderRadius": 6,
         "fontSize": 14,
         "wireframe": false

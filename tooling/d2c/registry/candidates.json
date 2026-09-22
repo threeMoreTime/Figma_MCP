@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
-  "registryId": "reg_cs_admin-client_65ff9149",
+  "registryId": "reg_cs_admin-client_a6149d2d",
   "targetRepo": "cs_admin-client",
-  "scannedHead": "65ff9149b1f54e98559494f0b21315d45bb189b0",
+  "scannedHead": "a6149d2dd9b9ddff182252e7ed6483b271231ea6",
   "components": {
     "Button": {
       "designComponentId": "antd_button",
@@ -57,7 +57,8 @@
       "knownConstraints": [
         "Strict boolean for disabled/loading; respects ConfigProvider theme token"
       ],
-      "usageExample": "<Button />"
+      "usageExample": "<Button />",
+      "verificationStatus": "VERIFIED"
     },
     "Table": {
       "designComponentId": "antd_table",
@@ -99,7 +100,8 @@
       "knownConstraints": [
         "Requires columns and dataSource definitions; pagination controlled via ConfigProvider"
       ],
-      "usageExample": "<Table />"
+      "usageExample": "<Table />",
+      "verificationStatus": "VERIFIED"
     },
     "Modal": {
       "designComponentId": "antd_modal",
@@ -134,7 +136,8 @@
       "knownConstraints": [
         "Controlled via 'open' prop in AntD 5 (not 'visible')"
       ],
-      "usageExample": "<Modal />"
+      "usageExample": "<Modal />",
+      "verificationStatus": "VERIFIED"
     },
     "Form": {
       "designComponentId": "antd_form",
@@ -169,7 +172,8 @@
       "knownConstraints": [
         "Form.Item wrapper required for validation bindings"
       ],
-      "usageExample": "<Form />"
+      "usageExample": "<Form />",
+      "verificationStatus": "VERIFIED"
     },
     "Input": {
       "designComponentId": "antd_input",
@@ -205,14 +209,15 @@
       "knownConstraints": [
         "Supports prefix/suffix icons; onChange returns ChangeEvent"
       ],
-      "usageExample": "<Input />"
+      "usageExample": "<Input />",
+      "verificationStatus": "VERIFIED"
     },
     "AuthButton": {
       "designComponentId": "cs_auth_button",
       "modulePath": "@/components/AuthButton",
       "exportName": "default",
       "sourceType": "REAL",
-      "codeVersionHash": "d9a9216b5a3206008c6f6985df6ec3fd63b99b55712779ac78f15412d76597ff",
+      "codeVersionHash": "a4915e5beb0bfc922ed5344fc0b84b0d75cd4da1b5451bbbdaab942b8097b383",
       "props": {
         "permission": {
           "name": "permission",
@@ -239,14 +244,15 @@
       "knownConstraints": [
         "Wraps AntD Button with user permission check from @monorepo/utils"
       ],
-      "usageExample": "<AuthButton permission=\"user.create\" type=\"primary\">新建</AuthButton>"
+      "usageExample": "<AuthButton permission=\"user.create\" type=\"primary\">新建</AuthButton>",
+      "verificationStatus": "UNVERIFIED_DEPENDENCY"
     },
     "IconInput": {
       "designComponentId": "cs_icon_input",
       "modulePath": "@/components/IconInput",
       "exportName": "default",
       "sourceType": "REAL",
-      "codeVersionHash": "a30e5c836251d38615b33f285d99676231f3105b42eefdda6eff015d6b413648",
+      "codeVersionHash": "a0a2d7130a9d581d5822a77c9fa6d46f9b1a5c0dadaa9a62f3b19235f845a72d",
       "props": {
         "placeholder": {
           "name": "placeholder",
@@ -260,8 +266,21 @@
       "bindingStatus": "UNBOUND",
       "knownConstraints": [
         "Custom search input wrapper with icon styling"
-      ]
+      ],
+      "verificationStatus": "VERIFIED"
     }
   },
-  "diagnostics": []
+  "diagnostics": [
+    {
+      "code": "UNVERIFIED_EXTERNAL_DEPENDENCY",
+      "message": "Module imports external monorepo packages [@monorepo/utils] not installed in standalone environment. Marked UNVERIFIED.",
+      "severity": "WARNING",
+      "path": "components.AuthButton.dependencies",
+      "details": {
+        "dependencies": [
+          "@monorepo/utils"
+        ]
+      }
+    }
+  ]
 }
