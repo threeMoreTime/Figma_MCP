@@ -1,7 +1,7 @@
 # D2C 集成推进状态跟踪 (D2C Status Tracking)
 
-最后更新：2026-09-22 14:35:00  
-当前执行阶段：**阶段 5A：Figma Design Package → React Prototype — 全部完成**
+最后更新：2026-09-22 15:45:00  
+当前执行阶段：**阶段 5B-2：HTML Prototype → New React Application — 全部完成**
 
 ---
 
@@ -17,20 +17,20 @@
 | **阶段 4A** | PRD → UI Blueprint 引擎 (无 MCP 结构化语义层) | **PASS** (UNIT_VERIFIED) | 零 Figma MCP、零幻觉组件名；PRD 事实与决策切分、3 种视觉方向 Design Brief、人工 Gate 阻断、生成完整 UI Blueprint 与 Interaction Contract；全量测试通过 | `tooling/d2c/blueprint/`, `examples/output/` |
 | **阶段 4B** | UI Blueprint → Native Figma Generator | **PASS** (UNIT_VERIFIED & SIMULATED) | 声明式 Figma 操作计划、Token Variable 绑定、Draft Component 降级、二次运行幂等与手动修改冲突防线，83 项测试通过 | `tooling/d2c/figma-generator/`, `examples/output/` |
 | **阶段 5A** | Figma Design Package → React Prototype | **PASS** (UNIT_VERIFIED & BROWSER_VERIFIED) | 6/6 组件映射至 AntD 5.7.3，零硬编码 Token 校验，4 态契约覆盖，Playwright 真实浏览器 5 项 E2E 交互测试与 6 份截图存档，94 项单元回归全过，tsc 0 错误 | `examples/prototype/users/`, `docs/d2c/prototype-report.md` |
-| **阶段 5B** | 业务仓库生产组件接入与路由挂载 | **NOT_RUN** | 需人工 Gate 确认后开启；保持业务仓库 `cs_admin-client` 绝对只读 | 待人工 Gate 确认 |
+| **阶段 5B-1** | Figma Design → HTML Prototype Generator | **PASS** (UNIT_VERIFIED & BROWSER_VERIFIED) | Greenfield 纯原生 HTML/CSS/JS 原型；Design Element Resolver 语义映射，防幻觉守卫，Hardcoded Style Detector 静态审计通过；Playwright 4 项实机浏览器交互与 6 份截图存档，102 项单元回归全过，tsc 0 错误 | `examples/html-prototype/`, `docs/d2c/html-prototype-report.md` |
+| **阶段 5B-2** | HTML Prototype → New React Application | **PASS** (UNIT_VERIFIED & BROWSER_VERIFIED) | 独立 Greenfield React + TypeScript + Vite 工程；Component Resolution 规范映射，4 态完备，Token 主题注入零硬编码；Playwright 4 项浏览器 E2E 测试全过，10 份截图存档；tsc 0 错误，vite build 成功 | `new-project/`, `docs/d2c/new-project-report.md` |
 | **阶段 6** | 故障注入、复现验证与完整验收 | **NOT_RUN** | 统一 CLI 体验，CI 守护防线，真实验收闭查 | 验收报告与 CI 规则 |
 
 ---
 
-## 2. 阶段 5A 原型状态评级标志 (Prototype Status Flags)
+## 2. 阶段 5B-1 原型状态评级标志 (HTML Prototype Status Flags)
 
 | 评估维度 (Dimension) | 状态 (Status) | 说明 (Notes) |
 | :--- | :---: | :--- |
-| **Component Mapping** | **PASS** | 6/6 组件精准映射到 AntD 5.7.3 原生规范；防幻觉守卫 100% 拦截非法组件；缺失映射明确抛出 `MISSING_COMPONENT` |
-| **Interaction** | **PASS** | 表格数据渲染、弹窗打开、表单空校验拦截、有效提交更新表格、搜索过滤、四态切换全部经 Playwright 实机浏览器验证通过 |
-| **Token** | **PASS** | 100% 使用 Semantic CSS Variables，静态与动态运行时均零硬编码（零 `#1677ff`，零 `16px`），对齐 Canonical Tokens |
-| **Visual** | **BLOCKED / NOT_RUN** | 严格遵循零 Figma MCP 与零非授权网络边界；不执行 live Figma 云端视觉比对，以 Chromium 实机无头渲染与 6 份截图为准 |
-| **Production Integration** | **NOT_RUN** | 阶段 5A 明确边界，非生产代码生成；目标业务仓库（`../workspace/cs_admin-client`）保持只读且零文件变更 |
+| **FIGMA_TO_HTML** | **PASS** | 基于 `figma-release-package`、`ui-blueprint` 与 `canonical-tokens`，通过 `Design Element Resolver` 编译为 W3C 原生语义元素；100% 保留 `data-semantic-id` 与 `data-component`；防幻觉守卫 100% 拦截非法组件名 |
+| **INTERACTION** | **PASS** | 原生 `<dialog>` 弹窗唤起、表单必填校验拦截、Mock API 异步提交、Toast 轻提示、表格动态增行、搜索实时过滤、四态切换全部经 Playwright 实机浏览器验证通过 |
+| **VISUAL** | **PASS** | 经 Playwright 真实 Chromium 环境全量加载并验证；自动生成并归档 6 份高保真状态截图；100% 采用 `--d2c-*` Semantic CSS Variables，静态与动态检查均零裸色、零裸间距 |
+| **REACT_GENERATION** | **NOT_RUN** | 严格遵守 Greenfield 阶段 5B-1 边界，本阶段不进入 React，不创建生产代码，业务仓库 `cs_admin-client` 保持绝对只读且零文件改动 |
 
 ---
 

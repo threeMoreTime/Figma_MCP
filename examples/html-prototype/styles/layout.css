@@ -1,0 +1,115 @@
+/**
+ * Layout Styles for Greenfield HTML Prototype
+ * Strictly conforms to Canonical Tokens (--d2c-*). ZERO hardcoded colors or dimensions.
+ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: var(--d2c-fontSize-base);
+  color: var(--d2c-color-text-primary);
+  background-color: var(--d2c-color-bg-layout);
+  line-height: 1.5715;
+  min-height: 100vh;
+}
+
+.d2c-app-container {
+  max-width: var(--d2c-maxWidth-app);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--d2c-spacing-lg);
+  padding-right: var(--d2c-spacing-lg);
+  padding-top: var(--d2c-spacing-md);
+  padding-bottom: var(--d2c-spacing-lg);
+}
+
+/* State Switcher Bar */
+.d2c-state-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--d2c-spacing-sm);
+  padding-left: var(--d2c-spacing-md);
+  padding-right: var(--d2c-spacing-md);
+  padding-top: var(--d2c-spacing-sm);
+  padding-bottom: var(--d2c-spacing-sm);
+  background-color: var(--d2c-color-bg-container);
+  border: var(--d2c-borderWidth-base) dashed var(--d2c-color-border);
+  border-radius: var(--d2c-borderRadius-base);
+  margin-bottom: var(--d2c-spacing-md);
+}
+
+.d2c-state-title {
+  font-weight: 600;
+  font-size: var(--d2c-fontSize-base);
+  color: var(--d2c-color-text-secondary);
+  margin-right: var(--d2c-spacing-sm);
+}
+
+/* Header Region */
+.d2c-page-header {
+  padding-top: var(--d2c-spacing-md);
+  padding-bottom: var(--d2c-spacing-md);
+  padding-left: var(--d2c-spacing-lg);
+  padding-right: var(--d2c-spacing-lg);
+  background-color: var(--d2c-color-bg-container);
+  border-radius: var(--d2c-borderRadius-base);
+  border: var(--d2c-borderWidth-base) solid var(--d2c-color-border);
+  margin-bottom: var(--d2c-spacing-md);
+}
+
+.d2c-header-title {
+  font-size: var(--d2c-fontSize-heading);
+  font-weight: 600;
+  color: var(--d2c-color-text-primary);
+  margin-bottom: var(--d2c-spacing-xs);
+}
+
+.d2c-header-subtitle {
+  font-size: var(--d2c-fontSize-base);
+  color: var(--d2c-color-text-secondary);
+}
+
+/* Toolbar Region */
+.d2c-toolbar-region {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--d2c-spacing-md);
+  margin-bottom: var(--d2c-spacing-md);
+}
+
+.d2c-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--d2c-spacing-sm);
+  flex: 1;
+  max-width: var(--d2c-maxWidth-toolbar);
+}
+
+/* Content Region */
+.d2c-content-region {
+  background-color: var(--d2c-color-bg-container);
+  border-radius: var(--d2c-borderRadius-base);
+  border: var(--d2c-borderWidth-base) solid var(--d2c-color-border);
+  padding-left: var(--d2c-spacing-md);
+  padding-right: var(--d2c-spacing-md);
+  padding-top: var(--d2c-spacing-md);
+  padding-bottom: var(--d2c-spacing-md);
+}
+
+/* Toast Container */
+.d2c-toast-container {
+  position: fixed;
+  top: var(--d2c-spacing-lg);
+  right: var(--d2c-spacing-lg);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--d2c-spacing-sm);
+  pointer-events: none;
+}

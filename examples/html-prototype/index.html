@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>企业用户权限管理控制台 (Greenfield HTML Prototype)</title>
+  <link rel="stylesheet" href="./styles/tokens.css">
+  <link rel="stylesheet" href="./styles/layout.css">
+  <link rel="stylesheet" href="./styles/components.css">
+</head>
+<body>
+  <div class="d2c-app-container" id="html-prototype-root">
+    <!-- State Switcher Bar for InteractionContract Verification -->
+    <aside class="d2c-state-bar" id="state-switcher" aria-label="契约状态切换">
+      <span class="d2c-state-title">契约状态切换:</span>
+      <button type="button" class="d2c-btn d2c-btn-secondary d2c-btn-sm active" id="btn-state-ready">ready (就绪)</button>
+      <button type="button" class="d2c-btn d2c-btn-secondary d2c-btn-sm" id="btn-state-loading">loading (加载中)</button>
+      <button type="button" class="d2c-btn d2c-btn-secondary d2c-btn-sm" id="btn-state-empty">empty (空数据)</button>
+      <button type="button" class="d2c-btn d2c-btn-secondary d2c-btn-sm" id="btn-state-error">error (失败)</button>
+    </aside>
+
+    <!-- Region 1: Header -->
+    <header class="d2c-page-header" data-component="page-header" data-semantic-id="users.management.page_header" id="region-header">
+  <h1 class="d2c-header-title" id="header-title">企业用户权限管理控制台</h1>
+  <p class="d2c-header-subtitle" id="header-subtitle">为管理员与安全审计人员提供用户生命周期管理、多角色权限配置及操作轨迹审计能力。</p>
+</header>
+
+    <!-- Region 2: Toolbar -->
+    <section class="d2c-toolbar-region" id="region-toolbar">
+  <div class="d2c-toolbar-left">
+    <div class="d2c-search-box" data-component="filter-search" data-semantic-id="users.management.search_input">
+      <input type="search" id="input-search" class="d2c-input d2c-input-search" placeholder="按姓名或角色搜索..." autocomplete="off" />
+    </div>
+  </div>
+  <button type="button" class="d2c-btn d2c-btn-primary" id="btn-create-user" data-component="button" data-semantic-id="users.management.create_btn">
+    新建用户
+  </button>
+</section>
+
+    <!-- Region 3: Content -->
+    <main class="d2c-content-region" id="region-content">
+      <!-- 3.1 Loading State View -->
+      <div id="state-loading-view" class="d2c-loading-placeholder" style="display: none;">
+        <div class="d2c-spinner"></div>
+        <p>正在从后端用户中心加载数据...</p>
+      </div>
+
+      <!-- 3.2 Error State View -->
+      <div id="state-error-view" style="display: none;">
+        <div class="d2c-alert d2c-alert-error" data-component="alert-notice">
+          <div>
+            <strong>数据加载失败:</strong> 后端鉴权认证超时或网络连接异常，请重试。
+          </div>
+          <button type="button" class="d2c-btn d2c-btn-danger d2c-btn-sm" onclick="window.__d2cPrototypeState.setPageState('ready')">
+            重新加载
+          </button>
+        </div>
+      </div>
+
+      <!-- 3.3 Empty State View -->
+      <div id="state-empty-view" class="d2c-empty-placeholder" data-component="empty-placeholder" style="display: none;">
+        <p>暂无符合筛选条件的用户记录</p>
+      </div>
+
+      <!-- 3.4 Ready State View (Table) -->
+      <div id="state-ready-view">
+        <div class="d2c-table-container" data-component="data-table" data-semantic-id="users.management.table" id="table-container">
+  <table class="d2c-table" id="users-table">
+    <thead class="d2c-table-thead">
+      <tr>
+        <th class="d2c-th">用户姓名</th>
+        <th class="d2c-th">企业邮箱</th>
+        <th class="d2c-th">系统角色</th>
+        <th class="d2c-th">状态</th>
+        <th class="d2c-th">创建时间</th>
+        <th class="d2c-th">操作</th>
+      </tr>
+    </thead>
+    <tbody class="d2c-table-tbody" id="users-table-tbody">
+      <!-- Injected by state.js -->
+    </tbody>
+  </table>
+</div>
+      </div>
+    </main>
+
+    <!-- Region 4: Modal Dialog -->
+    <dialog class="d2c-dialog" data-component="modal-dialog" data-semantic-id="users.management.create_modal" id="modal-create-user">
+  <div class="d2c-dialog-box">
+    <div class="d2c-dialog-header">
+      <h3 class="d2c-dialog-title">新建企业用户</h3>
+      <button type="button" class="d2c-dialog-close" id="btn-modal-close" aria-label="关闭">&times;</button>
+    </div>
+    <div class="d2c-dialog-body">
+      <form class="d2c-form" data-component="form-container" data-semantic-id="users.management.create_form" id="form-create-user" novalidate>
+        <div class="d2c-form-item" data-component="form-field">
+          <label class="d2c-label d2c-label-required" for="input-username">用户姓名</label>
+          <input type="text" id="input-username" name="username" class="d2c-input" placeholder="例如：赵六" autocomplete="off" />
+          <div class="d2c-error-msg" id="error-username"></div>
+        </div>
+
+        <div class="d2c-form-item" data-component="form-field">
+          <label class="d2c-label" for="input-email">企业邮箱</label>
+          <input type="email" id="input-email" name="email" class="d2c-input" placeholder="例如：zhaoliu@enterprise.com" autocomplete="off" />
+          <div class="d2c-error-msg" id="error-email"></div>
+        </div>
+
+        <div class="d2c-form-item" data-component="form-field">
+          <label class="d2c-label d2c-label-required" for="input-role">系统角色</label>
+          <input type="text" id="input-role" name="role" class="d2c-input" placeholder="例如：业务运维" autocomplete="off" />
+          <div class="d2c-error-msg" id="error-role"></div>
+        </div>
+
+        <div class="d2c-form-actions">
+          <button type="button" class="d2c-btn d2c-btn-secondary" id="btn-modal-cancel">取消</button>
+          <button type="submit" class="d2c-btn d2c-btn-primary" id="btn-submit-user">确认创建</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</dialog>
+
+    <!-- Global Notifications / Toasts -->
+    <div class="d2c-toast-container" id="notification-container" aria-live="polite"></div>
+  </div>
+
+  <!-- Runtime Scripts (Classic scripts execute under file:// without CORS restrictions) -->
+  <script src="./runtime/mock-api.js"></script>
+  <script src="./runtime/router.js"></script>
+  <script src="./runtime/state.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const state = new window.D2C_STATE.PrototypeState();
+      window.__d2cPrototypeState = state;
+
+      const router = new window.D2C_ROUTER.MicroRouter({
+        "/users": () => {
+          state.setPageState("ready");
+        }
+      });
+
+      router.init();
+      state.init();
+    });
+  </script>
+</body>
+</html>

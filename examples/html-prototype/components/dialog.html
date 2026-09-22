@@ -1,0 +1,34 @@
+<dialog class="d2c-dialog" data-component="modal-dialog" data-semantic-id="users.management.create_modal" id="modal-create-user">
+  <div class="d2c-dialog-box">
+    <div class="d2c-dialog-header">
+      <h3 class="d2c-dialog-title">新建企业用户</h3>
+      <button type="button" class="d2c-dialog-close" id="btn-modal-close" aria-label="关闭">&times;</button>
+    </div>
+    <div class="d2c-dialog-body">
+      <form class="d2c-form" data-component="form-container" data-semantic-id="users.management.create_form" id="form-create-user" novalidate>
+        <div class="d2c-form-item" data-component="form-field">
+          <label class="d2c-label d2c-label-required" for="input-username">用户姓名</label>
+          <input type="text" id="input-username" name="username" class="d2c-input" placeholder="例如：赵六" autocomplete="off" />
+          <div class="d2c-error-msg" id="error-username"></div>
+        </div>
+
+        <div class="d2c-form-item" data-component="form-field">
+          <label class="d2c-label" for="input-email">企业邮箱</label>
+          <input type="email" id="input-email" name="email" class="d2c-input" placeholder="例如：zhaoliu@enterprise.com" autocomplete="off" />
+          <div class="d2c-error-msg" id="error-email"></div>
+        </div>
+
+        <div class="d2c-form-item" data-component="form-field">
+          <label class="d2c-label d2c-label-required" for="input-role">系统角色</label>
+          <input type="text" id="input-role" name="role" class="d2c-input" placeholder="例如：业务运维" autocomplete="off" />
+          <div class="d2c-error-msg" id="error-role"></div>
+        </div>
+
+        <div class="d2c-form-actions">
+          <button type="button" class="d2c-btn d2c-btn-secondary" id="btn-modal-cancel">取消</button>
+          <button type="submit" class="d2c-btn d2c-btn-primary" id="btn-submit-user">确认创建</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</dialog>

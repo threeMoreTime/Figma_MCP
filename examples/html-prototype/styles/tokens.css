@@ -1,0 +1,30 @@
+:root {
+  --d2c-color-primary: #1677ff;
+  --d2c-color-success: #52c41a;
+  --d2c-color-error: #ff4d4f;
+  --d2c-color-bg-container: #ffffff;
+  --d2c-color-bg-layout: #f5f5f5;
+  --d2c-color-text-primary: #141414;
+  --d2c-color-text-secondary: #595959;
+  --d2c-color-border: #d9d9d9;
+  --d2c-borderWidth-base: 1px;
+  --d2c-borderWidth-spinner: 3px;
+  --d2c-spacing-xxs: 2px;
+  --d2c-spacing-xs: 4px;
+  --d2c-spacing-sm: 8px;
+  --d2c-spacing-md: 16px;
+  --d2c-spacing-lg: 24px;
+  --d2c-spacing-xl: 32px;
+  --d2c-spacing-xxl: 48px;
+  --d2c-borderRadius-sm: 2px;
+  --d2c-borderRadius-base: 6px;
+  --d2c-borderRadius-lg: 8px;
+  --d2c-fontSize-base: 14px;
+  --d2c-fontSize-lg: 16px;
+  --d2c-fontSize-heading: 20px;
+  --d2c-maxWidth-app: 1280px;
+  --d2c-maxWidth-toolbar: 360px;
+  --d2c-maxWidth-dialog: 520px;
+  --d2c-shadow-modal: 0 10px 25px rgba(0, 0, 0, 0.2);
+  --d2c-shadow-toast: 0 4px 12px rgba(0, 0, 0, 0.15);
+}

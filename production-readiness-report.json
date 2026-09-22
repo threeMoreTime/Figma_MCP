@@ -1,0 +1,55 @@
+{
+  "ready": true,
+  "status": "APPROVED",
+  "screenId": "users.management",
+  "unapprovedComponents": [],
+  "approvedComponents": [
+    {
+      "semanticId": "users.management.page_header",
+      "target": "antd/es/typography",
+      "props": {
+        "level": 4
+      }
+    },
+    {
+      "semanticId": "users.management.search_input",
+      "target": "antd/es/input",
+      "props": {
+        "placeholder": "搜索用户名或邮箱..."
+      }
+    },
+    {
+      "semanticId": "users.management.create_btn",
+      "target": "@/components/AuthButton",
+      "props": {
+        "permission": "sys:user:add",
+        "type": "primary"
+      }
+    },
+    {
+      "semanticId": "users.management.table",
+      "target": "antd/es/table",
+      "props": {
+        "rowKey": "id"
+      }
+    },
+    {
+      "semanticId": "users.management.create_modal",
+      "target": "antd/es/modal",
+      "props": {
+        "title": "新建用户",
+        "destroyOnClose": true
+      }
+    },
+    {
+      "semanticId": "users.management.create_form",
+      "target": "antd/es/form",
+      "props": {
+        "layout": "vertical"
+      }
+    }
+  ],
+  "securityViolations": [],
+  "reportPath": "C:\\Users\\Administrator\\Desktop\\Antigravity_No_Figma_MCP_Prompts\\production-readiness-report.json",
+  "timestamp": "2026-09-22T07:19:48.886Z"
+}

@@ -57,7 +57,25 @@ export function generateMappingProposal(
       };
     }
 
-    const figmaTarget = DEFAULT_INTENT_FIGMA_MAP[comp.intent] || `DS/${comp.component}`;
+    const figmaTarget = DEFAULT_INTENT_FIGMA_MAP[comp.intent];
+
+    if (!figmaTarget) {
+      diagnostics.push({
+        code: "UNRESOLVED_FIGMA_COMPONENT_MAPPING",
+        message: `No approved Figma component mapping exists for intent '${comp.intent}'.`,
+        severity: "WARNING",
+        details: { semanticId: comp.semanticId, intent: comp.intent },
+      });
+      return {
+        semanticId: comp.semanticId,
+        intent: comp.intent,
+        candidate: {
+          figmaComponent: "UNRESOLVED",
+          status: "UNRESOLVED" as const,
+          reason: "No approved mapping exists; human review required.",
+        },
+      };
+    }
 
     return {
       semanticId: comp.semanticId,

@@ -1,10 +1,1 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { UsersPrototype } from "./UsersPrototype.js";
-import "./prototype.css";
-
-const rootElement = document.getElementById("root");
-if (rootElement) {
-  const root = ReactDOM.createRoot(rootElement);
-  root.render(<UsersPrototype />);
-}
+import "../users-management/page/index.js";

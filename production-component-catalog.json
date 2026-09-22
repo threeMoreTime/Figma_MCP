@@ -1,0 +1,1071 @@
+{
+  "generatedAt": "2026-09-22T07:19:48.908Z",
+  "sourceRepository": "cs_admin-client",
+  "summary": {
+    "componentsCount": 9,
+    "pagesCount": 98,
+    "hooksCount": 1,
+    "servicesCount": 1
+  },
+  "components": [
+    {
+      "name": "AuthButton",
+      "category": "component",
+      "filePath": "src/components/AuthButton/index.tsx",
+      "importPath": "@/components/AuthButton",
+      "propsInterface": "AuthButtonProps",
+      "props": [
+        {
+          "name": "permission",
+          "type": "string",
+          "required": false,
+          "description": "权限标识，如 \"sys:orders:manger\""
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false
+        },
+        {
+          "name": "onNoPermission",
+          "type": "() => void",
+          "required": false,
+          "description": "无权限时的回调函数"
+        },
+        {
+          "name": "hideWhenNoPermission",
+          "type": "boolean",
+          "required": false,
+          "description": "是否隐藏无权限的按钮，默认为 false（禁用）"
+        }
+      ],
+      "exportType": "both",
+      "usagePattern": "<AuthButton />"
+    },
+    {
+      "name": "ChatRecordModal",
+      "category": "component",
+      "filePath": "src/components/ChatRecordModal/index.tsx",
+      "importPath": "@/components/ChatRecordModal",
+      "props": [],
+      "exportType": "both",
+      "usagePattern": "<ChatRecordModal />"
+    },
+    {
+      "name": "DynamicForm",
+      "category": "component",
+      "filePath": "src/components/DynamicForm/index.tsx",
+      "importPath": "@/components/DynamicForm",
+      "props": [],
+      "exportType": "default",
+      "usagePattern": "<DynamicForm />"
+    },
+    {
+      "name": "FastReplyDropdownButton",
+      "category": "component",
+      "filePath": "src/components/FastReplyDropdownButton/index.tsx",
+      "importPath": "@/components/FastReplyDropdownButton",
+      "propsInterface": "FastReplyDropdownButtonProps",
+      "props": [
+        {
+          "name": "visible",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "language",
+          "type": "string | null",
+          "required": false
+        },
+        {
+          "name": "groupId",
+          "type": "string | number",
+          "required": false
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "onSelect",
+          "type": "(content: string) => void",
+          "required": true
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "iconStyle",
+          "type": "React.CSSProperties",
+          "required": false
+        },
+        {
+          "name": "placement",
+          "type": "\"topRight\" | \"bottomRight\" | \"topLeft\" | \"bottomLeft\"",
+          "required": false
+        },
+        {
+          "name": "buttonProps",
+          "type": "Omit<ButtonProps, \"onClick\" | \"icon\" | \"title\" | \"disabled\">",
+          "required": false
+        }
+      ],
+      "exportType": "both",
+      "usagePattern": "<FastReplyDropdownButton />"
+    },
+    {
+      "name": "GameServerSelect",
+      "category": "component",
+      "filePath": "src/components/GameServerSelect/index.tsx",
+      "importPath": "@/components/GameServerSelect",
+      "propsInterface": "CustomMultiSelectProps",
+      "props": [
+        {
+          "name": "value",
+          "type": "(string | number)[]",
+          "required": false
+        },
+        {
+          "name": "onChange",
+          "type": "(val: (string | number)[]) => void",
+          "required": false
+        },
+        {
+          "name": "options",
+          "type": "Option[]",
+          "required": false
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false
+        }
+      ],
+      "exportType": "named",
+      "usagePattern": "<GameServerSelect />"
+    },
+    {
+      "name": "IconInput",
+      "category": "component",
+      "filePath": "src/components/IconInput/index.tsx",
+      "importPath": "@/components/IconInput",
+      "propsInterface": "IconInputProps",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "输入框的值"
+        },
+        {
+          "name": "onChange",
+          "type": "(value: string) => void",
+          "required": false,
+          "description": "值变化回调"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "description": "占位符"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "是否禁用"
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": "输入框样式"
+        }
+      ],
+      "exportType": "both",
+      "usagePattern": "<IconInput />"
+    },
+    {
+      "name": "ImageUpload",
+      "category": "component",
+      "filePath": "src/components/ImageUpload/index.tsx",
+      "importPath": "@/components/ImageUpload",
+      "props": [],
+      "exportType": "default",
+      "usagePattern": "<ImageUpload />"
+    },
+    {
+      "name": "MainLayout",
+      "category": "component",
+      "filePath": "src/components/MainLayout/index.tsx",
+      "importPath": "@/components/MainLayout",
+      "props": [],
+      "exportType": "default",
+      "usagePattern": "<MainLayout />"
+    },
+    {
+      "name": "RichTextEditor",
+      "category": "component",
+      "filePath": "src/components/RichTextEditor/index.tsx",
+      "importPath": "@/components/RichTextEditor",
+      "propsInterface": "RichTextEditorProps",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "onChange",
+          "type": "(value: string) => void",
+          "required": false
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false
+        },
+        {
+          "name": "readOnly",
+          "type": "boolean",
+          "required": false
+        }
+      ],
+      "exportType": "both",
+      "usagePattern": "<RichTextEditor />"
+    }
+  ],
+  "pages": [
+    {
+      "name": "complaint",
+      "category": "page",
+      "filePath": "src/pages/complaint/index.tsx",
+      "importPath": "@/pages/complaint",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/complaint\" />"
+    },
+    {
+      "name": "complaint/services",
+      "category": "page",
+      "filePath": "src/pages/complaint/services/index.ts",
+      "importPath": "@/pages/complaint/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/complaint/services\" />"
+    },
+    {
+      "name": "complaint/types",
+      "category": "page",
+      "filePath": "src/pages/complaint/types/index.ts",
+      "importPath": "@/pages/complaint/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/complaint/types\" />"
+    },
+    {
+      "name": "dashboard/aiCustomerStat",
+      "category": "page",
+      "filePath": "src/pages/dashboard/aiCustomerStat/index.tsx",
+      "importPath": "@/pages/dashboard/aiCustomerStat",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/dashboard/aiCustomerStat\" />"
+    },
+    {
+      "name": "dashboard/aiCustomerStat/services",
+      "category": "page",
+      "filePath": "src/pages/dashboard/aiCustomerStat/services/index.ts",
+      "importPath": "@/pages/dashboard/aiCustomerStat/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/dashboard/aiCustomerStat/services\" />"
+    },
+    {
+      "name": "dashboard/aiCustomerStat/types",
+      "category": "page",
+      "filePath": "src/pages/dashboard/aiCustomerStat/types/index.ts",
+      "importPath": "@/pages/dashboard/aiCustomerStat/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/dashboard/aiCustomerStat/types\" />"
+    },
+    {
+      "name": "dashboard/staffPerformance",
+      "category": "page",
+      "filePath": "src/pages/dashboard/staffPerformance/index.tsx",
+      "importPath": "@/pages/dashboard/staffPerformance",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/dashboard/staffPerformance\" />"
+    },
+    {
+      "name": "dashboard/staffPerformance/services",
+      "category": "page",
+      "filePath": "src/pages/dashboard/staffPerformance/services/index.ts",
+      "importPath": "@/pages/dashboard/staffPerformance/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/dashboard/staffPerformance/services\" />"
+    },
+    {
+      "name": "dashboard/staffPerformance/types",
+      "category": "page",
+      "filePath": "src/pages/dashboard/staffPerformance/types/index.ts",
+      "importPath": "@/pages/dashboard/staffPerformance/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/dashboard/staffPerformance/types\" />"
+    },
+    {
+      "name": "knowledge/aiKnowledge",
+      "category": "page",
+      "filePath": "src/pages/knowledge/aiKnowledge/index.tsx",
+      "importPath": "@/pages/knowledge/aiKnowledge",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/knowledge/aiKnowledge\" />"
+    },
+    {
+      "name": "knowledge/aiKnowledge/services",
+      "category": "page",
+      "filePath": "src/pages/knowledge/aiKnowledge/services/index.ts",
+      "importPath": "@/pages/knowledge/aiKnowledge/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/knowledge/aiKnowledge/services\" />"
+    },
+    {
+      "name": "knowledge/aiKnowledge/types",
+      "category": "page",
+      "filePath": "src/pages/knowledge/aiKnowledge/types/index.ts",
+      "importPath": "@/pages/knowledge/aiKnowledge/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/knowledge/aiKnowledge/types\" />"
+    },
+    {
+      "name": "prototype/users",
+      "category": "page",
+      "filePath": "src/pages/prototype/users/index.tsx",
+      "importPath": "@/pages/prototype/users",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/prototype/users\" />"
+    },
+    {
+      "name": "receptionSimulation",
+      "category": "page",
+      "filePath": "src/pages/receptionSimulation/index.tsx",
+      "importPath": "@/pages/receptionSimulation",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/receptionSimulation\" />"
+    },
+    {
+      "name": "system/aiSimilarityThreshold",
+      "category": "page",
+      "filePath": "src/pages/system/aiSimilarityThreshold/index.tsx",
+      "importPath": "@/pages/system/aiSimilarityThreshold",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/aiSimilarityThreshold\" />"
+    },
+    {
+      "name": "system/aiSimilarityThreshold/services",
+      "category": "page",
+      "filePath": "src/pages/system/aiSimilarityThreshold/services/index.ts",
+      "importPath": "@/pages/system/aiSimilarityThreshold/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/aiSimilarityThreshold/services\" />"
+    },
+    {
+      "name": "system/aiSimilarityThreshold/types",
+      "category": "page",
+      "filePath": "src/pages/system/aiSimilarityThreshold/types/index.ts",
+      "importPath": "@/pages/system/aiSimilarityThreshold/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/aiSimilarityThreshold/types\" />"
+    },
+    {
+      "name": "system/alertConfig",
+      "category": "page",
+      "filePath": "src/pages/system/alertConfig/index.tsx",
+      "importPath": "@/pages/system/alertConfig",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/alertConfig\" />"
+    },
+    {
+      "name": "system/alertConfig/services",
+      "category": "page",
+      "filePath": "src/pages/system/alertConfig/services/index.ts",
+      "importPath": "@/pages/system/alertConfig/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/alertConfig/services\" />"
+    },
+    {
+      "name": "system/alertConfig/types",
+      "category": "page",
+      "filePath": "src/pages/system/alertConfig/types/index.ts",
+      "importPath": "@/pages/system/alertConfig/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/alertConfig/types\" />"
+    },
+    {
+      "name": "system/config",
+      "category": "page",
+      "filePath": "src/pages/system/config/index.tsx",
+      "importPath": "@/pages/system/config",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/config\" />"
+    },
+    {
+      "name": "system/config/services",
+      "category": "page",
+      "filePath": "src/pages/system/config/services/index.ts",
+      "importPath": "@/pages/system/config/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/config/services\" />"
+    },
+    {
+      "name": "system/dept/columns",
+      "category": "page",
+      "filePath": "src/pages/system/dept/columns/index.tsx",
+      "importPath": "@/pages/system/dept/columns",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/dept/columns\" />"
+    },
+    {
+      "name": "system/dept/components",
+      "category": "page",
+      "filePath": "src/pages/system/dept/components/index.ts",
+      "importPath": "@/pages/system/dept/components",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/dept/components\" />"
+    },
+    {
+      "name": "system/dept/config",
+      "category": "page",
+      "filePath": "src/pages/system/dept/config/index.ts",
+      "importPath": "@/pages/system/dept/config",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/dept/config\" />"
+    },
+    {
+      "name": "system/dept/hooks",
+      "category": "page",
+      "filePath": "src/pages/system/dept/hooks/index.ts",
+      "importPath": "@/pages/system/dept/hooks",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/dept/hooks\" />"
+    },
+    {
+      "name": "system/dept",
+      "category": "page",
+      "filePath": "src/pages/system/dept/index.tsx",
+      "importPath": "@/pages/system/dept",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/dept\" />"
+    },
+    {
+      "name": "system/dept/services",
+      "category": "page",
+      "filePath": "src/pages/system/dept/services/index.ts",
+      "importPath": "@/pages/system/dept/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/dept/services\" />"
+    },
+    {
+      "name": "system/dept/types",
+      "category": "page",
+      "filePath": "src/pages/system/dept/types/index.ts",
+      "importPath": "@/pages/system/dept/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/dept/types\" />"
+    },
+    {
+      "name": "system/gameManage/components/GameEditModal",
+      "category": "page",
+      "filePath": "src/pages/system/gameManage/components/GameEditModal/index.tsx",
+      "importPath": "@/pages/system/gameManage/components/GameEditModal",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/gameManage/components/GameEditModal\" />"
+    },
+    {
+      "name": "system/gameManage",
+      "category": "page",
+      "filePath": "src/pages/system/gameManage/index.tsx",
+      "importPath": "@/pages/system/gameManage",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/gameManage\" />"
+    },
+    {
+      "name": "system/gameManage/services",
+      "category": "page",
+      "filePath": "src/pages/system/gameManage/services/index.ts",
+      "importPath": "@/pages/system/gameManage/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/gameManage/services\" />"
+    },
+    {
+      "name": "system/gameManage/types",
+      "category": "page",
+      "filePath": "src/pages/system/gameManage/types/index.ts",
+      "importPath": "@/pages/system/gameManage/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/gameManage/types\" />"
+    },
+    {
+      "name": "system/gameManage/welcomeConfig",
+      "category": "page",
+      "filePath": "src/pages/system/gameManage/welcomeConfig/index.tsx",
+      "importPath": "@/pages/system/gameManage/welcomeConfig",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/gameManage/welcomeConfig\" />"
+    },
+    {
+      "name": "system/gameManage/welcomeConfig/services",
+      "category": "page",
+      "filePath": "src/pages/system/gameManage/welcomeConfig/services/index.ts",
+      "importPath": "@/pages/system/gameManage/welcomeConfig/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/gameManage/welcomeConfig/services\" />"
+    },
+    {
+      "name": "system/gameManage/welcomeConfig/types",
+      "category": "page",
+      "filePath": "src/pages/system/gameManage/welcomeConfig/types/index.ts",
+      "importPath": "@/pages/system/gameManage/welcomeConfig/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/gameManage/welcomeConfig/types\" />"
+    },
+    {
+      "name": "system/menu/columns",
+      "category": "page",
+      "filePath": "src/pages/system/menu/columns/index.tsx",
+      "importPath": "@/pages/system/menu/columns",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/menu/columns\" />"
+    },
+    {
+      "name": "system/menu/config",
+      "category": "page",
+      "filePath": "src/pages/system/menu/config/index.ts",
+      "importPath": "@/pages/system/menu/config",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/menu/config\" />"
+    },
+    {
+      "name": "system/menu/hooks",
+      "category": "page",
+      "filePath": "src/pages/system/menu/hooks/index.ts",
+      "importPath": "@/pages/system/menu/hooks",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/menu/hooks\" />"
+    },
+    {
+      "name": "system/menu",
+      "category": "page",
+      "filePath": "src/pages/system/menu/index.tsx",
+      "importPath": "@/pages/system/menu",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/menu\" />"
+    },
+    {
+      "name": "system/menu/services",
+      "category": "page",
+      "filePath": "src/pages/system/menu/services/index.ts",
+      "importPath": "@/pages/system/menu/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/menu/services\" />"
+    },
+    {
+      "name": "system/menu/types",
+      "category": "page",
+      "filePath": "src/pages/system/menu/types/index.ts",
+      "importPath": "@/pages/system/menu/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/menu/types\" />"
+    },
+    {
+      "name": "system/oss/columns",
+      "category": "page",
+      "filePath": "src/pages/system/oss/columns/index.tsx",
+      "importPath": "@/pages/system/oss/columns",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/oss/columns\" />"
+    },
+    {
+      "name": "system/oss/components",
+      "category": "page",
+      "filePath": "src/pages/system/oss/components/index.ts",
+      "importPath": "@/pages/system/oss/components",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/oss/components\" />"
+    },
+    {
+      "name": "system/oss/config",
+      "category": "page",
+      "filePath": "src/pages/system/oss/config/index.ts",
+      "importPath": "@/pages/system/oss/config",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/oss/config\" />"
+    },
+    {
+      "name": "system/oss/hooks",
+      "category": "page",
+      "filePath": "src/pages/system/oss/hooks/index.ts",
+      "importPath": "@/pages/system/oss/hooks",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/oss/hooks\" />"
+    },
+    {
+      "name": "system/oss",
+      "category": "page",
+      "filePath": "src/pages/system/oss/index.tsx",
+      "importPath": "@/pages/system/oss",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/oss\" />"
+    },
+    {
+      "name": "system/oss/services",
+      "category": "page",
+      "filePath": "src/pages/system/oss/services/index.ts",
+      "importPath": "@/pages/system/oss/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/oss/services\" />"
+    },
+    {
+      "name": "system/oss/types",
+      "category": "page",
+      "filePath": "src/pages/system/oss/types/index.ts",
+      "importPath": "@/pages/system/oss/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/oss/types\" />"
+    },
+    {
+      "name": "system/playerManage",
+      "category": "page",
+      "filePath": "src/pages/system/playerManage/index.tsx",
+      "importPath": "@/pages/system/playerManage",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/playerManage\" />"
+    },
+    {
+      "name": "system/playerManage/services",
+      "category": "page",
+      "filePath": "src/pages/system/playerManage/services/index.ts",
+      "importPath": "@/pages/system/playerManage/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/playerManage/services\" />"
+    },
+    {
+      "name": "system/playerManage/types",
+      "category": "page",
+      "filePath": "src/pages/system/playerManage/types/index.ts",
+      "importPath": "@/pages/system/playerManage/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/playerManage/types\" />"
+    },
+    {
+      "name": "system/role/columns",
+      "category": "page",
+      "filePath": "src/pages/system/role/columns/index.tsx",
+      "importPath": "@/pages/system/role/columns",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/role/columns\" />"
+    },
+    {
+      "name": "system/role/config",
+      "category": "page",
+      "filePath": "src/pages/system/role/config/index.ts",
+      "importPath": "@/pages/system/role/config",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/role/config\" />"
+    },
+    {
+      "name": "system/role/hooks",
+      "category": "page",
+      "filePath": "src/pages/system/role/hooks/index.ts",
+      "importPath": "@/pages/system/role/hooks",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/role/hooks\" />"
+    },
+    {
+      "name": "system/role",
+      "category": "page",
+      "filePath": "src/pages/system/role/index.tsx",
+      "importPath": "@/pages/system/role",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/role\" />"
+    },
+    {
+      "name": "system/role/services",
+      "category": "page",
+      "filePath": "src/pages/system/role/services/index.ts",
+      "importPath": "@/pages/system/role/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/role/services\" />"
+    },
+    {
+      "name": "system/role/types",
+      "category": "page",
+      "filePath": "src/pages/system/role/types/index.ts",
+      "importPath": "@/pages/system/role/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/role/types\" />"
+    },
+    {
+      "name": "system/sdkNotifyConfig",
+      "category": "page",
+      "filePath": "src/pages/system/sdkNotifyConfig/index.tsx",
+      "importPath": "@/pages/system/sdkNotifyConfig",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/sdkNotifyConfig\" />"
+    },
+    {
+      "name": "system/sdkNotifyConfig/services",
+      "category": "page",
+      "filePath": "src/pages/system/sdkNotifyConfig/services/index.ts",
+      "importPath": "@/pages/system/sdkNotifyConfig/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/sdkNotifyConfig/services\" />"
+    },
+    {
+      "name": "system/sdkNotifyConfig/types",
+      "category": "page",
+      "filePath": "src/pages/system/sdkNotifyConfig/types/index.ts",
+      "importPath": "@/pages/system/sdkNotifyConfig/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/sdkNotifyConfig/types\" />"
+    },
+    {
+      "name": "system/staffManage",
+      "category": "page",
+      "filePath": "src/pages/system/staffManage/index.tsx",
+      "importPath": "@/pages/system/staffManage",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/staffManage\" />"
+    },
+    {
+      "name": "system/staffManage/services",
+      "category": "page",
+      "filePath": "src/pages/system/staffManage/services/index.ts",
+      "importPath": "@/pages/system/staffManage/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/staffManage/services\" />"
+    },
+    {
+      "name": "system/staffManage/statusRecord",
+      "category": "page",
+      "filePath": "src/pages/system/staffManage/statusRecord/index.tsx",
+      "importPath": "@/pages/system/staffManage/statusRecord",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/staffManage/statusRecord\" />"
+    },
+    {
+      "name": "system/staffManage/types",
+      "category": "page",
+      "filePath": "src/pages/system/staffManage/types/index.ts",
+      "importPath": "@/pages/system/staffManage/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/staffManage/types\" />"
+    },
+    {
+      "name": "system/user/columns",
+      "category": "page",
+      "filePath": "src/pages/system/user/columns/index.tsx",
+      "importPath": "@/pages/system/user/columns",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/user/columns\" />"
+    },
+    {
+      "name": "system/user/config",
+      "category": "page",
+      "filePath": "src/pages/system/user/config/index.ts",
+      "importPath": "@/pages/system/user/config",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/user/config\" />"
+    },
+    {
+      "name": "system/user/hooks",
+      "category": "page",
+      "filePath": "src/pages/system/user/hooks/index.ts",
+      "importPath": "@/pages/system/user/hooks",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/user/hooks\" />"
+    },
+    {
+      "name": "system/user",
+      "category": "page",
+      "filePath": "src/pages/system/user/index.tsx",
+      "importPath": "@/pages/system/user",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/user\" />"
+    },
+    {
+      "name": "system/user/services",
+      "category": "page",
+      "filePath": "src/pages/system/user/services/index.ts",
+      "importPath": "@/pages/system/user/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/user/services\" />"
+    },
+    {
+      "name": "system/user/types",
+      "category": "page",
+      "filePath": "src/pages/system/user/types/index.ts",
+      "importPath": "@/pages/system/user/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/system/user/types\" />"
+    },
+    {
+      "name": "workOrder/announcement",
+      "category": "page",
+      "filePath": "src/pages/workOrder/announcement/index.tsx",
+      "importPath": "@/pages/workOrder/announcement",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/announcement\" />"
+    },
+    {
+      "name": "workOrder/announcement/services",
+      "category": "page",
+      "filePath": "src/pages/workOrder/announcement/services/index.ts",
+      "importPath": "@/pages/workOrder/announcement/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/announcement/services\" />"
+    },
+    {
+      "name": "workOrder/announcement/types",
+      "category": "page",
+      "filePath": "src/pages/workOrder/announcement/types/index.ts",
+      "importPath": "@/pages/workOrder/announcement/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/announcement/types\" />"
+    },
+    {
+      "name": "workOrder/assignRules",
+      "category": "page",
+      "filePath": "src/pages/workOrder/assignRules/index.tsx",
+      "importPath": "@/pages/workOrder/assignRules",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/assignRules\" />"
+    },
+    {
+      "name": "workOrder/assignRules/services",
+      "category": "page",
+      "filePath": "src/pages/workOrder/assignRules/services/index.ts",
+      "importPath": "@/pages/workOrder/assignRules/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/assignRules/services\" />"
+    },
+    {
+      "name": "workOrder/assignRules/types",
+      "category": "page",
+      "filePath": "src/pages/workOrder/assignRules/types/index.ts",
+      "importPath": "@/pages/workOrder/assignRules/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/assignRules/types\" />"
+    },
+    {
+      "name": "workOrder/fastReply",
+      "category": "page",
+      "filePath": "src/pages/workOrder/fastReply/index.tsx",
+      "importPath": "@/pages/workOrder/fastReply",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/fastReply\" />"
+    },
+    {
+      "name": "workOrder/fastReply/services",
+      "category": "page",
+      "filePath": "src/pages/workOrder/fastReply/services/index.ts",
+      "importPath": "@/pages/workOrder/fastReply/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/fastReply/services\" />"
+    },
+    {
+      "name": "workOrder/fastReply/types",
+      "category": "page",
+      "filePath": "src/pages/workOrder/fastReply/types/index.ts",
+      "importPath": "@/pages/workOrder/fastReply/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/fastReply/types\" />"
+    },
+    {
+      "name": "workOrder/imageAudit",
+      "category": "page",
+      "filePath": "src/pages/workOrder/imageAudit/index.tsx",
+      "importPath": "@/pages/workOrder/imageAudit",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/imageAudit\" />"
+    },
+    {
+      "name": "workOrder/imageAudit/services",
+      "category": "page",
+      "filePath": "src/pages/workOrder/imageAudit/services/index.ts",
+      "importPath": "@/pages/workOrder/imageAudit/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/imageAudit/services\" />"
+    },
+    {
+      "name": "workOrder/imageAudit/types",
+      "category": "page",
+      "filePath": "src/pages/workOrder/imageAudit/types/index.ts",
+      "importPath": "@/pages/workOrder/imageAudit/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/imageAudit/types\" />"
+    },
+    {
+      "name": "workOrder/myWorkOrder/components/ProcessWorkOrderModal",
+      "category": "page",
+      "filePath": "src/pages/workOrder/myWorkOrder/components/ProcessWorkOrderModal/index.tsx",
+      "importPath": "@/pages/workOrder/myWorkOrder/components/ProcessWorkOrderModal",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/myWorkOrder/components/ProcessWorkOrderModal\" />"
+    },
+    {
+      "name": "workOrder/myWorkOrder",
+      "category": "page",
+      "filePath": "src/pages/workOrder/myWorkOrder/index.tsx",
+      "importPath": "@/pages/workOrder/myWorkOrder",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/myWorkOrder\" />"
+    },
+    {
+      "name": "workOrder/myWorkOrder/services",
+      "category": "page",
+      "filePath": "src/pages/workOrder/myWorkOrder/services/index.ts",
+      "importPath": "@/pages/workOrder/myWorkOrder/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/myWorkOrder/services\" />"
+    },
+    {
+      "name": "workOrder/myWorkOrder/types",
+      "category": "page",
+      "filePath": "src/pages/workOrder/myWorkOrder/types/index.ts",
+      "importPath": "@/pages/workOrder/myWorkOrder/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/myWorkOrder/types\" />"
+    },
+    {
+      "name": "workOrder/serviceEvaluation",
+      "category": "page",
+      "filePath": "src/pages/workOrder/serviceEvaluation/index.tsx",
+      "importPath": "@/pages/workOrder/serviceEvaluation",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/serviceEvaluation\" />"
+    },
+    {
+      "name": "workOrder/serviceEvaluation/inviteConfig",
+      "category": "page",
+      "filePath": "src/pages/workOrder/serviceEvaluation/inviteConfig/index.tsx",
+      "importPath": "@/pages/workOrder/serviceEvaluation/inviteConfig",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/serviceEvaluation/inviteConfig\" />"
+    },
+    {
+      "name": "workOrder/serviceEvaluation/results",
+      "category": "page",
+      "filePath": "src/pages/workOrder/serviceEvaluation/results/index.tsx",
+      "importPath": "@/pages/workOrder/serviceEvaluation/results",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/serviceEvaluation/results\" />"
+    },
+    {
+      "name": "workOrder/serviceEvaluation/services",
+      "category": "page",
+      "filePath": "src/pages/workOrder/serviceEvaluation/services/index.ts",
+      "importPath": "@/pages/workOrder/serviceEvaluation/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/serviceEvaluation/services\" />"
+    },
+    {
+      "name": "workOrder/serviceEvaluation/types",
+      "category": "page",
+      "filePath": "src/pages/workOrder/serviceEvaluation/types/index.ts",
+      "importPath": "@/pages/workOrder/serviceEvaluation/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/serviceEvaluation/types\" />"
+    },
+    {
+      "name": "workOrder/workOrderConfig",
+      "category": "page",
+      "filePath": "src/pages/workOrder/workOrderConfig/index.tsx",
+      "importPath": "@/pages/workOrder/workOrderConfig",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/workOrderConfig\" />"
+    },
+    {
+      "name": "workOrder/workOrderConfig/services",
+      "category": "page",
+      "filePath": "src/pages/workOrder/workOrderConfig/services/index.ts",
+      "importPath": "@/pages/workOrder/workOrderConfig/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/workOrderConfig/services\" />"
+    },
+    {
+      "name": "workOrder/workOrderConfig/types",
+      "category": "page",
+      "filePath": "src/pages/workOrder/workOrderConfig/types/index.ts",
+      "importPath": "@/pages/workOrder/workOrderConfig/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/workOrderConfig/types\" />"
+    },
+    {
+      "name": "workOrder/workOrderList",
+      "category": "page",
+      "filePath": "src/pages/workOrder/workOrderList/index.tsx",
+      "importPath": "@/pages/workOrder/workOrderList",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/workOrderList\" />"
+    },
+    {
+      "name": "workOrder/workOrderList/services",
+      "category": "page",
+      "filePath": "src/pages/workOrder/workOrderList/services/index.ts",
+      "importPath": "@/pages/workOrder/workOrderList/services",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/workOrderList/services\" />"
+    },
+    {
+      "name": "workOrder/workOrderList/types",
+      "category": "page",
+      "filePath": "src/pages/workOrder/workOrderList/types/index.ts",
+      "importPath": "@/pages/workOrder/workOrderList/types",
+      "exportType": "default",
+      "usagePattern": "Route element: <LazyComponent path=\"../pages/workOrder/workOrderList/types\" />"
+    }
+  ],
+  "hooks": [
+    {
+      "name": "useLanguageList",
+      "category": "hook",
+      "filePath": "src/hooks/useLanguageList.ts",
+      "importPath": "@/hooks/useLanguageList",
+      "exportType": "named",
+      "usagePattern": "const result = useLanguageList()"
+    }
+  ],
+  "services": [
+    {
+      "name": "systemStatus",
+      "category": "service",
+      "filePath": "src/services/systemStatus.ts",
+      "importPath": "@/services/systemStatus",
+      "exportType": "named"
+    }
+  ]
+}

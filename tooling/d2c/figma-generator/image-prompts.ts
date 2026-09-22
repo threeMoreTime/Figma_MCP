@@ -20,7 +20,10 @@ export function generateVisualPrompts(
   brief: DesignBrief,
   blueprint: ScreenBlueprint
 ): VisualPromptsDocument {
-  const directionKey = (blueprint.selectedDirection || brief.selectedDirection || "B") as "A" | "B" | "C";
+  const directionKey = blueprint.selectedDirection || brief.selectedDirection;
+  if (!directionKey) {
+    throw new Error("HUMAN_GATE_REQUIRED: select design direction A/B/C before generating GPT Image prompts.");
+  }
   const direction = brief.visualDirections[directionKey];
 
   const componentNames = blueprint.components.map((c) => {

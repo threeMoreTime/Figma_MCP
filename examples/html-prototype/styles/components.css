@@ -1,0 +1,320 @@
+/**
+ * Component Styles for Greenfield HTML Prototype
+ * Conforming strictly to Canonical Tokens (--d2c-*). ZERO hardcoded values.
+ */
+
+/* Buttons */
+.d2c-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--d2c-fontSize-base);
+  font-weight: 500;
+  border-radius: var(--d2c-borderRadius-base);
+  padding-left: var(--d2c-spacing-md);
+  padding-right: var(--d2c-spacing-md);
+  padding-top: var(--d2c-spacing-xs);
+  padding-bottom: var(--d2c-spacing-xs);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: var(--d2c-borderWidth-base) solid transparent;
+  outline: none;
+}
+
+.d2c-btn:hover {
+  opacity: 0.85;
+}
+
+.d2c-btn-primary {
+  background-color: var(--d2c-color-primary);
+  color: var(--d2c-color-neutral-white);
+  border-color: var(--d2c-color-primary);
+}
+
+.d2c-btn-secondary {
+  background-color: var(--d2c-color-bg-container);
+  color: var(--d2c-color-text-primary);
+  border-color: var(--d2c-color-border);
+}
+
+.d2c-btn-secondary.active {
+  background-color: var(--d2c-color-primary);
+  color: var(--d2c-color-neutral-white);
+  border-color: var(--d2c-color-primary);
+}
+
+.d2c-btn-danger {
+  background-color: var(--d2c-color-error);
+  color: var(--d2c-color-neutral-white);
+  border-color: var(--d2c-color-error);
+}
+
+.d2c-btn-link {
+  background: transparent;
+  color: var(--d2c-color-primary);
+  border-color: transparent;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.d2c-btn-link:hover {
+  text-decoration: underline;
+}
+
+.d2c-btn-sm {
+  font-size: var(--d2c-fontSize-base);
+  padding-left: var(--d2c-spacing-sm);
+  padding-right: var(--d2c-spacing-sm);
+  padding-top: var(--d2c-spacing-xxs);
+  padding-bottom: var(--d2c-spacing-xxs);
+}
+
+/* Inputs */
+.d2c-input {
+  width: 100%;
+  font-size: var(--d2c-fontSize-base);
+  color: var(--d2c-color-text-primary);
+  background-color: var(--d2c-color-bg-container);
+  border: var(--d2c-borderWidth-base) solid var(--d2c-color-border);
+  border-radius: var(--d2c-borderRadius-base);
+  padding-left: var(--d2c-spacing-sm);
+  padding-right: var(--d2c-spacing-sm);
+  padding-top: var(--d2c-spacing-xs);
+  padding-bottom: var(--d2c-spacing-xs);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.d2c-input:focus {
+  border-color: var(--d2c-color-primary);
+}
+
+.d2c-input.has-error {
+  border-color: var(--d2c-color-error);
+}
+
+/* Table */
+.d2c-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.d2c-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.d2c-th {
+  background-color: var(--d2c-color-bg-layout);
+  color: var(--d2c-color-text-primary);
+  font-weight: 600;
+  padding-left: var(--d2c-spacing-md);
+  padding-right: var(--d2c-spacing-md);
+  padding-top: var(--d2c-spacing-sm);
+  padding-bottom: var(--d2c-spacing-sm);
+  border-bottom: var(--d2c-borderWidth-base) solid var(--d2c-color-border);
+}
+
+.d2c-td {
+  padding-left: var(--d2c-spacing-md);
+  padding-right: var(--d2c-spacing-md);
+  padding-top: var(--d2c-spacing-sm);
+  padding-bottom: var(--d2c-spacing-sm);
+  border-bottom: var(--d2c-borderWidth-base) solid var(--d2c-color-border);
+  color: var(--d2c-color-text-primary);
+}
+
+.d2c-table-row:hover {
+  background-color: var(--d2c-color-bg-layout);
+}
+
+/* Tags & Badges */
+.d2c-tag {
+  display: inline-block;
+  font-size: var(--d2c-fontSize-base);
+  padding-left: var(--d2c-spacing-sm);
+  padding-right: var(--d2c-spacing-sm);
+  padding-top: var(--d2c-borderWidth-base);
+  padding-bottom: var(--d2c-borderWidth-base);
+  border-radius: var(--d2c-borderRadius-sm);
+  border: var(--d2c-borderWidth-base) solid var(--d2c-color-border);
+  background-color: var(--d2c-color-bg-layout);
+  color: var(--d2c-color-text-primary);
+}
+
+.d2c-tag-success {
+  background-color: rgba(82, 196, 26, 0.1);
+  border-color: var(--d2c-color-success);
+  color: var(--d2c-color-success);
+}
+
+.d2c-tag-danger {
+  background-color: rgba(255, 77, 79, 0.1);
+  border-color: var(--d2c-color-error);
+  color: var(--d2c-color-error);
+}
+
+.d2c-tag-primary {
+  background-color: rgba(22, 119, 255, 0.1);
+  border-color: var(--d2c-color-primary);
+  color: var(--d2c-color-primary);
+}
+
+/* Dialog / Modal */
+.d2c-dialog {
+  border: none;
+  border-radius: var(--d2c-borderRadius-lg);
+  padding: 0;
+  max-width: var(--d2c-maxWidth-dialog);
+  width: 90%;
+  background: transparent;
+  box-shadow: var(--d2c-shadow-modal);
+  margin: auto;
+}
+
+.d2c-dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.45);
+}
+
+.d2c-dialog-box {
+  background-color: var(--d2c-color-bg-container);
+  border-radius: var(--d2c-borderRadius-lg);
+  overflow: hidden;
+}
+
+.d2c-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: var(--d2c-spacing-lg);
+  padding-right: var(--d2c-spacing-lg);
+  padding-top: var(--d2c-spacing-md);
+  padding-bottom: var(--d2c-spacing-md);
+  border-bottom: var(--d2c-borderWidth-base) solid var(--d2c-color-border);
+}
+
+.d2c-dialog-title {
+  font-size: var(--d2c-fontSize-lg);
+  font-weight: 600;
+  color: var(--d2c-color-text-primary);
+}
+
+.d2c-dialog-close {
+  background: transparent;
+  border: none;
+  font-size: var(--d2c-fontSize-heading);
+  cursor: pointer;
+  color: var(--d2c-color-text-secondary);
+}
+
+.d2c-dialog-body {
+  padding-left: var(--d2c-spacing-lg);
+  padding-right: var(--d2c-spacing-lg);
+  padding-top: var(--d2c-spacing-lg);
+  padding-bottom: var(--d2c-spacing-lg);
+}
+
+/* Form */
+.d2c-form-item {
+  margin-bottom: var(--d2c-spacing-md);
+}
+
+.d2c-label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: var(--d2c-spacing-xs);
+  color: var(--d2c-color-text-primary);
+}
+
+.d2c-label-required::after {
+  content: " *";
+  color: var(--d2c-color-error);
+}
+
+.d2c-error-msg {
+  display: none;
+  color: var(--d2c-color-error);
+  font-size: var(--d2c-fontSize-base);
+  margin-top: var(--d2c-spacing-xs);
+}
+
+.d2c-error-msg.visible {
+  display: block;
+}
+
+.d2c-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--d2c-spacing-sm);
+  margin-top: var(--d2c-spacing-lg);
+}
+
+/* States Feedback (Alert, Spinner, Empty) */
+.d2c-alert {
+  padding-left: var(--d2c-spacing-md);
+  padding-right: var(--d2c-spacing-md);
+  padding-top: var(--d2c-spacing-md);
+  padding-bottom: var(--d2c-spacing-md);
+  border-radius: var(--d2c-borderRadius-base);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.d2c-alert-error {
+  background-color: rgba(255, 77, 79, 0.05);
+  border: var(--d2c-borderWidth-base) solid var(--d2c-color-error);
+  color: var(--d2c-color-error);
+}
+
+.d2c-empty-placeholder {
+  text-align: center;
+  padding-top: var(--d2c-spacing-xxl);
+  padding-bottom: var(--d2c-spacing-xxl);
+  color: var(--d2c-color-text-secondary);
+}
+
+.d2c-loading-placeholder {
+  text-align: center;
+  padding-top: var(--d2c-spacing-xxl);
+  padding-bottom: var(--d2c-spacing-xxl);
+  color: var(--d2c-color-primary);
+}
+
+.d2c-spinner {
+  display: inline-block;
+  width: var(--d2c-spacing-xl);
+  height: var(--d2c-spacing-xl);
+  border: var(--d2c-borderWidth-spinner) solid rgba(22, 119, 255, 0.2);
+  border-top-color: var(--d2c-color-primary);
+  border-radius: 50%;
+  animation: d2c-spin 0.8s linear infinite;
+  margin-bottom: var(--d2c-spacing-sm);
+}
+
+@keyframes d2c-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Toast */
+.d2c-toast {
+  background-color: var(--d2c-color-bg-container);
+  border: var(--d2c-borderWidth-base) solid var(--d2c-color-border);
+  box-shadow: var(--d2c-shadow-toast);
+  border-radius: var(--d2c-borderRadius-base);
+  padding-left: var(--d2c-spacing-md);
+  padding-right: var(--d2c-spacing-md);
+  padding-top: var(--d2c-spacing-sm);
+  padding-bottom: var(--d2c-spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--d2c-spacing-sm);
+  pointer-events: auto;
+  animation: d2c-fade-in 0.25s ease;
+}
+
+@keyframes d2c-fade-in {
+  from { opacity: 0; transform: translateY(calc(-1 * var(--d2c-spacing-sm))); }
+  to { opacity: 1; transform: translateY(0); }
+}

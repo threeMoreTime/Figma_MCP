@@ -1,0 +1,128 @@
+{
+  "screen": "users-management",
+  "sourceDesignPackage": "figma-release-package.json",
+  "sourceBlueprint": "ui-blueprint.json",
+  "sourceInteractionContract": "interaction-contract.json",
+  "mappings": [
+    {
+      "semanticId": "users.management.page_header",
+      "intent": "page-header",
+      "figmaComponent": "DS/Header.PageHeader",
+      "status": "PROPOSAL",
+      "resolutionStatus": "REVIEW_REQUIRED",
+      "isProductionAllowed": false,
+      "resolvedPrimitive": "PageHeader"
+    },
+    {
+      "semanticId": "users.management.search_input",
+      "intent": "filter-search",
+      "figmaComponent": "DS/Input.Search",
+      "status": "PROPOSAL",
+      "resolutionStatus": "REVIEW_REQUIRED",
+      "isProductionAllowed": false,
+      "resolvedPrimitive": "Input.Search"
+    },
+    {
+      "semanticId": "users.management.create_btn",
+      "intent": "primary-action",
+      "figmaComponent": "DS/Button.Primary",
+      "status": "PROPOSAL",
+      "resolutionStatus": "REVIEW_REQUIRED",
+      "isProductionAllowed": false,
+      "resolvedPrimitive": "Button"
+    },
+    {
+      "semanticId": "users.management.table",
+      "intent": "data-table",
+      "figmaComponent": "DS/Table.DataTable",
+      "status": "PROPOSAL",
+      "resolutionStatus": "REVIEW_REQUIRED",
+      "isProductionAllowed": false,
+      "resolvedPrimitive": "Table"
+    },
+    {
+      "semanticId": "users.management.create_modal",
+      "intent": "modal-dialog",
+      "figmaComponent": "DS/Modal.Standard",
+      "status": "PROPOSAL",
+      "resolutionStatus": "REVIEW_REQUIRED",
+      "isProductionAllowed": false,
+      "resolvedPrimitive": "Modal"
+    },
+    {
+      "semanticId": "users.management.create_form",
+      "intent": "form-container",
+      "figmaComponent": "DS/Form.VerticalContainer",
+      "status": "PROPOSAL",
+      "resolutionStatus": "REVIEW_REQUIRED",
+      "isProductionAllowed": false,
+      "resolvedPrimitive": "Form"
+    }
+  ],
+  "states": [
+    "loading",
+    "ready",
+    "empty",
+    "error"
+  ],
+  "interactions": [
+    {
+      "id": "int-click-create",
+      "event": "click:users.management.create_btn",
+      "source": "users.management.create_btn",
+      "action": "open-modal",
+      "target": "users.management.create_modal"
+    },
+    {
+      "id": "int-validate-form",
+      "event": "validation:users.management.create_form",
+      "source": "users.management.create_form",
+      "action": "validate-fields",
+      "target": "users.management.create_form",
+      "validationRules": [
+        {
+          "field": "username",
+          "rule": "required"
+        },
+        {
+          "field": "role",
+          "rule": "required"
+        }
+      ]
+    },
+    {
+      "id": "int-submit-form",
+      "event": "submit:users.management.create_form",
+      "source": "users.management.create_form",
+      "action": "submit-form",
+      "target": "users.management.create_modal"
+    },
+    {
+      "id": "int-success-form",
+      "event": "success:users.management.create_form",
+      "source": "users.management.create_form",
+      "action": "show-notification",
+      "target": "users.management.table",
+      "onSuccess": {
+        "action": "refresh-table",
+        "feedback": "保存成功",
+        "target": "users.management.table"
+      }
+    },
+    {
+      "id": "int-error-form",
+      "event": "error:users.management.create_form",
+      "source": "users.management.create_form",
+      "action": "show-notification",
+      "target": "users.management.create_form",
+      "onError": {
+        "action": "show-error-message",
+        "feedback": "提交失败，请检查填写内容",
+        "target": "users.management.create_form"
+      }
+    }
+  ],
+  "reviewRequired": true,
+  "productionIntegrationAllowed": false,
+  "generatedAt": "2026-09-22T07:02:30.558Z"
+}
