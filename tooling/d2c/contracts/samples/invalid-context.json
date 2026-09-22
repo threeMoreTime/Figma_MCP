@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0.0",
+  "sourceFileRef": "figma://file/xyz123",
+  "rootNodeId": "0:1",
+  "exporter": {
+    "tool": "broken-tool",
+    "version": "0.1",
+    "commitSha": "abc"
+  },
+  "dataSource": "REAL",
+  "exportedTree": {
+    "sourceNodeId": "0:1",
+    "sourceFileRef": "figma://file/xyz123",
+    "identity": {
+      "screenId": "page",
+      "semanticId": "node",
+      "instanceKey": "k"
+    },
+    "name": "BadNode",
+    "isComponentInstance": false,
+    "isSynthesized": false,
+    "layout": {
+      "layoutMode": "INVALID_MODE",
+      "layoutSizingHorizontal": "STRETCH",
+      "width": -10,
+      "height": 0
+    }
+  }
+}

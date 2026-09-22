@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "contractId": "int_users_page_01",
+  "screenId": "users_page",
+  "interactions": [
+    {
+      "trigger": "onClick",
+      "targetElementIdentity": {
+        "screenId": "users_page",
+        "semanticId": "btn_add_user",
+        "state": "ready",
+        "breakpoint": "desktop",
+        "instanceKey": "btn_01"
+      },
+      "expectedEffect": "openModal",
+      "payload": {
+        "modalId": "modal_create_user"
+      }
+    }
+  ]
+}

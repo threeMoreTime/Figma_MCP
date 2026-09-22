@@ -1,0 +1,11 @@
+{
+  "name": "Antigravity D2C Read-Only Exporter",
+  "id": "antigravity-d2c-readonly-exporter",
+  "api": "1.0.0",
+  "main": "dist/code.js",
+  "ui": "dist/ui.html",
+  "editorType": ["figma", "dev"],
+  "networkAccess": {
+    "allowedDomains": ["none"]
+  }
+}

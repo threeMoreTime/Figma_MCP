@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0.0",
+  "packageId": "pkg_users_v1",
+  "screenId": "users_page",
+  "revision": 1,
+  "sourceFileRef": "figma://file/xyz123",
+  "rootNodeId": "0:1",
+  "dataSource": "SYNTHETIC",
+  "exporterCommitSha": "0d9b1dc082f18a5ebbae3ff5621ab4a07dd5bc94",
+  "canonicalTokenHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "contentHash": "51f5e8fbe59c90538a7c2162629b3ae3eb28aa41074a3f3a8b417bbdca84332e",
+  "resourceHashes": {
+    "screenshot_desktop.png": "a1b2c3d4e5f60718293a4b5c6d7e8f90123456789abcdef0123456789abcdef0"
+  },
+  "approval": {
+    "status": "APPROVED",
+    "approvedBy": "Lead Designer & Tech Lead",
+    "approvedAt": "2026-09-22T09:00:00Z",
+    "bindingContentHash": "51f5e8fbe59c90538a7c2162629b3ae3eb28aa41074a3f3a8b417bbdca84332e",
+    "notes": "Verified against PRD and initial synthetic brief."
+  }
+}

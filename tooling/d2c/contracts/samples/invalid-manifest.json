@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0.0",
+  "packageId": "pkg_invalid",
+  "screenId": "users_page",
+  "revision": -1,
+  "sourceFileRef": "",
+  "rootNodeId": "",
+  "dataSource": "UNKNOWN",
+  "exporterCommitSha": "",
+  "canonicalTokenHash": "",
+  "contentHash": "content_hash_xyz",
+  "resourceHashes": {},
+  "approval": {
+    "status": "APPROVED",
+    "bindingContentHash": "stale_hash_that_does_not_match"
+  }
+}

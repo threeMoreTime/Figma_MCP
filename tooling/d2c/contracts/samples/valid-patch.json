@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0.0",
+  "patchId": "patch_user_btn_label_01",
+  "baseContentHash": "51f5e8fbe59c90538a7c2162629b3ae3eb28aa41074a3f3a8b417bbdca84332e",
+  "targetFileRef": "figma://file/xyz123",
+  "operations": [
+    {
+      "op": "replace",
+      "path": "/rootNode/children/0/props/title",
+      "beforeValue": "添加用户",
+      "value": "新建用户",
+      "targetIdentity": {
+        "screenId": "users_page",
+        "semanticId": "btn_add_user",
+        "state": "ready",
+        "breakpoint": "desktop",
+        "instanceKey": "btn_01"
+      },
+      "fieldOwner": "DESIGNER"
+    }
+  ],
+  "preconditions": {
+    "expectedOldValue": "添加用户"
+  },
+  "diagnostics": []
+}

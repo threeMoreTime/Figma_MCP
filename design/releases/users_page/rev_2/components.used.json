@@ -1,0 +1,10 @@
+{
+  "btn_primary": {
+    "name": "Button",
+    "variant": "primary"
+  },
+  "table_users": {
+    "name": "Table",
+    "variant": "default"
+  }
+}

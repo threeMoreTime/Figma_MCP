@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0.0",
+  "sourceFileRef": "figma://file/xyz123",
+  "rootNodeId": "0:1",
+  "exporter": {
+    "tool": "d2c-native-plugin",
+    "version": "1.0.0",
+    "commitSha": "0d9b1dc082f18a5ebbae3ff5621ab4a07dd5bc94"
+  },
+  "dataSource": "SYNTHETIC",
+  "exportedTree": {
+    "sourceNodeId": "0:1",
+    "sourceFileRef": "figma://file/xyz123",
+    "identity": {
+      "screenId": "users_page",
+      "semanticId": "root_frame",
+      "state": "ready",
+      "breakpoint": "desktop",
+      "instanceKey": "inst_root"
+    },
+    "name": "UserManagementRoot",
+    "isComponentInstance": false,
+    "isSynthesized": false,
+    "layout": {
+      "layoutMode": "VERTICAL",
+      "layoutWrap": "NO_WRAP",
+      "layoutSizingHorizontal": "FIXED",
+      "layoutSizingVertical": "HUG",
+      "padding": { "top": 24, "right": 24, "bottom": 24, "left": 24 },
+      "itemSpacing": 16,
+      "width": 1440,
+      "height": 900
+    },
+    "textRuns": [],
+    "tokenBindings": {
+      "background": {
+        "collection": "Semantic",
+        "name": "color.bg.container",
+        "mode": "Light",
+        "resolvedValue": "#FFFFFF",
+        "resolvedPath": ["Semantic", "color.bg.container", "Light"]
+      }
+    },
+    "children": []
+  },
+  "tokenCollections": {
+    "Semantic": [
+      {
+        "collection": "Semantic",
+        "name": "color.bg.container",
+        "mode": "Light",
+        "resolvedValue": "#FFFFFF",
+        "resolvedPath": ["Semantic", "color.bg.container", "Light"]
+      }
+    ]
+  },
+  "diagnostics": []
+}

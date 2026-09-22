@@ -1,0 +1,7 @@
+[
+  {
+    "code": "OFFLINE_SYNTHETIC_FIXTURE",
+    "message": "This design package is an offline fixture generated for contract verification, not from live Figma API.",
+    "severity": "INFO"
+  }
+]

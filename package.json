@@ -1,0 +1,32 @@
+{
+  "name": "antigravity-d2c-tooling",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Antigravity Non-Figma-MCP Design-to-Code Toolchain, Contracts, Tokens and Registry",
+  "type": "module",
+  "scripts": {
+    "d2c:validate": "tsx tooling/d2c/cli/validate.ts",
+    "d2c:tokens": "tsx tooling/d2c/cli/tokens.ts",
+    "d2c:resolve": "tsx tooling/d2c/cli/resolve.ts",
+    "d2c:plugin:build": "tsx tooling/d2c/figma-plugin/build.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test tests/*.test.ts"
+  },
+  "dependencies": {
+    "antd": "5.7.3",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "style-dictionary": "5.5.5",
+    "zod": "3.24.2"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.138.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "esbuild": "^0.28.2",
+    "playwright": "1.63.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

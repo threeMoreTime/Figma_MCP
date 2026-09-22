@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryId": "reg_cs_admin_antd5",
+  "targetRepo": "cs_admin-client",
+  "scannedHead": "65ff9149b1f54e98559494f0b21315d45bb189b0",
+  "components": {
+    "Button": {
+      "designComponentId": "figma_cmp_button",
+      "modulePath": "antd",
+      "exportName": "Button",
+      "sourceType": "REAL",
+      "codeVersionHash": "d9a9216b5a3206008c6f6985df6ec3fd63b99b55712779ac78f15412d",
+      "props": {
+        "type": {
+          "name": "type",
+          "type": "enum",
+          "required": false,
+          "defaultValue": "default",
+          "enumOptions": ["primary", "default", "dashed", "link", "text"]
+        },
+        "disabled": {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "defaultValue": false
+        },
+        "loading": {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "defaultValue": false
+        }
+      },
+      "supportedStates": ["ready", "loading", "disabled"],
+      "bindingStatus": "APPROVED",
+      "knownConstraints": ["AntD 5.7.3 Button respects ConfigProvider theme token"],
+      "usageExample": "<Button type=\"primary\">确认</Button>"
+    }
+  },
+  "diagnostics": []
+}

@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "screenId": "users_page",
+  "elements": {
+    "users.header.title": {
+      "figmaNodeId": "10:102",
+      "targetDomId": "users-page-title"
+    },
+    "users.header.create_btn": {
+      "figmaNodeId": "10:103",
+      "targetDomId": "users-create-btn"
+    },
+    "users.content.table": {
+      "figmaNodeId": "10:104",
+      "targetDomId": "users-table-container"
+    }
+  }
+}

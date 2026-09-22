@@ -1,0 +1,93 @@
+{
+  "screenId": "users_page",
+  "revision": 1,
+  "generatedAt": "2026-09-22T02:15:30.416Z",
+  "overallStatus": "REVIEW_REQUIRED",
+  "bindings": [
+    {
+      "designComponentKey": "btn_primary",
+      "sourceDesignName": "CreateButton (Primary Variant)",
+      "targetImplementation": {
+        "modulePath": "antd",
+        "exportName": "Button",
+        "isSyntheticFixture": false
+      },
+      "bindingStatus": "PROPOSED_PENDING_REVIEW",
+      "propMappings": {
+        "type": {
+          "figmaProp": "variant.type",
+          "targetProp": "type",
+          "transform": "direct string map"
+        },
+        "text": {
+          "figmaProp": "characters",
+          "targetProp": "children",
+          "transform": "inner text node"
+        }
+      },
+      "evidence": "Matched against REUSE candidate Button in Ant Design 5.7.3 core registry.",
+      "knownLimitations": [
+        "Does NOT integrate AuthButton permission gate (@monorepo/utils). If permission control is needed, user must upgrade to AuthButton and specify 'permission' prop in review."
+      ]
+    },
+    {
+      "designComponentKey": "table_users",
+      "sourceDesignName": "UserTable",
+      "targetImplementation": {
+        "modulePath": "antd",
+        "exportName": "Table",
+        "isSyntheticFixture": false
+      },
+      "bindingStatus": "PROPOSED_PENDING_REVIEW",
+      "propMappings": {
+        "dataSource": {
+          "figmaProp": "rows",
+          "targetProp": "dataSource",
+          "transform": "synthetic mock array"
+        },
+        "columns": {
+          "figmaProp": "headers",
+          "targetProp": "columns",
+          "transform": "schema-inferred column defs"
+        }
+      },
+      "evidence": "Matched against REUSE candidate Table in Ant Design 5.7.3 core registry.",
+      "knownLimitations": [
+        "Figma design does not declare server pagination or sorting contracts. Handled via draft client-side state."
+      ]
+    },
+    {
+      "designComponentKey": "tag_status",
+      "sourceDesignName": "UserStatusTag",
+      "targetImplementation": {
+        "modulePath": "examples/fixture-app/src/components/SyntheticTag",
+        "exportName": "SyntheticTag",
+        "isSyntheticFixture": true
+      },
+      "bindingStatus": "PROPOSED_PENDING_REVIEW",
+      "propMappings": {
+        "status": {
+          "figmaProp": "status",
+          "targetProp": "status",
+          "transform": "active -> success, disabled -> default"
+        }
+      },
+      "evidence": "Proposal to satisfy MISSING candidate UserStatusTag using standard antd <Tag /> wrapper in fixture.",
+      "knownLimitations": [
+        "Explicitly marked SYNTHETIC. NOT a production business component; does not exist in cs_admin-client."
+      ]
+    }
+  ],
+  "themeProposal": {
+    "hasDivergence": false,
+    "diffCount": 0,
+    "previewThemeConfig": {
+      "token": {
+        "colorPrimary": "#1677ff",
+        "borderRadius": 6,
+        "fontSize": 14,
+        "wireframe": false
+      }
+    }
+  }
+}

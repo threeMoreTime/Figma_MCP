@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Antigravity D2C Exporter</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 16px;
+      font-size: 13px;
+      background-color: #fafafa;
+      color: #333333;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #e5e5e5;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+    .title {
+      font-weight: 600;
+      font-size: 15px;
+      color: #111;
+    }
+    .badge {
+      background: #e6f4ff;
+      color: #0958d9;
+      border: 1px solid #91caff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px dashed #f0f0f0;
+    }
+    .stat-row:last-child {
+      border-bottom: none;
+    }
+    .stat-label {
+      color: #666;
+    }
+    .stat-value {
+      font-weight: 500;
+      color: #222;
+    }
+    .button-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      flex-direction: column;
+    }
+    button {
+      background: #1677ff;
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    button:hover {
+      background: #4096ff;
+    }
+    button.secondary {
+      background: #fff;
+      color: #333;
+      border: 1px solid #d9d9d9;
+    }
+    button.secondary:hover {
+      border-color: #1677ff;
+      color: #1677ff;
+    }
+    .diag-item {
+      padding: 6px 8px;
+      margin: 4px 0;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    .diag-WARNING {
+      background: #fffbe6;
+      border: 1px solid #ffe58f;
+      color: #d48806;
+    }
+    .diag-ERROR {
+      background: #fff2f0;
+      border: 1px solid #ffccc7;
+      color: #cf1322;
+    }
+    .diag-INFO {
+      background: #e6f4ff;
+      border: 1px solid #91caff;
+      color: #0958d9;
+    }
+    #preview-img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      border: 1px solid #eee;
+      margin-top: 8px;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 40px 16px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="title">Antigravity D2C Exporter</div>
+    <span class="badge">READ-ONLY</span>
+  </div>
+
+  <div id="content">
+    <div class="empty-state">
+      <p>Please select a top-level Frame in Figma to begin export.</p>
+      <button onclick="triggerExport()" class="secondary">Check Selection</button>
+    </div>
+  </div>
+
+  <script>
+    let currentPayload = null;
+
+    function triggerExport() {
+      parent.postMessage({ pluginMessage: { type: 'TRIGGER_EXPORT' } }, '*');
+    }
+
+    function downloadJson() {
+      if (!currentPayload) return;
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentPayload, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `${currentPayload.rootNodeName}_export.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function downloadScreenshot() {
+      if (!currentPayload || !currentPayload.screenshotBase64) return;
+      const link = document.createElement('a');
+      link.href = "data:image/png;base64," + currentPayload.screenshotBase64;
+      link.download = `${currentPayload.rootNodeName}_screenshot.png`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+
+    function copyJson() {
+      if (!currentPayload) return;
+      const text = JSON.stringify(currentPayload, null, 2);
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Export package copied to clipboard!");
+      });
+    }
+
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+      if (!msg) return;
+
+      if (msg.type === 'SELECTION_EMPTY') {
+        document.getElementById('content').innerHTML = `
+          <div class="empty-state">
+            <p style="color: #ff4d4f; font-weight: 500;">No frame selected.</p>
+            <p>Select a Frame or Component on canvas, then click refresh.</p>
+            <button onclick="triggerExport()" class="secondary">Re-check Selection</button>
+          </div>
+        `;
+      } else if (msg.type === 'EXPORT_SUCCESS') {
+        currentPayload = msg.payload;
+        const p = msg.payload;
+
+        const componentsCount = Object.keys(p.componentsUsed || {}).length;
+        const variablesCount = Object.keys(p.variables || {}).length;
+        const collectionsCount = Object.keys(p.collections || {}).length;
+        const diags = p.diagnostics || [];
+
+        let diagsHtml = "";
+        if (diags.length > 0) {
+          diagsHtml = `<div class="card" style="margin-top: 12px;">
+            <div style="font-weight: 600; margin-bottom: 6px;">Diagnostics (${diags.length})</div>
+            ${diags.map(d => `<div class="diag-item diag-${d.severity}"><strong>[${d.severity}]</strong> ${d.message}</div>`).join('')}
+          </div>`;
+        }
+
+        let screenshotHtml = "";
+        if (p.screenshotBase64) {
+          screenshotHtml = `
+            <div class="card">
+              <div style="font-weight: 600;">Frame Screenshot</div>
+              <img id="preview-img" src="data:image/png;base64,${p.screenshotBase64}" alt="Screenshot" />
+            </div>
+          `;
+        }
+
+        document.getElementById('content').innerHTML = `
+          <div class="card">
+            <div class="stat-row">
+              <span class="stat-label">Frame Name:</span>
+              <span class="stat-value">${p.rootNodeName}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Node ID:</span>
+              <span class="stat-value"><code>${p.rootNodeId}</code></span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Components Used:</span>
+              <span class="stat-value">${componentsCount}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Bound Variables:</span>
+              <span class="stat-value">${variablesCount} (${collectionsCount} collections)</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Dimensions:</span>
+              <span class="stat-value">${p.tree.width} × ${p.tree.height} px</span>
+            </div>
+          </div>
+
+          ${screenshotHtml}
+          ${diagsHtml}
+
+          <div class="button-group">
+            <button onclick="downloadJson()">Download Full Release JSON</button>
+            ${p.screenshotBase64 ? '<button class="secondary" onclick="downloadScreenshot()">Save PNG Screenshot</button>' : ''}
+            <button class="secondary" onclick="copyJson()">Copy JSON to Clipboard</button>
+            <button class="secondary" onclick="triggerExport()">Re-Export Selection</button>
+          </div>
+        `;
+      }
+    };
+  </script>
+</body>
+</html>

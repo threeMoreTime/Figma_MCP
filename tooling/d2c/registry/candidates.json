@@ -1,0 +1,267 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryId": "reg_cs_admin-client_65ff9149",
+  "targetRepo": "cs_admin-client",
+  "scannedHead": "65ff9149b1f54e98559494f0b21315d45bb189b0",
+  "components": {
+    "Button": {
+      "designComponentId": "antd_button",
+      "modulePath": "antd",
+      "exportName": "Button",
+      "sourceType": "REAL",
+      "codeVersionHash": "antd@5.7.3-core",
+      "props": {
+        "type": {
+          "name": "type",
+          "type": "enum",
+          "required": false,
+          "defaultValue": "default",
+          "enumOptions": [
+            "primary",
+            "default",
+            "dashed",
+            "link",
+            "text"
+          ]
+        },
+        "disabled": {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "defaultValue": false
+        },
+        "loading": {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "defaultValue": false
+        },
+        "size": {
+          "name": "size",
+          "type": "enum",
+          "required": false,
+          "defaultValue": "middle",
+          "enumOptions": [
+            "large",
+            "middle",
+            "small"
+          ]
+        }
+      },
+      "supportedStates": [
+        "ready",
+        "loading",
+        "disabled"
+      ],
+      "bindingStatus": "UNBOUND",
+      "knownConstraints": [
+        "Strict boolean for disabled/loading; respects ConfigProvider theme token"
+      ],
+      "usageExample": "<Button />"
+    },
+    "Table": {
+      "designComponentId": "antd_table",
+      "modulePath": "antd",
+      "exportName": "Table",
+      "sourceType": "REAL",
+      "codeVersionHash": "antd@5.7.3-core",
+      "props": {
+        "bordered": {
+          "name": "bordered",
+          "type": "boolean",
+          "required": false,
+          "defaultValue": false
+        },
+        "loading": {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "defaultValue": false
+        },
+        "size": {
+          "name": "size",
+          "type": "enum",
+          "required": false,
+          "defaultValue": "large",
+          "enumOptions": [
+            "large",
+            "middle",
+            "small"
+          ]
+        }
+      },
+      "supportedStates": [
+        "ready",
+        "loading",
+        "empty"
+      ],
+      "bindingStatus": "UNBOUND",
+      "knownConstraints": [
+        "Requires columns and dataSource definitions; pagination controlled via ConfigProvider"
+      ],
+      "usageExample": "<Table />"
+    },
+    "Modal": {
+      "designComponentId": "antd_modal",
+      "modulePath": "antd",
+      "exportName": "Modal",
+      "sourceType": "REAL",
+      "codeVersionHash": "antd@5.7.3-core",
+      "props": {
+        "open": {
+          "name": "open",
+          "type": "boolean",
+          "required": true,
+          "defaultValue": false
+        },
+        "title": {
+          "name": "title",
+          "type": "string",
+          "required": false
+        },
+        "confirmLoading": {
+          "name": "confirmLoading",
+          "type": "boolean",
+          "required": false,
+          "defaultValue": false
+        }
+      },
+      "supportedStates": [
+        "ready",
+        "loading"
+      ],
+      "bindingStatus": "UNBOUND",
+      "knownConstraints": [
+        "Controlled via 'open' prop in AntD 5 (not 'visible')"
+      ],
+      "usageExample": "<Modal />"
+    },
+    "Form": {
+      "designComponentId": "antd_form",
+      "modulePath": "antd",
+      "exportName": "Form",
+      "sourceType": "REAL",
+      "codeVersionHash": "antd@5.7.3-core",
+      "props": {
+        "layout": {
+          "name": "layout",
+          "type": "enum",
+          "required": false,
+          "defaultValue": "horizontal",
+          "enumOptions": [
+            "horizontal",
+            "vertical",
+            "inline"
+          ]
+        },
+        "disabled": {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "defaultValue": false
+        }
+      },
+      "supportedStates": [
+        "ready",
+        "disabled"
+      ],
+      "bindingStatus": "UNBOUND",
+      "knownConstraints": [
+        "Form.Item wrapper required for validation bindings"
+      ],
+      "usageExample": "<Form />"
+    },
+    "Input": {
+      "designComponentId": "antd_input",
+      "modulePath": "antd",
+      "exportName": "Input",
+      "sourceType": "REAL",
+      "codeVersionHash": "antd@5.7.3-core",
+      "props": {
+        "placeholder": {
+          "name": "placeholder",
+          "type": "string",
+          "required": false
+        },
+        "disabled": {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "defaultValue": false
+        },
+        "allowClear": {
+          "name": "allowClear",
+          "type": "boolean",
+          "required": false,
+          "defaultValue": false
+        }
+      },
+      "supportedStates": [
+        "ready",
+        "disabled",
+        "error"
+      ],
+      "bindingStatus": "UNBOUND",
+      "knownConstraints": [
+        "Supports prefix/suffix icons; onChange returns ChangeEvent"
+      ],
+      "usageExample": "<Input />"
+    },
+    "AuthButton": {
+      "designComponentId": "cs_auth_button",
+      "modulePath": "@/components/AuthButton",
+      "exportName": "default",
+      "sourceType": "REAL",
+      "codeVersionHash": "d9a9216b5a3206008c6f6985df6ec3fd63b99b55712779ac78f15412d76597ff",
+      "props": {
+        "permission": {
+          "name": "permission",
+          "type": "string",
+          "required": true
+        },
+        "type": {
+          "name": "type",
+          "type": "enum",
+          "required": false,
+          "defaultValue": "default",
+          "enumOptions": [
+            "primary",
+            "default",
+            "link"
+          ]
+        }
+      },
+      "supportedStates": [
+        "ready",
+        "disabled"
+      ],
+      "bindingStatus": "UNBOUND",
+      "knownConstraints": [
+        "Wraps AntD Button with user permission check from @monorepo/utils"
+      ],
+      "usageExample": "<AuthButton permission=\"user.create\" type=\"primary\">新建</AuthButton>"
+    },
+    "IconInput": {
+      "designComponentId": "cs_icon_input",
+      "modulePath": "@/components/IconInput",
+      "exportName": "default",
+      "sourceType": "REAL",
+      "codeVersionHash": "a30e5c836251d38615b33f285d99676231f3105b42eefdda6eff015d6b413648",
+      "props": {
+        "placeholder": {
+          "name": "placeholder",
+          "type": "string",
+          "required": false
+        }
+      },
+      "supportedStates": [
+        "ready"
+      ],
+      "bindingStatus": "UNBOUND",
+      "knownConstraints": [
+        "Custom search input wrapper with icon styling"
+      ]
+    }
+  },
+  "diagnostics": []
+}

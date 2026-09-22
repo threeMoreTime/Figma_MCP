@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0.0",
+  "packageId": "pkg_users_page_rev1",
+  "screenId": "users_page",
+  "revision": 1,
+  "sourceFileRef": "figma://file/demo_offline_workspace",
+  "rootNodeId": "10:100",
+  "dataSource": "SYNTHETIC",
+  "provenance": {
+    "designOrigin": "SYNTHETIC_SPEC",
+    "componentOrigin": "SYNTHETIC_FIXTURE",
+    "tokenOrigin": "SYNTHETIC_CANONICAL",
+    "dataOrigin": "SYNTHETIC_MOCK"
+  },
+  "exporterCommitSha": "0.2.0-standalone",
+  "canonicalTokenHash": "d8a31b84134c3ca79ff83af2335528b69774f0f1b7f21f73e556ff36bf4f94d6",
+  "contentHash": "d490a9930e09ec2bcfd9e2d5b05494b4b207ea491996503b99b997f76cd27a50",
+  "resourceHashes": {
+    "figma.raw.json": "4f4c2bd8e116b7d5c0c8a28905f9fbabe73501136247595645252504eb107ca2",
+    "context.json": "1e883f007d7eed6cc1bc917cab43706e98c3d1f6bee0ac52b31da631055a6d6e",
+    "source-map.json": "c5cb864c561ff79986d2279b419d39b403bfc5b9af887a224b993d15ef60edb8",
+    "tokens.snapshot.json": "d8a31b84134c3ca79ff83af2335528b69774f0f1b7f21f73e556ff36bf4f94d6",
+    "components.used.json": "1fc349ea81e03ce8fafe7701e12b1c508e7e28962766a8dffa5c6151088cf5ec",
+    "interactions.json": "05e014e6ba79337c254b28ee4651bbfbd7f30e81ea203111928b2a170e267d73",
+    "diagnostics.json": "5656fb50829591681ef18bdaee9b69b707f185e552e7af14b14a99e37792b06b"
+  },
+  "approval": {
+    "status": "PENDING",
+    "bindingContentHash": "d490a9930e09ec2bcfd9e2d5b05494b4b207ea491996503b99b997f76cd27a50",
+    "notes": "Pending human design review and binding approval"
+  }
+}

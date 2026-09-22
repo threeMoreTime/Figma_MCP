@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0.0",
+  "blueprintId": "bp_user_mgmt_01",
+  "screenId": "users_page",
+  "title": "User Management Page Blueprint",
+  "dataSource": "SYNTHETIC",
+  "rootNode": {
+    "identity": {
+      "screenId": "users_page",
+      "semanticId": "user_container",
+      "state": "ready",
+      "breakpoint": "desktop",
+      "instanceKey": "inst_01"
+    },
+    "intendedComponent": "LayoutContainer",
+    "props": {
+      "title": "用户管理"
+    },
+    "children": [
+      {
+        "identity": {
+          "screenId": "users_page",
+          "semanticId": "user_table",
+          "state": "ready",
+          "breakpoint": "desktop",
+          "instanceKey": "table_01"
+        },
+        "intendedComponent": "Table",
+        "props": {
+          "bordered": true
+        },
+        "children": []
+      }
+    ]
+  },
+  "metadata": {
+    "author": "Antigravity Architect"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryId": "reg_invalid",
+  "targetRepo": "cs_admin-client",
+  "scannedHead": "unknown",
+  "components": {
+    "BadButton": {
+      "designComponentId": "bad_button",
+      "modulePath": "antd",
+      "exportName": "Button",
+      "sourceType": "INVALID_SOURCE",
+      "codeVersionHash": "123",
+      "props": {
+        "disabled": {
+          "name": "disabled",
+          "type": "boolean",
+          "defaultValue": "false"
+        }
+      },
+      "bindingStatus": "MAGIC_APPROVED"
+    }
+  }
+}

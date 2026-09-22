@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "lockfileVersion": 1,
+  "generatedAt": "2026-09-22T09:25:00+08:00",
+  "verifiedBy": "Antigravity Agent (Technical Lead)",
+  "repositories": {
+    "design-to-code-json": {
+      "url": "https://github.com/arifinbardansyah/design-to-code-json.git",
+      "pinnedSHA": "0d9b1dc082f18a5ebbae3ff5621ab4a07dd5bc94",
+      "versionTag": "v0.11.0",
+      "branch": "main",
+      "license": "MIT",
+      "notice": null,
+      "packageLicense": "MIT",
+      "verificationStatus": "VERIFIED_SOURCE",
+      "decision": "VENDORED_MODULE",
+      "reusedModules": [
+        "src/transform.ts (rgbaToHex at SHA 0d9b1dc082f18a5ebbae3ff5621ab4a07dd5bc94 L57-L60 -> tooling/d2c/normalizer/color.ts)",
+        "src/transform.ts (resolveToLiteral concept at SHA 0d9b1dc082f18a5ebbae3ff5621ab4a07dd5bc94 L101-L119 -> refactored to preserve path and diagnostics in tooling/d2c/normalizer/variables.ts)"
+      ],
+      "rejectedModules": [
+        "src/transform.ts (buildFlatCatalog - drops nodeId, collapses modes, collides same-name tokens across collections)",
+        "src/components.ts (synthesizeComponents - visual frame deduplication does not equal real Design System component mapping)"
+      ],
+      "installScript": "npm install",
+      "testScript": "node tool/test_transform.mjs && node tool/test_components.mjs",
+      "testExecutionStatus": "BLOCKED_ENVIRONMENT",
+      "testExecutionNote": "Execution failed with exit code 1 due to missing devDependency esbuild in node_modules. Upstream test scripts do not self-bundle. Algorithm logic verified by direct code inspection."
+    },
+    "figma-map": {
+      "url": "https://github.com/KirillBaranov/figma-map.git",
+      "pinnedSHA": "6901f443e29c55d09558872a95a28dc3d14508fc",
+      "versionTag": "v0.13.0",
+      "branch": "main",
+      "license": "MIT",
+      "notice": null,
+      "packageLicense": "MIT (backend)",
+      "verificationStatus": "VERIFIED_SOURCE",
+      "decision": "REFERENCE_ONLY",
+      "localImplementation": "CUSTOM_IMPLEMENTATION (tooling/d2c/registry/ and tooling/d2c/verification/)",
+      "reusedModules": [
+        "internal/op/registry.go (Referenced binding contract concept and data-figma-node DOM reconcile pattern)"
+      ],
+      "rejectedModules": [
+        "cmd/init.go (registers MCP server in target project, violates no-MCP constraint)",
+        "cmd/mcp.go (starts MCP server)",
+        "backend/ (Bun runtime + @modelcontextprotocol/sdk dependency; host environment lacks Bun and Go compilers)"
+      ],
+      "installScript": "go build / bun install",
+      "testScript": "go test ./...",
+      "testExecutionStatus": "BLOCKED_ENVIRONMENT",
+      "testExecutionNote": "Host environment lacks Go and Bun compilers. Go CLI is not executed. All local binding and scanning logic is implemented as independent TypeScript modules in tooling/d2c."
+    },
+    "react-figma": {
+      "url": "https://github.com/react-figma/react-figma.git",
+      "pinnedSHA": "1fd2d9d7ed4fbdb3c217d17a171432df9a506819",
+      "versionTag": "v0.31.0",
+      "branch": "master",
+      "license": "MIT",
+      "notice": null,
+      "packageLicense": "MIT",
+      "verificationStatus": "INCOMPATIBLE_BLOCKED",
+      "decision": "REJECTED",
+      "reusedModules": [],
+      "rejectedModules": [
+        "Entire runtime (package.json engines.node '>=10.0.0 <22.0.0' conflicts with host Node 22.22.2; react-reconciler ^0.23.0 conflicts with React 18+; Yoga absolute positioning does not produce native Auto Layout)"
+      ],
+      "installScript": "yarn install",
+      "testScript": "yarn test",
+      "testExecutionStatus": "NOT_RUN",
+      "testExecutionNote": "Incompatible with Node 22 and React 18. Not installed or executed in production pipeline."
+    },
+    "figma-api": {
+      "url": "https://github.com/todoforai/figma-api.git",
+      "pinnedSHA": "c094db9c706c33dc14431e7f929784907a3f01b0",
+      "versionTag": "HEAD",
+      "branch": "main",
+      "license": "MIT",
+      "notice": null,
+      "packageLicense": "MIT",
+      "verificationStatus": "SECURITY_REJECTED",
+      "decision": "REJECTED",
+      "reusedModules": [
+        "plugin/code.js (n.exportAsync({ format: 'JSON_REST_V1' }) API pattern noted for Phase 3 plugin)"
+      ],
+      "rejectedModules": [
+        "src/bridge.ts (unauthenticated broadcast across all peers; binds 0.0.0.0; Bun dependency)",
+        "plugin/code.js (arbitrary eval execution handler in plugin)"
+      ],
+      "installScript": "bun install",
+      "testScript": "none provided",
+      "testExecutionStatus": "NOT_RUN",
+      "testExecutionNote": "Unauthenticated relay broadcasting and arbitrary eval handler present unacceptable security risks. Excluded from runtime."
+    },
+    "tokens-studio-figma-plugin": {
+      "url": "https://github.com/tokens-studio/figma-plugin.git",
+      "pinnedSHA": "5c7fe785f6e8f82849f4e19d345c00dcbefdda31",
+      "versionTag": "2.12.0",
+      "branch": "main",
+      "license": "MIT",
+      "notice": null,
+      "packageLicense": "MIT",
+      "verificationStatus": "VERIFIED_SPEC_ONLY",
+      "decision": "SPEC_ONLY",
+      "reusedModules": [
+        "W3C DTCG Token JSON specification ($value, $type, {alias} format)"
+      ],
+      "rejectedModules": [
+        "Monorepo packages, plugin application UI, Supabase sync, Monaco editor, Sentry analytics"
+      ],
+      "installScript": "yarn install",
+      "testScript": "yarn test",
+      "testExecutionStatus": "NOT_RUN",
+      "testExecutionNote": "Data contract adopted without importing plugin source code."
+    },
+    "style-dictionary": {
+      "url": "https://github.com/style-dictionary/style-dictionary.git",
+      "pinnedSHA": "951cc612b37a18f2d26fcfa55858c93b09109e1d",
+      "versionTag": "v5.5.5",
+      "branch": "main",
+      "license": "Apache-2.0",
+      "notice": "NOTICE file present",
+      "packageLicense": "Apache-2.0",
+      "verificationStatus": "VERIFIED_COMPATIBLE",
+      "decision": "DEPENDENCY",
+      "reusedModules": [
+        "style-dictionary@^5.5.5 public npm package API"
+      ],
+      "rejectedModules": [],
+      "installScript": "npm install style-dictionary@^5.5.5",
+      "testScript": "npm test",
+      "testExecutionStatus": "VERIFIED_COMPATIBLE",
+      "testExecutionNote": "Engine requirement node >=22.0.0 matches host Node 22.22.2. Standard transform hooks and custom AntD ThemeConfig formatters."
+    },
+    "FigmaToCode": {
+      "url": "https://github.com/bernaferrari/FigmaToCode.git",
+      "pinnedSHA": "f5c4831d5de6cffc19a73fe2823c56b4bb551281",
+      "versionTag": "HEAD",
+      "branch": "main",
+      "license": "GPL-3.0",
+      "notice": null,
+      "packageLicense": "GPL-3.0",
+      "verificationStatus": "LICENSE_REJECTED",
+      "decision": "REJECTED",
+      "reusedModules": [],
+      "rejectedModules": [
+        "packages/backend/ (GPL-3.0 copyleft code must not be vendored or linked into core runtime; outputs static untyped HTML/Tailwind without design system component mapping)"
+      ],
+      "installScript": "pnpm install",
+      "testScript": "pnpm test",
+      "testExecutionStatus": "NOT_RUN",
+      "testExecutionNote": "Excluded under clean-room boundary to prevent GPL copyleft obligations on proprietary/closed targets."
+    },
+    "playwright": {
+      "url": "https://github.com/microsoft/playwright.git",
+      "pinnedSHA": "07f1a6154795f055f341b8972086533e8e48b36f",
+      "versionTag": "v1.63.0",
+      "branch": "main",
+      "license": "Apache-2.0",
+      "notice": "NOTICE file present",
+      "packageLicense": "Apache-2.0",
+      "verificationStatus": "VERIFIED_COMPATIBLE",
+      "decision": "DEPENDENCY",
+      "reusedModules": [
+        "@playwright/test@^1.63.0 public npm package API"
+      ],
+      "rejectedModules": [
+        "Browser engine patching and automation core source code"
+      ],
+      "installScript": "npm install -D @playwright/test@^1.63.0",
+      "testScript": "npx playwright test",
+      "testExecutionStatus": "PENDING_PHASE_3",
+      "testExecutionNote": "Browser automation dependency for Phase 3 and Phase 6. Contract and token tests run independently of browser execution."
+    }
+  }
+}

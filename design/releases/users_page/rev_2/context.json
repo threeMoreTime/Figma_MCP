@@ -1,0 +1,18 @@
+{
+  "rootNodeId": "10:100",
+  "screenTitle": "系统用户列表",
+  "nodes": {
+    "10:102": {
+      "semanticId": "users.header.title",
+      "text": "系统用户列表"
+    },
+    "10:103": {
+      "semanticId": "users.header.create_btn",
+      "variant": "dashed",
+      "text": "添加新账号"
+    },
+    "10:104": {
+      "semanticId": "users.content.table"
+    }
+  }
+}
