@@ -11,6 +11,7 @@
     "d2c:intake": "tsx tooling/d2c/cli/intake.ts",
     "d2c:plugin:build": "tsx tooling/d2c/figma-plugin/build.ts",
     "d2c:blueprint": "tsx tooling/d2c/cli/blueprint.ts",
+    "d2c:prototype": "tsx tooling/d2c/cli/prototype.ts",
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test tests/*.test.ts"
   },

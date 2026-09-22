@@ -207,6 +207,58 @@ export function generateUIBlueprint(
     };
   }
 
+  const layoutConstraint = {
+    containerWidth: 1440,
+    spacingSystem: {
+      baseUnit: 8,
+      steps: [4, 8, 16, 24, 32],
+    },
+    density: selectedDirection === "A" ? ("high" as const) : selectedDirection === "C" ? ("low" as const) : ("medium" as const),
+    responsiveBehavior: "fluid" as const,
+  };
+
+  const visualIntent = {
+    colorStrategy:
+      selectedDirection === "C"
+        ? "Monochrome Minimalist High Contrast"
+        : "AntD 5.7.3 Brand Blue (#1677ff) with Neutral Grayscale",
+    typographyDirection:
+      selectedDirection === "A"
+        ? "Compact Data Typography (12px base, 1.2 heading scale)"
+        : "Clean SaaS Typography (14px base, 1.25 heading scale)",
+    surfaceStyle:
+      selectedDirection === "A"
+        ? "Bordered High Contrast pure white container"
+        : selectedDirection === "C"
+        ? "Borderless Plain minimalist surface"
+        : "Card surface with subtle elevation (#f5f7fa background)",
+    interactionStyle:
+      selectedDirection === "A"
+        ? "Inline quick action, keyboard priority"
+        : selectedDirection === "C"
+        ? "Command palette driven, zero friction"
+        : "Modal dialog and drawer flow with status transitions",
+  };
+
+  const candidates = allComponents.map((c) => {
+    let candidateName = "UNRESOLVED";
+    if (c.intent === "primary-action") candidateName = "DS/Button.Primary";
+    else if (c.intent === "page-header") candidateName = "DS/PageHeader.Standard";
+    else if (c.intent === "filter-search") candidateName = "DS/Input.Search";
+    else if (c.intent === "data-table") candidateName = "DS/Table.DataTable";
+    else if (c.intent === "modal-dialog") candidateName = "DS/Modal.Standard";
+    else if (c.intent === "form-container") candidateName = "DS/Form.VerticalContainer";
+    else candidateName = `DS/${c.component}`;
+
+    return {
+      semanticId: c.semanticId,
+      intent: c.intent,
+      candidate: candidateName,
+      status: "PROPOSAL" as const,
+      fallbackDraft: true,
+    };
+  });
+
   const rawBlueprint = {
     schemaVersion: SCHEMA_VERSION,
     screenId,
@@ -220,6 +272,9 @@ export function generateUIBlueprint(
     regions,
     components: allComponents,
     selectedDirection,
+    layoutConstraint,
+    visualIntent,
+    candidates,
     diagnostics: [],
   };
 

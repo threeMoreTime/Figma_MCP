@@ -1,0 +1,76 @@
+/**
+ * Prototype Stylesheet (Phase 5A)
+ * Strictly uses semantic CSS variables from canonical tokens.
+ * Zero hardcoded colors (#1677ff) or spacing (16px).
+ */
+
+.prototype-container {
+  padding: var(--d2c-spacing-lg);
+  background-color: var(--d2c-color-bg-layout);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.prototype-header-region {
+  background-color: var(--d2c-color-bg-container);
+  padding: var(--d2c-spacing-md);
+  border-bottom: 1px solid var(--d2c-color-border);
+  margin-bottom: var(--d2c-spacing-md);
+  border-radius: var(--d2c-borderRadius-base);
+}
+
+.prototype-header-region h2 {
+  margin: 0;
+  color: var(--d2c-color-text-primary);
+  font-size: var(--d2c-fontSize-heading);
+}
+
+.prototype-header-region p {
+  margin: var(--d2c-spacing-xs) 0 0 0;
+  color: var(--d2c-color-text-secondary);
+  font-size: var(--d2c-fontSize-base);
+}
+
+.prototype-toolbar-region {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--d2c-color-bg-container);
+  padding: var(--d2c-spacing-md);
+  margin-bottom: var(--d2c-spacing-md);
+  border-radius: var(--d2c-borderRadius-base);
+  gap: var(--d2c-spacing-md);
+}
+
+.prototype-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--d2c-spacing-sm);
+  flex: 1;
+  max-width: 400px;
+}
+
+.prototype-content-region {
+  background-color: var(--d2c-color-bg-container);
+  padding: var(--d2c-spacing-md);
+  border-radius: var(--d2c-borderRadius-base);
+  border: 1px solid var(--d2c-color-border);
+}
+
+.state-switcher-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--d2c-spacing-sm);
+  padding: var(--d2c-spacing-sm) var(--d2c-spacing-md);
+  background-color: var(--d2c-color-neutral-white);
+  border-bottom: 1px dashed var(--d2c-color-border);
+  margin-bottom: var(--d2c-spacing-md);
+  border-radius: var(--d2c-borderRadius-base);
+}
+
+.state-switcher-title {
+  font-weight: 600;
+  font-size: var(--d2c-fontSize-base);
+  color: var(--d2c-color-text-secondary);
+  margin-right: var(--d2c-spacing-sm);
+}

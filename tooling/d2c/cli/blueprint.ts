@@ -17,21 +17,35 @@ import {
   generateInteractionContract,
   validateInteractionContract,
 } from "../blueprint/interaction-contract.js";
+import { generateVisualPrompts } from "../figma-generator/image-prompts.js";
+import {
+  generateMappingProposal,
+  validateMappingProposal,
+} from "../figma-generator/component-mapper.js";
+import { generateFigmaOperationPlan } from "../figma-generator/plan-generator.js";
+import {
+  createSimulatorContext,
+  executePlanInSimulator,
+} from "../figma-generator/simulator.js";
 
 function printUsage() {
   console.log(`
-Blueprint Engine CLI (Phase 4A: PRD → UI Blueprint)
+Blueprint Engine CLI (Phase 4A & 4B: PRD → UI Blueprint → Figma Generator)
 
 Usage:
   tsx tooling/d2c/cli/blueprint.ts --analyze <prd-path>
   tsx tooling/d2c/cli/blueprint.ts --generate <prd-path> --direction <A|B|C>
   tsx tooling/d2c/cli/blueprint.ts --demo
+  tsx tooling/d2c/cli/blueprint.ts --figma-plan <blueprint-json-path>
+  tsx tooling/d2c/cli/blueprint.ts --demo-4b
 
 Options:
   --analyze <path>      Parse PRD and generate Requirement Analysis + Design Brief (Halts for human gate)
   --generate <path>     Generate UI Blueprint and Interaction Contract for selected direction
   --direction <A|B|C>   Selected design direction (A: Enterprise Dense, B: Modern SaaS, C: Minimal Productivity)
-  --demo                Run end-to-end demo using examples/prd/users-management.md
+  --demo                Run Phase 4A end-to-end demo using examples/prd/users-management.md
+  --figma-plan <path>   Compile UI Blueprint into Figma Operations Plan, Visual Prompts, and Mapping Proposal
+  --demo-4b             Run Phase 4B end-to-end demo (Figma Operation Plan, Tokens, Idempotency, Conflict Check)
   --help                Show this help message
 `);
 }
@@ -261,6 +275,141 @@ async function main() {
     console.log(`\n✅ Generated UI Blueprint & Interaction Contract for Direction ${direction}!`);
     console.log(`  - Blueprint: ${blueprintFile}`);
     console.log(`  - Contract:  ${contractFile}`);
+    return;
+  }
+
+  const isDemo4B = args.includes("--demo-4b");
+  const figmaPlanIdx = args.indexOf("--figma-plan");
+
+  if (isDemo4B || figmaPlanIdx !== -1) {
+    console.log("================================================================================");
+    console.log("🚀 Blueprint Engine: Running Phase 4B Native Figma Generator Pipeline");
+    console.log("================================================================================");
+
+    // 1. Ensure Phase 4A outputs exist (or run generator on users-management.md)
+    let blueprintPath =
+      figmaPlanIdx !== -1 && args[figmaPlanIdx + 1]
+        ? resolve(process.cwd(), args[figmaPlanIdx + 1])
+        : resolve(outputDir, "ui-blueprint.json");
+
+    const briefPath = resolve(outputDir, "design-brief.json");
+
+    if (!existsSync(blueprintPath) || !existsSync(briefPath)) {
+      console.log("Phase 4A artifacts not found. Generating initial Blueprint & Brief...");
+      const prdPath = resolve(process.cwd(), "examples/prd/users-management.md");
+      const prdContent = readFileSync(prdPath, "utf-8");
+      const analysis = analyzeRequirement(prdContent);
+      const brief = generateDesignBrief(analysis);
+      brief.selectedDirection = "B";
+      brief.selectionRationale = "Phase 4B Demo: Selected Modern SaaS (Direction B).";
+      writeJson(briefPath, brief);
+
+      const bpResult = generateUIBlueprint({ analysis, selectedDirection: "B" });
+      if (!bpResult.success || !bpResult.blueprint) {
+        console.error("Failed to generate UI Blueprint:", bpResult.diagnostics);
+        process.exit(1);
+      }
+      blueprintPath = resolve(outputDir, "ui-blueprint.json");
+      writeJson(blueprintPath, bpResult.blueprint);
+    }
+
+    const blueprint = JSON.parse(readFileSync(blueprintPath, "utf-8"));
+    const brief = JSON.parse(readFileSync(briefPath, "utf-8"));
+
+    const tokensPath = resolve(process.cwd(), "tooling/d2c/tokens/canonical-tokens.json");
+    const canonicalTokens = JSON.parse(readFileSync(tokensPath, "utf-8"));
+
+    const catalogPath = resolve(process.cwd(), "tooling/d2c/blueprint/component-intent-catalog.json");
+    const catalog = JSON.parse(readFileSync(catalogPath, "utf-8"));
+
+    // Step 1: GPT Image Prompts
+    console.log("\n[Step 1/5] Generating GPT Image Visual Exploration Prompts...");
+    const visualPrompts = generateVisualPrompts(brief, blueprint);
+    const visualPromptsFile = resolve(outputDir, "visual-prompts.json");
+    writeJson(visualPromptsFile, visualPrompts);
+    console.log(`  - Prompts generated for ${visualPrompts.prompts.length} screen states`);
+    console.log(`  - Role: ${visualPrompts.role} (Strictly for mood exploration, NOT Figma data source)`);
+
+    // Step 2: Component Mapping Proposal
+    console.log("\n[Step 2/5] Generating Component Mapping Proposal (Human confirmation required)...");
+    const mappingProposal = generateMappingProposal(blueprint, catalog);
+    const mappingValidation = validateMappingProposal(mappingProposal);
+    const mappingFile = resolve(outputDir, "mapping-proposal.json");
+    writeJson(mappingFile, mappingProposal);
+    console.log(`  - Mapped: ${mappingProposal.mappings.length} components`);
+    console.log(`  - Auto Publish: ${mappingProposal.autoPublish} (Strictly disabled)`);
+    console.log(`  - Requires Human Gate: ${mappingProposal.requiresHumanConfirmation}`);
+
+    // Step 3: Figma Operation Plan
+    console.log("\n[Step 3/5] Generating Validated Figma Operation Plan...");
+    const { plan, diagnostics: planDiagnostics } = generateFigmaOperationPlan({
+      blueprint,
+      brief,
+      canonicalTokens,
+      catalog,
+      mappingProposal,
+    });
+
+    const planFile = resolve(outputDir, "figma-operation-plan.json");
+    writeJson(planFile, plan);
+    console.log(`  - Total operations: ${plan.operations.length}`);
+    console.log(`  - Blueprint content hash: ${plan.blueprintHash.slice(0, 16)}...`);
+    console.log(`  - Diagnostics: ${planDiagnostics.length} warnings/errors`);
+
+    // Step 4: Figma Simulator & Idempotency / Conflict Verification
+    console.log("\n[Step 4/5] Executing Plan in Native Figma Simulator...");
+    const simContext = createSimulatorContext();
+
+    // Run 1: Initial Creation
+    const run1 = executePlanInSimulator(plan, simContext);
+    console.log(`  - First Run: ${run1.createdNodes} nodes created, ${run1.skippedNodes} skipped, ${run1.conflicts} conflicts`);
+
+    // Run 2: Idempotency Test (same plan re-executed)
+    const run2 = executePlanInSimulator(plan, simContext);
+    console.log(`  - Second Run (Idempotency Test): ${run2.createdNodes} created, ${run2.skippedNodes} skipped (0 duplicates!)`);
+
+    // Run 3: Conflict Simulation (simulate manual Figma modification on a node)
+    const testNode = simContext.nodesBySemanticId.get("users.management.create_btn");
+    if (testNode) {
+      testNode.pluginData.set("manualEdited", "true");
+    }
+    const run3 = executePlanInSimulator(plan, simContext);
+    console.log(`  - Conflict Test: Detected ${run3.conflicts} manual conflict(s) (Overwrite blocked!)`);
+
+    // Step 5: Figma Release Package
+    console.log("\n[Step 5/5] Emitting Figma Release Package Manifest...");
+    const releasePackage = {
+      schemaVersion: "1.0.0",
+      screenId: blueprint.screenId,
+      blueprintHash: plan.blueprintHash,
+      status: "READY_FOR_FIGMA_IMPORT",
+      files: {
+        visualPrompts: "visual-prompts.json",
+        operationPlan: "figma-operation-plan.json",
+        mappingProposal: "mapping-proposal.json",
+        uiBlueprint: "ui-blueprint.json",
+      },
+      summary: {
+        totalOperations: plan.operations.length,
+        totalRegions: blueprint.regions.length,
+        totalComponents: blueprint.components.length,
+        tokenBindings: plan.operations.filter((o) => o.variableBinding).length,
+        idempotencyVerified: run2.skippedNodes > 0 && run2.createdNodes === 0,
+        conflictDetectionVerified: run3.conflicts > 0,
+      },
+    };
+
+    const packageFile = resolve(outputDir, "figma-release-package.json");
+    writeJson(packageFile, releasePackage);
+
+    console.log("\n================================================================================");
+    console.log("✅ Phase 4B Native Figma Generator Pipeline Completed Successfully");
+    console.log("Artifacts produced in examples/output/:");
+    console.log(`  1. Visual Prompts:    ${visualPromptsFile}`);
+    console.log(`  2. Operation Plan:    ${planFile}`);
+    console.log(`  3. Mapping Proposal:  ${mappingFile}`);
+    console.log(`  4. Release Package:   ${packageFile}`);
+    console.log("================================================================================");
     return;
   }
 

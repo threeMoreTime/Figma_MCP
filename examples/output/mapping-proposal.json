@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0.0",
+  "screenId": "users.management",
+  "requiresHumanConfirmation": true,
+  "autoPublish": false,
+  "mappings": [
+    {
+      "semanticId": "users.management.page_header",
+      "intent": "page-header",
+      "candidate": {
+        "figmaComponent": "DS/Header.PageHeader",
+        "status": "PROPOSAL",
+        "reason": "Matched intent 'page-header' to standard design system component 'DS/Header.PageHeader'."
+      }
+    },
+    {
+      "semanticId": "users.management.search_input",
+      "intent": "filter-search",
+      "candidate": {
+        "figmaComponent": "DS/Input.Search",
+        "status": "PROPOSAL",
+        "reason": "Matched intent 'filter-search' to standard design system component 'DS/Input.Search'."
+      }
+    },
+    {
+      "semanticId": "users.management.create_btn",
+      "intent": "primary-action",
+      "candidate": {
+        "figmaComponent": "DS/Button.Primary",
+        "status": "PROPOSAL",
+        "reason": "Matched intent 'primary-action' to standard design system component 'DS/Button.Primary'."
+      }
+    },
+    {
+      "semanticId": "users.management.table",
+      "intent": "data-table",
+      "candidate": {
+        "figmaComponent": "DS/Table.DataTable",
+        "status": "PROPOSAL",
+        "reason": "Matched intent 'data-table' to standard design system component 'DS/Table.DataTable'."
+      }
+    },
+    {
+      "semanticId": "users.management.create_modal",
+      "intent": "modal-dialog",
+      "candidate": {
+        "figmaComponent": "DS/Modal.Standard",
+        "status": "PROPOSAL",
+        "reason": "Matched intent 'modal-dialog' to standard design system component 'DS/Modal.Standard'."
+      }
+    },
+    {
+      "semanticId": "users.management.create_form",
+      "intent": "form-container",
+      "candidate": {
+        "figmaComponent": "DS/Form.VerticalContainer",
+        "status": "PROPOSAL",
+        "reason": "Matched intent 'form-container' to standard design system component 'DS/Form.VerticalContainer'."
+      }
+    }
+  ],
+  "diagnostics": []
+}

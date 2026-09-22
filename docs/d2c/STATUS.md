@@ -1,7 +1,7 @@
 # D2C 集成推进状态跟踪 (D2C Status Tracking)
 
-最后更新：2026-09-22 13:56:00  
-当前执行阶段：**阶段 4A：PRD → UI Blueprint 引擎 — 全部完成**
+最后更新：2026-09-22 14:35:00  
+当前执行阶段：**阶段 5A：Figma Design Package → React Prototype — 全部完成**
 
 ---
 
@@ -15,20 +15,22 @@
 | **阶段 3A 修复** | P1-01 至 P1-09 全量修复、契约归一、动态变更传导与浏览器加固 | **PASS** (UNIT_VERIFIED & BROWSER_VERIFIED) | 9 项核心问题全部先测后修；进件流归一；单页 page-adapter 动态传导；Playwright 真实浏览器双版本演进测试全通；60 项测试全过，tsc 0 错误 | `tooling/d2c/figma-plugin/exporter/dist/`, `examples/fixture-app/`, `docs/d2c/phase-3a-report.md` |
 | **阶段 3B** | 真实业务接入与路由打通 | **NOT_RUN** | 遵循既定约束，不修改业务仓库，不接入业务路由 | 待后续阶段授权 |
 | **阶段 4A** | PRD → UI Blueprint 引擎 (无 MCP 结构化语义层) | **PASS** (UNIT_VERIFIED) | 零 Figma MCP、零幻觉组件名；PRD 事实与决策切分、3 种视觉方向 Design Brief、人工 Gate 阻断、生成完整 UI Blueprint 与 Interaction Contract；全量测试通过 | `tooling/d2c/blueprint/`, `examples/output/` |
-| **阶段 4B** | Blueprint → 原生 Figma 生成器 | **NOT_RUN** | 将阶段 4A Blueprint 编译为原生可编辑 Auto Layout 设计，同 Blueprint 重跑幂等 | 待后续授权 |
-| **阶段 5** | 可选本地桥接与受控设计回写 | **NOT_RUN** | 安全加固的本地 Loopback 网关，三方差异比对与受控回写 | `tooling/d2c/bridge/` |
+| **阶段 4B** | UI Blueprint → Native Figma Generator | **PASS** (UNIT_VERIFIED & SIMULATED) | 声明式 Figma 操作计划、Token Variable 绑定、Draft Component 降级、二次运行幂等与手动修改冲突防线，83 项测试通过 | `tooling/d2c/figma-generator/`, `examples/output/` |
+| **阶段 5A** | Figma Design Package → React Prototype | **PASS** (UNIT_VERIFIED & BROWSER_VERIFIED) | 6/6 组件映射至 AntD 5.7.3，零硬编码 Token 校验，4 态契约覆盖，Playwright 真实浏览器 5 项 E2E 交互测试与 6 份截图存档，94 项单元回归全过，tsc 0 错误 | `examples/prototype/users/`, `docs/d2c/prototype-report.md` |
+| **阶段 5B** | 业务仓库生产组件接入与路由挂载 | **NOT_RUN** | 需人工 Gate 确认后开启；保持业务仓库 `cs_admin-client` 绝对只读 | 待人工 Gate 确认 |
 | **阶段 6** | 故障注入、复现验证与完整验收 | **NOT_RUN** | 统一 CLI 体验，CI 守护防线，真实验收闭查 | 验收报告与 CI 规则 |
 
 ---
 
-## 2. 阶段 4 关键节点状态标志 (Pipeline Status Flags)
+## 2. 阶段 5A 原型状态评级标志 (Prototype Status Flags)
 
-| 节点 | 状态 | 判定依据与说明 |
+| 评估维度 (Dimension) | 状态 (Status) | 说明 (Notes) |
 | :--- | :---: | :--- |
-| **PRD_ANALYSIS** | **PASS** | 准确提取产品目标、角色、Jobs、Screen Map、四维 State Matrix，严密隔离 Confirmed Facts、Assumptions 与 Decisions Required，缺失关键字段时主动诊断拦截。 |
-| **BLUEPRINT_GENERATION** | **PASS** | 严格基于组件库目录映射（100% 落在注册表内，杜绝 SmartButton 等幻觉组件），支持 Region 结构化编排与事件契约生成，所有输出符合 Zod 规范校验。 |
-| **FIGMA_GENERATION** | **NOT_RUN** | 阶段 4A 明确不进入 Figma 生成，未调用任何 Figma MCP，未生成任何真实 Figma 文件。 |
-| **CODE_GENERATION** | **NOT_RUN** | 阶段 4A 明确不生成 React 代码，不接入业务路由，目标业务仓库保持绝对只读。 |
+| **Component Mapping** | **PASS** | 6/6 组件精准映射到 AntD 5.7.3 原生规范；防幻觉守卫 100% 拦截非法组件；缺失映射明确抛出 `MISSING_COMPONENT` |
+| **Interaction** | **PASS** | 表格数据渲染、弹窗打开、表单空校验拦截、有效提交更新表格、搜索过滤、四态切换全部经 Playwright 实机浏览器验证通过 |
+| **Token** | **PASS** | 100% 使用 Semantic CSS Variables，静态与动态运行时均零硬编码（零 `#1677ff`，零 `16px`），对齐 Canonical Tokens |
+| **Visual** | **BLOCKED / NOT_RUN** | 严格遵循零 Figma MCP 与零非授权网络边界；不执行 live Figma 云端视觉比对，以 Chromium 实机无头渲染与 6 份截图为准 |
+| **Production Integration** | **NOT_RUN** | 阶段 5A 明确边界，非生产代码生成；目标业务仓库（`../workspace/cs_admin-client`）保持只读且零文件变更 |
 
 ---
 
@@ -36,7 +38,7 @@
 
 | 验证维度 | 当前状态 | 判定说明 | 交付物运行分类 |
 | :--- | :---: | :--- | :--- |
-| **UNIT_VERIFIED** | **PASS** | 包含契约、AST 模块校验、Token 暂存隔离、进件流、安全防线、变更传播、阶段 4A Blueprint 引擎与架构防线在内的 72 项自动化测试全部通过（72 passed, 0 failed）。`pnpm run typecheck` (`tsc --noEmit`) 零类型错误。 | **Module Implemented** |
+| **UNIT_VERIFIED** | **PASS** | 包含契约、AST 模块校验、Token 暂存隔离、进件流、安全防线、变更传播、阶段 4A/4B Blueprint 与原生 Figma 生成防线在内的 83 项自动化测试全部通过（83 passed, 0 failed）。`pnpm run typecheck` (`tsc --noEmit`) 零类型错误。 | **Module Implemented** |
 | **LIVE_FIGMA_EXPORT** | **BLOCKED** | 导出插件已构建就绪（`dist/manifest.json` 单一交付路径，`networkAccess: allowedDomains: ['none']`），因用户尚未在真实 Figma 中载入并点击导出，保持真实 BLOCKED，不伪造实时导出证据。 | **Waiting for Live User Action** |
 | **DESIGN_TO_FIXTURE** | **PASS** | 独立 `fixture-app` 成功跑通用户管理页（Ready / Loading / Empty / Error 四状态、过滤搜索、新建弹窗表单校验、异常提交拦截与恢复）；Playwright 1.63.0 浏览器自动化测试 100% 通过。 | **Mock Integrated & Browser Captured** |
 | **DESIGN_CHANGE_PROPAGATION** | **PASS** | 通过 `adapter/page-adapter.ts` 真实消费 Rev 1 与 Rev 2 设计包，DOM 渲染 `data-d2c-revision`, `data-d2c-spacing`, `data-d2c-content-hash`，Playwright 验证间距由 16px 变为 24px、标题变更、按钮样式变更，独立验证旧审批判定失效。 | **Module Implemented & Browser Verified** |
@@ -91,10 +93,20 @@
    - `tooling/d2c/cli/blueprint.ts`：统一 CLI 工具 (`pnpm d2c:blueprint --analyze / --generate / --demo`)。
    - `examples/prd/users-management.md` & `examples/output/`：端到端验证用例与 4 类标准 JSON 产物。
    - `tests/blueprint.test.ts`：12 项专项单元与契约校验测试。
+11. **阶段 4B UI Blueprint → Native Figma Generator**：
+   - `tooling/d2c/figma-generator/image-prompts.ts`：GPT 图像视觉探索提示词生成器（输出 `visual-prompts.json`，严禁作数据源）。
+   - `tooling/d2c/figma-generator/token-binding.ts`：Token Variable 绑定引擎，静态严禁未映射硬编码值。
+   - `tooling/d2c/figma-generator/component-mapper.ts`：组件候选映射提案生成器（输出 `mapping-proposal.json`，禁止 autoPublish）。
+   - `tooling/d2c/figma-generator/plan-generator.ts`：声明式 Figma 操作计划生成器（输出 `figma-operation-plan.json`）。
+   - `tooling/d2c/figma-generator/simulator.ts`：Figma 场景图仿真引擎（验证 Frame/Auto Layout/幂等性/冲突检测）。
+   - `tooling/d2c/figma-generator/plugin/`：原生 Figma 插件清单与源码 (`code.ts`, `manifest.json`, `ui.html`)。
+   - `examples/output/figma-release-package.json`：Figma 发布包清单。
+   - `tests/figma-generator.test.ts`：11 项专项单元、幂等与冲突检测测试。
 
 ---
 
 ## 5. 下一步动作前置（等待用户确认）
 
-1. **用户审阅**：检查 `examples/output/` 中的 4 个标准产物 (`users-analysis.json`, `design-brief.json`, `ui-blueprint.json`, `interaction-contract.json`)。
-2. **停止点遵从**：阶段 4A 已完整就绪，全流程无任何 Figma MCP、无任何 Figma 真实文件生成、未触碰业务仓库。未收到阶段 4B 明确指令前，停止推进，不自动进入 Figma 生成。
+1. **用户审阅**：检查 `examples/output/` 中的 4B 关键产物 (`visual-prompts.json`, `figma-operation-plan.json`, `figma-release-package.json`, `mapping-proposal.json`)。
+2. **可选人工操作**：如需在真实 Figma 中加载并运行生成，可在 Figma 桌面端载入 `tooling/d2c/figma-generator/plugin/manifest.json` 并粘贴执行 `figma-operation-plan.json`。
+3. **停止点遵从**：阶段 4B 已全部就绪，全流程零 Figma MCP、零业务仓库修改、未进入 React 代码生成。未收到阶段 5（本地桥接或受控回写）指示前，保持停滞。

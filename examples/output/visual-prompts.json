@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "1.0.0",
+  "screenId": "users.management",
+  "role": "VISUAL_EXPLORATION_ONLY",
+  "prompts": [
+    {
+      "screen": "users.management",
+      "state": "loading",
+      "prompt": {
+        "style": "Modern SaaS enterprise SaaS UI with skeleton loading indicators",
+        "density": "medium",
+        "components": [
+          "PageHeader",
+          "FilterBar",
+          "PrimaryButton",
+          "DataTable",
+          "ModalDialog",
+          "DataForm"
+        ],
+        "avoid": [
+          "glassmorphism",
+          "gradient",
+          "neon glows",
+          "3D claymorphism",
+          "hallucinated buttons",
+          "unaligned layouts",
+          "decorative 3D illustrations in functional tables"
+        ]
+      }
+    },
+    {
+      "screen": "users.management",
+      "state": "ready",
+      "prompt": {
+        "style": "Modern SaaS enterprise SaaS UI",
+        "density": "medium",
+        "components": [
+          "PageHeader",
+          "FilterBar",
+          "PrimaryButton",
+          "DataTable",
+          "ModalDialog",
+          "DataForm"
+        ],
+        "avoid": [
+          "glassmorphism",
+          "gradient",
+          "neon glows",
+          "3D claymorphism",
+          "hallucinated buttons",
+          "unaligned layouts",
+          "decorative 3D illustrations in functional tables"
+        ]
+      }
+    },
+    {
+      "screen": "users.management",
+      "state": "empty",
+      "prompt": {
+        "style": "Modern SaaS enterprise SaaS UI with clean empty-state vector placeholder",
+        "density": "medium",
+        "components": [
+          "PageHeader",
+          "FilterBar",
+          "PrimaryButton",
+          "DataTable",
+          "ModalDialog",
+          "DataForm"
+        ],
+        "avoid": [
+          "glassmorphism",
+          "gradient",
+          "neon glows",
+          "3D claymorphism",
+          "hallucinated buttons",
+          "unaligned layouts",
+          "decorative 3D illustrations in functional tables"
+        ]
+      }
+    },
+    {
+      "screen": "users.management",
+      "state": "error",
+      "prompt": {
+        "style": "Modern SaaS enterprise SaaS UI with inline error banner notice",
+        "density": "medium",
+        "components": [
+          "PageHeader",
+          "FilterBar",
+          "PrimaryButton",
+          "DataTable",
+          "ModalDialog",
+          "DataForm"
+        ],
+        "avoid": [
+          "glassmorphism",
+          "gradient",
+          "neon glows",
+          "3D claymorphism",
+          "hallucinated buttons",
+          "unaligned layouts",
+          "decorative 3D illustrations in functional tables"
+        ]
+      }
+    }
+  ],
+  "notice": "GPT Image prompts are strictly for visual exploration and mood board inspiration. They are NEVER used as data source for Native Figma Generation."
+}

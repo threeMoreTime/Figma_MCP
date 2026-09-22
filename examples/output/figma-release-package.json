@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.0.0",
+  "screenId": "users.management",
+  "blueprintHash": "9b78c961cfd867e647de9f08e202c17adbdde64e47ce8a9211c0e0320b996c15",
+  "status": "READY_FOR_FIGMA_IMPORT",
+  "files": {
+    "visualPrompts": "visual-prompts.json",
+    "operationPlan": "figma-operation-plan.json",
+    "mappingProposal": "mapping-proposal.json",
+    "uiBlueprint": "ui-blueprint.json"
+  },
+  "summary": {
+    "totalOperations": 11,
+    "totalRegions": 4,
+    "totalComponents": 6,
+    "tokenBindings": 11,
+    "idempotencyVerified": true,
+    "conflictDetectionVerified": true
+  }
+}

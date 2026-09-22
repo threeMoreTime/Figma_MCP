@@ -1,0 +1,326 @@
+{
+  "schemaVersion": "1.0.0",
+  "screenId": "users.management",
+  "blueprintHash": "9b78c961cfd867e647de9f08e202c17adbdde64e47ce8a9211c0e0320b996c15",
+  "operations": [
+    {
+      "id": "op-root-page",
+      "type": "CREATE_FRAME",
+      "semanticId": "users.management.page",
+      "name": "users.management [Page]",
+      "frameType": "PAGE",
+      "layout": {
+        "layoutMode": "VERTICAL",
+        "padding": {
+          "top": 24,
+          "right": 24,
+          "bottom": 24,
+          "left": 24
+        },
+        "itemSpacing": 24,
+        "primaryAxisAlignItems": "MIN",
+        "counterAxisAlignItems": "MIN"
+      },
+      "variableBinding": {
+        "property": "fills",
+        "variableToken": "color.bg.layout",
+        "fallbackValue": "#f5f5f5"
+      },
+      "metadata": {
+        "semanticId": "users.management.page",
+        "blueprintHash": "9b78c961cfd867e647de9f08e202c17adbdde64e47ce8a9211c0e0320b996c15",
+        "nodeType": "PAGE_ROOT"
+      }
+    },
+    {
+      "id": "op-01-region-region-header",
+      "type": "CREATE_FRAME",
+      "semanticId": "users.management.region-header",
+      "parentSemanticId": "users.management.page",
+      "name": "page-header [region-header]",
+      "frameType": "SECTION",
+      "layout": {
+        "layoutMode": "HORIZONTAL",
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "itemSpacing": 16,
+        "primaryAxisAlignItems": "MIN",
+        "counterAxisAlignItems": "CENTER"
+      },
+      "variableBinding": {
+        "property": "fills",
+        "variableToken": "color.bg.container",
+        "fallbackValue": "#ffffff"
+      },
+      "metadata": {
+        "semanticId": "users.management.region-header",
+        "blueprintHash": "9b78c961cfd867e647de9f08e202c17adbdde64e47ce8a9211c0e0320b996c15",
+        "regionId": "region-header"
+      }
+    },
+    {
+      "id": "op-02-comp-users_management_page_header",
+      "type": "CREATE_INSTANCE",
+      "semanticId": "users.management.page_header",
+      "parentSemanticId": "users.management.region-header",
+      "name": "page-header: users.management.page_header",
+      "component": "DS/Header.PageHeader",
+      "fallbackDraft": true,
+      "variableBinding": {
+        "property": "fills",
+        "variableToken": "color.bg.container",
+        "fallbackValue": "#1677ff"
+      },
+      "properties": {
+        "variant": "standard",
+        "importance": "high",
+        "label": "展示企业全量用户列表并提供新建与组合查询操作",
+        "boundStates": [
+          "default"
+        ]
+      },
+      "metadata": {
+        "semanticId": "users.management.page_header",
+        "intent": "page-header",
+        "blueprintHash": "9b78c961cfd867e647de9f08e202c17adbdde64e47ce8a9211c0e0320b996c15"
+      }
+    },
+    {
+      "id": "op-03-region-region-toolbar",
+      "type": "CREATE_FRAME",
+      "semanticId": "users.management.region-toolbar",
+      "parentSemanticId": "users.management.page",
+      "name": "filter-search [region-toolbar]",
+      "frameType": "SECTION",
+      "layout": {
+        "layoutMode": "HORIZONTAL",
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "itemSpacing": 12,
+        "primaryAxisAlignItems": "SPACE_BETWEEN",
+        "counterAxisAlignItems": "CENTER"
+      },
+      "variableBinding": {
+        "property": "fills",
+        "variableToken": "color.bg.container",
+        "fallbackValue": "#ffffff"
+      },
+      "metadata": {
+        "semanticId": "users.management.region-toolbar",
+        "blueprintHash": "9b78c961cfd867e647de9f08e202c17adbdde64e47ce8a9211c0e0320b996c15",
+        "regionId": "region-toolbar"
+      }
+    },
+    {
+      "id": "op-04-comp-users_management_search_input",
+      "type": "CREATE_INSTANCE",
+      "semanticId": "users.management.search_input",
+      "parentSemanticId": "users.management.region-toolbar",
+      "name": "filter-search: users.management.search_input",
+      "component": "DS/Input.Search",
+      "fallbackDraft": true,
+      "variableBinding": {
+        "property": "strokes",
+        "variableToken": "color.border",
+        "fallbackValue": "#d9d9d9"
+      },
+      "properties": {
+        "variant": "search",
+        "importance": "medium",
+        "boundStates": [
+          "default",
+          "focused",
+          "disabled"
+        ]
+      },
+      "metadata": {
+        "semanticId": "users.management.search_input",
+        "intent": "filter-search",
+        "blueprintHash": "9b78c961cfd867e647de9f08e202c17adbdde64e47ce8a9211c0e0320b996c15"
+      }
+    },
+    {
+      "id": "op-05-comp-users_management_create_btn",
+      "type": "CREATE_INSTANCE",
+      "semanticId": "users.management.create_btn",
+      "parentSemanticId": "users.management.region-toolbar",
+      "name": "primary-action: users.management.create_btn",
+      "component": "DS/Button.Primary",
+      "fallbackDraft": true,
+      "variableBinding": {
+        "property": "fills",
+        "variableToken": "color.primary",
+        "fallbackValue": "#1677ff"
+      },
+      "properties": {
+        "variant": "primary",
+        "importance": "high",
+        "label": "新建用户",
+        "boundStates": [
+          "default",
+          "loading",
+          "disabled"
+        ]
+      },
+      "metadata": {
+        "semanticId": "users.management.create_btn",
+        "intent": "primary-action",
+        "blueprintHash": "9b78c961cfd867e647de9f08e202c17adbdde64e47ce8a9211c0e0320b996c15"
+      }
+    },
+    {
+      "id": "op-06-region-region-content",
+      "type": "CREATE_FRAME",
+      "semanticId": "users.management.region-content",
+      "parentSemanticId": "users.management.page",
+      "name": "data-table [region-content]",
+      "frameType": "SECTION",
+      "layout": {
+        "layoutMode": "VERTICAL",
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "itemSpacing": 16,
+        "primaryAxisAlignItems": "MIN",
+        "counterAxisAlignItems": "CENTER"
+      },
+      "variableBinding": {
+        "property": "fills",
+        "variableToken": "color.bg.container",
+        "fallbackValue": "#ffffff"
+      },
+      "metadata": {
+        "semanticId": "users.management.region-content",
+        "blueprintHash": "9b78c961cfd867e647de9f08e202c17adbdde64e47ce8a9211c0e0320b996c15",
+        "regionId": "region-content"
+      }
+    },
+    {
+      "id": "op-07-comp-users_management_table",
+      "type": "CREATE_INSTANCE",
+      "semanticId": "users.management.table",
+      "parentSemanticId": "users.management.region-content",
+      "name": "data-table: users.management.table",
+      "component": "DS/Table.DataTable",
+      "fallbackDraft": true,
+      "variableBinding": {
+        "property": "strokes",
+        "variableToken": "color.border",
+        "fallbackValue": "#d9d9d9"
+      },
+      "properties": {
+        "variant": "default",
+        "importance": "high",
+        "boundStates": [
+          "loading",
+          "ready",
+          "empty",
+          "error"
+        ]
+      },
+      "metadata": {
+        "semanticId": "users.management.table",
+        "intent": "data-table",
+        "blueprintHash": "9b78c961cfd867e647de9f08e202c17adbdde64e47ce8a9211c0e0320b996c15"
+      }
+    },
+    {
+      "id": "op-08-region-region-modal",
+      "type": "CREATE_FRAME",
+      "semanticId": "users.management.region-modal",
+      "parentSemanticId": "users.management.page",
+      "name": "modal-dialog [region-modal]",
+      "frameType": "SECTION",
+      "layout": {
+        "layoutMode": "VERTICAL",
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "itemSpacing": 12,
+        "primaryAxisAlignItems": "MIN",
+        "counterAxisAlignItems": "CENTER"
+      },
+      "variableBinding": {
+        "property": "fills",
+        "variableToken": "color.bg.container",
+        "fallbackValue": "#ffffff"
+      },
+      "metadata": {
+        "semanticId": "users.management.region-modal",
+        "blueprintHash": "9b78c961cfd867e647de9f08e202c17adbdde64e47ce8a9211c0e0320b996c15",
+        "regionId": "region-modal"
+      }
+    },
+    {
+      "id": "op-09-comp-users_management_create_modal",
+      "type": "CREATE_INSTANCE",
+      "semanticId": "users.management.create_modal",
+      "parentSemanticId": "users.management.region-modal",
+      "name": "modal-dialog: users.management.create_modal",
+      "component": "DS/Modal.Standard",
+      "fallbackDraft": true,
+      "variableBinding": {
+        "property": "fills",
+        "variableToken": "color.primary",
+        "fallbackValue": "#1677ff"
+      },
+      "properties": {
+        "variant": "default",
+        "importance": "medium",
+        "boundStates": [
+          "closed",
+          "open",
+          "submitting"
+        ]
+      },
+      "metadata": {
+        "semanticId": "users.management.create_modal",
+        "intent": "modal-dialog",
+        "blueprintHash": "9b78c961cfd867e647de9f08e202c17adbdde64e47ce8a9211c0e0320b996c15"
+      }
+    },
+    {
+      "id": "op-10-comp-users_management_create_form",
+      "type": "CREATE_INSTANCE",
+      "semanticId": "users.management.create_form",
+      "parentSemanticId": "users.management.region-modal",
+      "name": "form-container: users.management.create_form",
+      "component": "DS/Form.VerticalContainer",
+      "fallbackDraft": true,
+      "variableBinding": {
+        "property": "fills",
+        "variableToken": "color.primary",
+        "fallbackValue": "#1677ff"
+      },
+      "properties": {
+        "variant": "vertical",
+        "importance": "medium",
+        "boundStates": [
+          "default",
+          "validating",
+          "submitting"
+        ]
+      },
+      "metadata": {
+        "semanticId": "users.management.create_form",
+        "intent": "form-container",
+        "blueprintHash": "9b78c961cfd867e647de9f08e202c17adbdde64e47ce8a9211c0e0320b996c15"
+      }
+    }
+  ],
+  "diagnostics": []
+}

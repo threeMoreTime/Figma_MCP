@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Figma Generator</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 16px;
+      margin: 0;
+      color: #333;
+    }
+    h3 {
+      margin-top: 0;
+      font-size: 15px;
+      color: #111;
+    }
+    p {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.5;
+    }
+    button {
+      background: #1677ff;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      font-size: 13px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 12px;
+    }
+    button:hover {
+      background: #4096ff;
+    }
+    textarea {
+      width: 100%;
+      height: 160px;
+      font-family: monospace;
+      font-size: 11px;
+      box-sizing: border-box;
+      padding: 8px;
+      border: 1px solid #d9d9d9;
+      border-radius: 4px;
+    }
+    .status {
+      margin-top: 12px;
+      font-size: 11px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <h3>Native Figma Generator</h3>
+  <p>Paste or load a validated <code>figma-operation-plan.json</code> to generate native frames, Auto Layout, and token bindings.</p>
+  <textarea id="planInput" placeholder="Paste Figma Operation Plan JSON here..."></textarea>
+  <button id="runBtn">Execute Operation Plan</button>
+  <div class="status" id="statusMsg">Ready</div>
+
+  <script>
+    const runBtn = document.getElementById("runBtn");
+    const planInput = document.getElementById("planInput");
+    const statusMsg = document.getElementById("statusMsg");
+
+    runBtn.addEventListener("click", () => {
+      try {
+        const text = planInput.value.trim();
+        if (!text) {
+          statusMsg.textContent = "Please paste an operation plan.";
+          return;
+        }
+        const plan = JSON.parse(text);
+        statusMsg.textContent = "Executing plan...";
+        parent.postMessage({ pluginMessage: { type: "EXECUTE_PLAN", plan } }, "*");
+      } catch (err) {
+        statusMsg.textContent = "Invalid JSON: " + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
