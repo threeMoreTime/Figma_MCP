@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0.0",
+  "screenId": "users.management",
+  "revision": "rev2",
+  "baseHash": "9b78c961cfd867e647de9f08e202c17adbdde64e47ce8a9211c0e0320b996c15",
+  "incrementalOperations": [
+    {
+      "type": "ADD_COMPONENT_INSTANCE",
+      "parentSemanticId": "region-toolbar",
+      "semanticId": "users.management.import_btn",
+      "componentIntent": "secondary-action",
+      "properties": {
+        "label": "批量导入",
+        "variant": "default"
+      },
+      "tokenBindings": {
+        "borderColor": "var(--d2c-color-border)",
+        "borderRadius": "var(--d2c-borderRadius-base)"
+      }
+    },
+    {
+      "type": "ADD_COMPONENT_INSTANCE",
+      "parentSemanticId": "region-modal",
+      "semanticId": "users.management.import_modal",
+      "componentIntent": "modal-dialog",
+      "properties": {
+        "title": "批量导入企业用户",
+        "size": "middle"
+      },
+      "tokenBindings": {
+        "bg": "var(--d2c-color-bg-container)",
+        "borderRadius": "var(--d2c-borderRadius-lg)"
+      }
+    },
+    {
+      "type": "BIND_INTERACTION",
+      "sourceSemanticId": "users.management.import_btn",
+      "event": "CLICK",
+      "targetSemanticId": "users.management.import_modal",
+      "action": "OPEN"
+    }
+  ]
+}

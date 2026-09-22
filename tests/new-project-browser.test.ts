@@ -287,3 +287,39 @@ test('Phase 5B-2 Browser: 4. Complete 4-state lifecycle verified via State Switc
   assert.ok(hasTable, 'Ready state must restore table view');
   await page.screenshot({ path: resolve(screenshotDir, '10-state-ready-restored.png') });
 });
+
+// ============================================================================
+// 5. Phase 6 Incremental Evolution: Batch Import Verification
+// ============================================================================
+
+test('Phase 6 Evolution Browser: 5. Incremental Batch Import modal and old features coexist in React', async () => {
+  assert.ok(page);
+
+  // Check import button exists with semanticId
+  const importBtn = await page.$('#btn-import-user');
+  assert.ok(importBtn, 'Import button must exist');
+  assert.equal(await importBtn.getAttribute('data-semantic-id'), 'users.management.import_btn');
+
+  // Open import modal
+  await page.click('#btn-import-user');
+  await page.waitForSelector('.ant-modal-title');
+  const modalTitle = await page.textContent('.ant-modal-title');
+  assert.ok(modalTitle?.includes('批量导入企业用户'), 'Import modal title verified');
+  await page.screenshot({ path: resolve(screenshotDir, '11-import-modal-open.png') });
+
+  // Input batch users
+  await page.fill('#textarea-import-data', '孙七,sunqi@enterprise.com,业务运维\n周八,zhouba@enterprise.com,安全审计员');
+  await page.click('#btn-submit-import');
+
+  // Success toast
+  const toast = page.locator('.ant-message-success', { hasText: '批量导入成功' });
+  await toast.waitFor({ timeout: 3000 });
+  const toastText = await toast.textContent();
+  assert.ok(toastText?.includes('批量导入成功'), 'Batch import success message verified');
+
+  // Check table rows increased
+  await page.waitForTimeout(300);
+  const currentRows = await page.$$('.ant-table-tbody tr.d2c-table-row');
+  assert.ok(currentRows.length >= 6, 'Table rows must include newly imported users');
+  await page.screenshot({ path: resolve(screenshotDir, '12-after-batch-import.png') });
+});

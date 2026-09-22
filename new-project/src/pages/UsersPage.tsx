@@ -3,6 +3,7 @@ import { Input, Button } from 'antd';
 import { PageHeader } from '../components/PageHeader';
 import { UserTable } from '../components/UserTable';
 import { UserCreateModal } from '../components/UserCreateModal';
+import { UserImportModal } from '../components/UserImportModal';
 import { LoadingView, EmptyView, ErrorView } from '../components/StateViews';
 import { useUsers } from '../hooks/useUsers';
 import type { PageState } from '../types/user';
@@ -17,7 +18,11 @@ export const UsersPage: React.FC = () => {
     isModalOpen,
     setIsModalOpen,
     submitting,
+    isImportModalOpen,
+    setIsImportModalOpen,
+    importSubmitting,
     handleCreateUser,
+    handleBatchImport,
     handleToggleStatus,
     reloadUsers,
   } = useUsers();
@@ -61,15 +66,25 @@ export const UsersPage: React.FC = () => {
               onChange={(e) => setSearchText(e.target.value)}
             />
           </div>
-          <Button
-            type="primary"
-            id="btn-create-user"
-            data-component="button"
-            data-semantic-id="users.management.create_btn"
-            onClick={() => setIsModalOpen(true)}
-          >
-            新建用户
-          </Button>
+          <div style={{ display: 'flex', gap: 'var(--d2c-spacing-sm)' }}>
+            <Button
+              id="btn-import-user"
+              data-component="button"
+              data-semantic-id="users.management.import_btn"
+              onClick={() => setIsImportModalOpen(true)}
+            >
+              批量导入
+            </Button>
+            <Button
+              type="primary"
+              id="btn-create-user"
+              data-component="button"
+              data-semantic-id="users.management.create_btn"
+              onClick={() => setIsModalOpen(true)}
+            >
+              新建用户
+            </Button>
+          </div>
         </section>
 
         {/* Region 3: Content */}
@@ -95,12 +110,18 @@ export const UsersPage: React.FC = () => {
           )}
         </main>
 
-        {/* Region 4: Create Modal Dialog */}
+        {/* Region 4: Modals */}
         <UserCreateModal
           open={isModalOpen}
           submitting={submitting}
           onCancel={() => setIsModalOpen(false)}
           onSubmit={handleCreateUser}
+        />
+        <UserImportModal
+          open={isImportModalOpen}
+          submitting={importSubmitting}
+          onCancel={() => setIsImportModalOpen(false)}
+          onImport={handleBatchImport}
         />
       </div>
     </div>

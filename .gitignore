@@ -1,6 +1,15 @@
 # Dependencies
 node_modules/
+**/node_modules/
 .pnpm-store/
+
+# Screenshots & Visual Artifacts
+**/screenshots/
+screenshots/
+*.png
+*.jpg
+*.jpeg
+*.webp
 
 # Upstream submodules/clones (tracked via upstreams.lock.json)
 .upstreams/

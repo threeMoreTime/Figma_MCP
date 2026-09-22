@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "1.0.0",
+  "screenId": "users.management",
+  "baseBlueprintHash": "9b78c961cfd867e647de9f08e202c17adbdde64e47ce8a9211c0e0320b996c15",
+  "patchVersion": "2.0.0",
+  "operations": [
+    {
+      "op": "ADD_COMPONENT",
+      "regionId": "region-toolbar",
+      "component": {
+        "semanticId": "users.management.import_btn",
+        "intent": "secondary-action",
+        "component": "Button",
+        "variant": "default",
+        "importance": "medium",
+        "regionId": "region-toolbar",
+        "label": "批量导入",
+        "props": {
+          "type": "default",
+          "text": "批量导入"
+        },
+        "boundStates": [
+          "default",
+          "loading",
+          "disabled"
+        ]
+      }
+    },
+    {
+      "op": "ADD_COMPONENT",
+      "regionId": "region-modal",
+      "component": {
+        "semanticId": "users.management.import_modal",
+        "intent": "modal-dialog",
+        "component": "Modal",
+        "variant": "default",
+        "importance": "medium",
+        "regionId": "region-modal",
+        "label": "批量导入企业用户",
+        "props": {
+          "title": "批量导入企业用户",
+          "destroyOnClose": true
+        },
+        "boundStates": [
+          "closed",
+          "open",
+          "submitting"
+        ]
+      }
+    },
+    {
+      "op": "UPDATE_COMPONENT",
+      "semanticId": "users.management.table",
+      "changes": {
+        "extendCapability": [
+          "batch_import_refresh",
+          "row_count_notification"
+        ]
+      }
+    },
+    {
+      "op": "ADD_INTERACTION",
+      "interactions": [
+        {
+          "id": "int-click-import",
+          "event": "click:users.management.import_btn",
+          "source": "users.management.import_btn",
+          "action": "open-modal",
+          "target": "users.management.import_modal"
+        },
+        {
+          "id": "int-submit-import",
+          "event": "submit:users.management.import_modal",
+          "source": "users.management.import_modal",
+          "action": "batch-create-users",
+          "target": "users.management.table"
+        },
+        {
+          "id": "int-success-import",
+          "event": "success:users.management.import_modal",
+          "source": "users.management.import_modal",
+          "action": "show-notification",
+          "target": "users.management.table",
+          "onSuccess": {
+            "action": "refresh-table",
+            "feedback": "批量导入成功"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -65,6 +65,24 @@ export const mockApi = {
     return newUser;
   },
 
+  async batchImportUsers(items: CreateUserDto[]): Promise<UserRecord[]> {
+    if (!Array.isArray(items) || items.length === 0) {
+      throw new Error('导入数据不能为空');
+    }
+
+    const createdUsers: UserRecord[] = items.map((data, index) => ({
+      id: `usr-${Date.now() + index}`,
+      name: data.username.trim(),
+      email: data.email?.trim() || `${data.username.trim()}@enterprise.com`,
+      role: data.role.trim() || '业务运维',
+      status: 'active',
+      createdAt: '刚刚 (批量)',
+    }));
+
+    usersStore = [...createdUsers, ...usersStore];
+    return createdUsers;
+  },
+
   async toggleUserStatus(id: string): Promise<UserRecord> {
     const userIndex = usersStore.findIndex((u) => u.id === id);
     if (userIndex === -1) {

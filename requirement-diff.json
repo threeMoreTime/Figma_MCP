@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0.0",
+  "changeRequestId": "CR-2026-USER-IMPORT",
+  "generatedAt": "2026-09-22T08:08:00.000Z",
+  "screenId": "users.management",
+  "added": [
+    {
+      "feature": "user.import",
+      "type": "ACTION_AND_MODAL",
+      "description": "批量导入企业员工账号功能，包含工具栏批量导入按钮与录入弹窗",
+      "targetComponents": [
+        "users.management.import_btn",
+        "users.management.import_modal"
+      ]
+    }
+  ],
+  "changed": [
+    {
+      "component": "users.management.toolbar",
+      "impact": "ADD_CHILD",
+      "details": "工具栏新增批量导入次级按钮（Button.default），并排于新建用户按钮左侧"
+    },
+    {
+      "component": "users.management.table",
+      "impact": "DATA_RECEPTION",
+      "details": "数据表格需接收批量导入返回的用户记录列表，动态前置插入并触发列表刷新"
+    }
+  ],
+  "removed": []
+}

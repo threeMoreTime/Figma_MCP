@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "1.0.0",
+  "analysisDate": "2026-09-22",
+  "screenId": "users.management",
+  "components": {
+    "PageHeader": "UNCHANGED",
+    "SearchInput": "UNCHANGED",
+    "CreateButton": "UNCHANGED",
+    "CreateModal": "UNCHANGED",
+    "UserTable": "EXTEND_REQUIRED",
+    "ImportButton": "NEW",
+    "ImportModal": "NEW"
+  },
+  "impactDetails": [
+    {
+      "semanticId": "users.management.page_header",
+      "component": "PageHeader",
+      "status": "UNCHANGED",
+      "reason": "标题与副标题内容及样式保持完全一致"
+    },
+    {
+      "semanticId": "users.management.search_input",
+      "component": "SearchInput",
+      "status": "UNCHANGED",
+      "reason": "搜索过滤输入框交互与过滤逻辑保持不变"
+    },
+    {
+      "semanticId": "users.management.create_btn",
+      "component": "CreateButton",
+      "status": "UNCHANGED",
+      "reason": "单用户新建入口保留现有 primary 属性与触发事件"
+    },
+    {
+      "semanticId": "users.management.create_modal",
+      "component": "CreateModal",
+      "status": "UNCHANGED",
+      "reason": "单用户录入表单及其字段验证逻辑保持完整独立"
+    },
+    {
+      "semanticId": "users.management.table",
+      "component": "UserTable",
+      "status": "EXTEND_REQUIRED",
+      "reason": "需支持批量接收并前置插入由 ImportModal 导入的多行用户数据"
+    },
+    {
+      "semanticId": "users.management.import_btn",
+      "component": "ImportButton",
+      "status": "NEW",
+      "reason": "工具栏新增 secondary 操作按钮用于打开批量导入弹窗"
+    },
+    {
+      "semanticId": "users.management.import_modal",
+      "component": "ImportModal",
+      "status": "NEW",
+      "reason": "新增批量导入弹窗，包含多行数据录入与格式校验"
+    }
+  ],
+  "summary": {
+    "unchangedCount": 4,
+    "extendedCount": 1,
+    "newCount": 2,
+    "removedCount": 0
+  }
+}

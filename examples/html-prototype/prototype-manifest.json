@@ -3,7 +3,7 @@
   "prototypeType": "HTML5_GREENFIELD",
   "screenId": "users.management",
   "blueprintHash": "9b78c961cfd867e647de9f08e202c17adbdde64e47ce8a9211c0e0320b996c15",
-  "createdAt": "2026-09-22T07:40:06.261Z",
+  "createdAt": "2026-09-22T08:15:50.839Z",
   "files": {
     "entry": "index.html",
     "tokens": "styles/tokens.css",
@@ -49,6 +49,18 @@
       "intent": "form-container",
       "component": "form-container",
       "tagName": "form"
+    },
+    {
+      "semanticId": "users.management.import_btn",
+      "intent": "secondary-action",
+      "component": "button",
+      "tagName": "button"
+    },
+    {
+      "semanticId": "users.management.import_modal",
+      "intent": "modal-dialog",
+      "component": "modal-dialog",
+      "tagName": "dialog"
     }
   ],
   "statesSupported": [

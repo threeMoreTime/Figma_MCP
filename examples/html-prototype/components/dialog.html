@@ -32,3 +32,24 @@
     </div>
   </div>
 </dialog>
+<dialog class="d2c-dialog" data-component="modal-dialog" data-semantic-id="users.management.import_modal" id="modal-import-user">
+  <div class="d2c-dialog-box">
+    <div class="d2c-dialog-header">
+      <h3 class="d2c-dialog-title">批量导入企业用户</h3>
+      <button type="button" class="d2c-dialog-close" id="btn-import-close" aria-label="关闭">&times;</button>
+    </div>
+    <div class="d2c-dialog-body">
+      <form class="d2c-form" id="form-import-users" novalidate>
+        <div class="d2c-form-item">
+          <label class="d2c-label d2c-label-required" for="textarea-import-data">用户批量数据 (每行格式：姓名,邮箱,角色)</label>
+          <textarea id="textarea-import-data" class="d2c-input" rows="5" style="height: auto;" placeholder="孙七,sunqi@enterprise.com,业务运维&#10;周八,zhouba@enterprise.com,安全审计员"></textarea>
+          <div class="d2c-error-msg" id="error-import"></div>
+        </div>
+        <div class="d2c-form-actions">
+          <button type="button" class="d2c-btn d2c-btn-secondary" id="btn-import-cancel">取消</button>
+          <button type="submit" class="d2c-btn d2c-btn-primary" id="btn-submit-import">确认导入</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</dialog>

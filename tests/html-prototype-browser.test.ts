@@ -220,3 +220,37 @@ test("Phase 5B-1 Browser: 4. State Completeness verifies loading, error, empty, 
   const hasTable = await page.isVisible("#users-table");
   assert.equal(hasTable, true, "Ready state must restore table view");
 });
+
+// ============================================================================
+// 5. Phase 6 Incremental Evolution: Batch Import Verification
+// ============================================================================
+
+test("Phase 6 Evolution Browser: 5. Incremental Batch Import modal and old features coexist", async () => {
+  assert.ok(page);
+
+  // Check import button exists
+  const importBtn = await page.$("#btn-import-user");
+  assert.ok(importBtn, "Import button must exist");
+  assert.equal(await importBtn.getAttribute("data-semantic-id"), "users.management.import_btn");
+
+  // Open import modal
+  await page.click("#btn-import-user");
+  const modal = await page.$("#modal-import-user");
+  assert.ok(modal);
+  const isOpen = await modal.evaluate((el: any) => el.open || el.hasAttribute("open"));
+  assert.equal(isOpen, true, "Import modal must be open");
+
+  // Input batch users
+  await page.fill("#textarea-import-data", "孙七,sunqi@enterprise.com,业务运维\n周八,zhouba@enterprise.com,安全审计员");
+  await page.click("#btn-submit-import");
+
+  // Success toast
+  const toast = page.locator(".d2c-toast", { hasText: "批量导入成功" });
+  await toast.waitFor({ timeout: 3000 });
+  const toastText = await toast.textContent();
+  assert.ok(toastText?.includes("批量导入成功"), "Batch import toast must appear");
+
+  // Check table rows increased
+  const currentRows = await page.$$("#users-table-tbody tr.d2c-table-row");
+  assert.ok(currentRows.length >= 6, "Table rows must include newly imported users");
+});

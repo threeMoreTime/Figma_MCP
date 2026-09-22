@@ -76,6 +76,13 @@ export function generateHtmlPrototype(options: GenerateHtmlPrototypeOptions = {}
     ? JSON.parse(readFileSync(releasePackagePath, "utf-8"))
     : { blueprintHash: "synthetic-hash" };
 
+  const patchPath = existsSync(resolve(process.cwd(), "blueprint-patch.json"))
+    ? resolve(process.cwd(), "blueprint-patch.json")
+    : existsSync(resolve(inputDir, "blueprint-patch.json"))
+    ? resolve(inputDir, "blueprint-patch.json")
+    : null;
+  const hasPatch = !!patchPath;
+
   // Create output directory tree
   mkdirSync(outputDir, { recursive: true });
   mkdirSync(resolve(outputDir, "assets"), { recursive: true });
@@ -626,12 +633,28 @@ async function createUser(data) {
   return newUser;
 }
 
+${hasPatch ? `async function importUsers(usersList) {
+  if (!Array.isArray(usersList) || usersList.length === 0) {
+    throw new Error("导入数据不能为空");
+  }
+  const newUsers = usersList.map((u, i) => ({
+    id: "usr-" + (Date.now() + i),
+    name: u.username.trim(),
+    email: u.email?.trim() || u.username.trim() + "@enterprise.com",
+    role: u.role?.trim() || "业务运维",
+    status: "active",
+    createdAt: "刚刚 (批量)",
+  }));
+  usersStore = [...newUsers, ...usersStore];
+  return newUsers;
+}` : ""}
+
 function resetUsers() {
   usersStore = [...INITIAL_USERS];
 }
 
 if (typeof window !== "undefined") {
-  window.D2C_MOCK_API = { INITIAL_USERS, fetchUsers, createUser, resetUsers };
+  window.D2C_MOCK_API = { INITIAL_USERS, fetchUsers, createUser, ${hasPatch ? "importUsers, " : ""}resetUsers };
 }
 `;
   const targetMockApiPath = resolve(outputDir, "runtime/mock-api.js");
@@ -806,6 +829,76 @@ class PrototypeState {
         alert(err.message || "创建失败");
       }
     });
+
+    ${hasPatch ? `// Import Modal triggers
+    const importBtn = document.getElementById("btn-import-user");
+    const importModal = document.getElementById("modal-import-user");
+    const importCloseBtn = document.getElementById("btn-import-close");
+    const importCancelBtn = document.getElementById("btn-import-cancel");
+    const importForm = document.getElementById("form-import-users");
+
+    importBtn?.addEventListener("click", () => {
+      const errEl = document.getElementById("error-import");
+      if (errEl) { errEl.textContent = ""; errEl.classList.remove("visible"); }
+      importForm?.reset();
+      if (typeof importModal?.showModal === "function") {
+        importModal.showModal();
+      } else {
+        importModal?.setAttribute("open", "");
+      }
+    });
+
+    const closeImportModal = () => {
+      if (typeof importModal?.close === "function") {
+        importModal.close();
+      } else {
+        importModal?.removeAttribute("open");
+      }
+    };
+
+    importCloseBtn?.addEventListener("click", closeImportModal);
+    importCancelBtn?.addEventListener("click", closeImportModal);
+
+    importForm?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const textarea = document.getElementById("textarea-import-data");
+      const errEl = document.getElementById("error-import");
+      const text = textarea?.value?.trim() || "";
+      if (!text) {
+        if (errEl) { errEl.textContent = "请输入要导入的用户数据"; errEl.classList.add("visible"); }
+        return;
+      }
+      const lines = text.split("\\n").map(l => l.trim()).filter(Boolean);
+      const parsedUsers = [];
+      for (const line of lines) {
+        const parts = line.split(",").map(p => p.trim());
+        if (parts[0]) {
+          parsedUsers.push({
+            username: parts[0],
+            email: parts[1] || parts[0] + "@enterprise.com",
+            role: parts[2] || "业务运维"
+          });
+        }
+      }
+      if (parsedUsers.length === 0) {
+        if (errEl) { errEl.textContent = "没有解析到有效的用户记录"; errEl.classList.add("visible"); }
+        return;
+      }
+      try {
+        const api = window.D2C_MOCK_API;
+        if (!api || typeof api.importUsers !== "function") {
+          throw new Error("Mock API 未初始化");
+        }
+        const createdUsers = await api.importUsers(parsedUsers);
+        this.users = [...createdUsers, ...this.users];
+        this.applyFilter();
+        closeImportModal();
+        this.renderTableOnly();
+        this.showToast(\`批量导入成功，已新增 \${createdUsers.length} 名用户\`);
+      } catch (err) {
+        if (errEl) { errEl.textContent = err.message || "导入失败"; errEl.classList.add("visible"); }
+      }
+    });` : ""}
   }
 
   showFieldError(field, message) {
@@ -938,9 +1031,16 @@ if (typeof window !== "undefined") {
       <input type="search" id="input-search" class="d2c-input d2c-input-search" placeholder="按姓名或角色搜索..." autocomplete="off" />
     </div>
   </div>
-  <button type="button" class="d2c-btn d2c-btn-primary" id="btn-create-user" data-component="button" data-semantic-id="users.management.create_btn">
+  ${hasPatch ? `<div class="d2c-toolbar-actions" style="display: flex; gap: var(--d2c-spacing-sm);">
+    <button type="button" class="d2c-btn d2c-btn-secondary" id="btn-import-user" data-component="button" data-semantic-id="users.management.import_btn">
+      批量导入
+    </button>
+    <button type="button" class="d2c-btn d2c-btn-primary" id="btn-create-user" data-component="button" data-semantic-id="users.management.create_btn">
+      新建用户
+    </button>
+  </div>` : `<button type="button" class="d2c-btn d2c-btn-primary" id="btn-create-user" data-component="button" data-semantic-id="users.management.create_btn">
     新建用户
-  </button>
+  </button>`}
 </section>`;
   writeFileSync(resolve(outputDir, "components/toolbar.html"), toolbarHtml, "utf-8");
 
@@ -996,7 +1096,28 @@ if (typeof window !== "undefined") {
       </form>
     </div>
   </div>
-</dialog>`;
+</dialog>${hasPatch ? `
+<dialog class="d2c-dialog" data-component="modal-dialog" data-semantic-id="users.management.import_modal" id="modal-import-user">
+  <div class="d2c-dialog-box">
+    <div class="d2c-dialog-header">
+      <h3 class="d2c-dialog-title">批量导入企业用户</h3>
+      <button type="button" class="d2c-dialog-close" id="btn-import-close" aria-label="关闭">&times;</button>
+    </div>
+    <div class="d2c-dialog-body">
+      <form class="d2c-form" id="form-import-users" novalidate>
+        <div class="d2c-form-item">
+          <label class="d2c-label d2c-label-required" for="textarea-import-data">用户批量数据 (每行格式：姓名,邮箱,角色)</label>
+          <textarea id="textarea-import-data" class="d2c-input" rows="5" style="height: auto;" placeholder="孙七,sunqi@enterprise.com,业务运维&#10;周八,zhouba@enterprise.com,安全审计员"></textarea>
+          <div class="d2c-error-msg" id="error-import"></div>
+        </div>
+        <div class="d2c-form-actions">
+          <button type="button" class="d2c-btn d2c-btn-secondary" id="btn-import-cancel">取消</button>
+          <button type="submit" class="d2c-btn d2c-btn-primary" id="btn-submit-import">确认导入</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</dialog>` : ""}`;
   writeFileSync(resolve(outputDir, "components/dialog.html"), dialogHtml, "utf-8");
 
   // 8. Generate index.html
@@ -1152,6 +1273,22 @@ if (typeof window !== "undefined") {
         component: "form-container",
         tagName: "form",
       },
+      ...(hasPatch
+        ? [
+            {
+              semanticId: "users.management.import_btn",
+              intent: "secondary-action",
+              component: "button",
+              tagName: "button",
+            },
+            {
+              semanticId: "users.management.import_modal",
+              intent: "modal-dialog",
+              component: "modal-dialog",
+              tagName: "dialog",
+            },
+          ]
+        : []),
     ],
     statesSupported: ["ready", "loading", "empty", "error"],
     tokenCompliance: {

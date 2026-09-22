@@ -131,6 +131,76 @@ class PrototypeState {
         alert(err.message || "创建失败");
       }
     });
+
+    // Import Modal triggers
+    const importBtn = document.getElementById("btn-import-user");
+    const importModal = document.getElementById("modal-import-user");
+    const importCloseBtn = document.getElementById("btn-import-close");
+    const importCancelBtn = document.getElementById("btn-import-cancel");
+    const importForm = document.getElementById("form-import-users");
+
+    importBtn?.addEventListener("click", () => {
+      const errEl = document.getElementById("error-import");
+      if (errEl) { errEl.textContent = ""; errEl.classList.remove("visible"); }
+      importForm?.reset();
+      if (typeof importModal?.showModal === "function") {
+        importModal.showModal();
+      } else {
+        importModal?.setAttribute("open", "");
+      }
+    });
+
+    const closeImportModal = () => {
+      if (typeof importModal?.close === "function") {
+        importModal.close();
+      } else {
+        importModal?.removeAttribute("open");
+      }
+    };
+
+    importCloseBtn?.addEventListener("click", closeImportModal);
+    importCancelBtn?.addEventListener("click", closeImportModal);
+
+    importForm?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const textarea = document.getElementById("textarea-import-data");
+      const errEl = document.getElementById("error-import");
+      const text = textarea?.value?.trim() || "";
+      if (!text) {
+        if (errEl) { errEl.textContent = "请输入要导入的用户数据"; errEl.classList.add("visible"); }
+        return;
+      }
+      const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+      const parsedUsers = [];
+      for (const line of lines) {
+        const parts = line.split(",").map(p => p.trim());
+        if (parts[0]) {
+          parsedUsers.push({
+            username: parts[0],
+            email: parts[1] || parts[0] + "@enterprise.com",
+            role: parts[2] || "业务运维"
+          });
+        }
+      }
+      if (parsedUsers.length === 0) {
+        if (errEl) { errEl.textContent = "没有解析到有效的用户记录"; errEl.classList.add("visible"); }
+        return;
+      }
+      try {
+        const api = window.D2C_MOCK_API;
+        if (!api || typeof api.importUsers !== "function") {
+          throw new Error("Mock API 未初始化");
+        }
+        const createdUsers = await api.importUsers(parsedUsers);
+        this.users = [...createdUsers, ...this.users];
+        this.applyFilter();
+        closeImportModal();
+        this.renderTableOnly();
+        this.showToast(`批量导入成功，已新增 ${createdUsers.length} 名用户`);
+      } catch (err) {
+        if (errEl) { errEl.textContent = err.message || "导入失败"; errEl.classList.add("visible"); }
+      }
+    });
   }
 
   showFieldError(field, message) {

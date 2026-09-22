@@ -9,6 +9,8 @@ export function useUsers() {
   const [searchText, setSearchText] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState<boolean>(false);
+  const [importSubmitting, setImportSubmitting] = useState<boolean>(false);
 
   const loadData = useCallback(async () => {
     try {
@@ -55,6 +57,23 @@ export function useUsers() {
     }
   }, []);
 
+  const handleBatchImport = useCallback(async (items: CreateUserDto[]): Promise<boolean> => {
+    setImportSubmitting(true);
+    try {
+      const createdUsers = await mockApi.batchImportUsers(items);
+      setUsers((prev) => [...createdUsers, ...prev]);
+      message.success(`批量导入成功，已新增 ${createdUsers.length} 名用户`);
+      setIsImportModalOpen(false);
+      return true;
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : '批量导入失败';
+      message.error(errMsg);
+      return false;
+    } finally {
+      setImportSubmitting(false);
+    }
+  }, []);
+
   const handleToggleStatus = useCallback(async (id: string) => {
     try {
       const updated = await mockApi.toggleUserStatus(id);
@@ -77,7 +96,11 @@ export function useUsers() {
     isModalOpen,
     setIsModalOpen,
     submitting,
+    isImportModalOpen,
+    setIsImportModalOpen,
+    importSubmitting,
     handleCreateUser,
+    handleBatchImport,
     handleToggleStatus,
     reloadUsers: loadData,
   };

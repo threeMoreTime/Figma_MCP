@@ -57,10 +57,26 @@ async function createUser(data) {
   return newUser;
 }
 
+async function importUsers(usersList) {
+  if (!Array.isArray(usersList) || usersList.length === 0) {
+    throw new Error("导入数据不能为空");
+  }
+  const newUsers = usersList.map((u, i) => ({
+    id: "usr-" + (Date.now() + i),
+    name: u.username.trim(),
+    email: u.email?.trim() || u.username.trim() + "@enterprise.com",
+    role: u.role?.trim() || "业务运维",
+    status: "active",
+    createdAt: "刚刚 (批量)",
+  }));
+  usersStore = [...newUsers, ...usersStore];
+  return newUsers;
+}
+
 function resetUsers() {
   usersStore = [...INITIAL_USERS];
 }
 
 if (typeof window !== "undefined") {
-  window.D2C_MOCK_API = { INITIAL_USERS, fetchUsers, createUser, resetUsers };
+  window.D2C_MOCK_API = { INITIAL_USERS, fetchUsers, createUser, importUsers, resetUsers };
 }

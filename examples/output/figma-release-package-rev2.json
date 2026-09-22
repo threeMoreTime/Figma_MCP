@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0.0",
+  "screenId": "users.management",
+  "revision": "rev2",
+  "baseHash": "9b78c961cfd867e647de9f08e202c17adbdde64e47ce8a9211c0e0320b996c15",
+  "status": "READY_FOR_FIGMA_IMPORT",
+  "files": {
+    "patch": "blueprint-patch.json",
+    "operationPlan": "figma-operation-plan-rev2.json",
+    "componentImpact": "component-impact.json",
+    "requirementDiff": "requirement-diff.json"
+  },
+  "summary": {
+    "incrementalOperations": 3,
+    "totalRegions": 4,
+    "totalComponents": 8,
+    "preservedSemanticIds": [
+      "users.management.page_header",
+      "users.management.search_input",
+      "users.management.create_btn",
+      "users.management.create_modal",
+      "users.management.create_form",
+      "users.management.table"
+    ],
+    "addedSemanticIds": [
+      "users.management.import_btn",
+      "users.management.import_modal"
+    ],
+    "idempotencyVerified": true,
+    "conflictDetectionVerified": true
+  }
+}
