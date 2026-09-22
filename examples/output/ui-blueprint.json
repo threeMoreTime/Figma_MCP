@@ -1,0 +1,279 @@
+{
+  "schemaVersion": "1.0.0",
+  "screenId": "users.management",
+  "route": "/users",
+  "purpose": "展示企业全量用户列表并提供新建与组合查询操作",
+  "layout": {
+    "type": "admin-crud",
+    "breakpoints": [
+      "desktop",
+      "mobile"
+    ]
+  },
+  "states": [
+    "loading",
+    "ready",
+    "empty",
+    "error"
+  ],
+  "regions": [
+    {
+      "id": "region-header",
+      "intent": "page-header",
+      "layout": {
+        "type": "horizontal",
+        "spacing": 16,
+        "align": "center"
+      },
+      "components": [
+        {
+          "semanticId": "users.management.page_header",
+          "intent": "page-header",
+          "component": "PageHeader",
+          "variant": "standard",
+          "importance": "high",
+          "regionId": "region-header",
+          "label": "展示企业全量用户列表并提供新建与组合查询操作",
+          "props": {
+            "title": "展示企业全量用户列表并提供新建与组合查询操作",
+            "subtitle": "产品目标: 建设高可靠、易合规的企业级统一用户权限管理控制台，为管理员与安全审计人员提供用户生命周期管理、多角色权限配置及操作轨迹审计能力。"
+          },
+          "boundStates": [
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "region-toolbar",
+      "intent": "filter-search",
+      "layout": {
+        "type": "horizontal",
+        "spacing": 12,
+        "align": "space-between"
+      },
+      "components": [
+        {
+          "semanticId": "users.management.search_input",
+          "intent": "filter-search",
+          "component": "Input.Search",
+          "variant": "search",
+          "importance": "medium",
+          "regionId": "region-toolbar",
+          "props": {
+            "placeholder": "按姓名或角色搜索...",
+            "allowClear": true
+          },
+          "boundStates": [
+            "default",
+            "focused",
+            "disabled"
+          ]
+        },
+        {
+          "semanticId": "users.management.create_btn",
+          "intent": "primary-action",
+          "component": "Button",
+          "variant": "primary",
+          "importance": "high",
+          "regionId": "region-toolbar",
+          "label": "新建用户",
+          "props": {
+            "type": "primary",
+            "text": "新建用户"
+          },
+          "boundStates": [
+            "default",
+            "loading",
+            "disabled"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "region-content",
+      "intent": "data-table",
+      "layout": {
+        "type": "vertical",
+        "spacing": 16
+      },
+      "components": [
+        {
+          "semanticId": "users.management.table",
+          "intent": "data-table",
+          "component": "Table",
+          "variant": "default",
+          "importance": "high",
+          "regionId": "region-content",
+          "props": {
+            "rowKey": "id",
+            "size": "middle",
+            "pagination": {
+              "pageSize": 10,
+              "showSizeChanger": true
+            }
+          },
+          "boundStates": [
+            "loading",
+            "ready",
+            "empty",
+            "error"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "region-modal",
+      "intent": "modal-dialog",
+      "layout": {
+        "type": "vertical",
+        "spacing": 12
+      },
+      "components": [
+        {
+          "semanticId": "users.management.create_modal",
+          "intent": "modal-dialog",
+          "component": "Modal",
+          "variant": "default",
+          "importance": "medium",
+          "regionId": "region-modal",
+          "props": {
+            "title": "新建用户",
+            "destroyOnClose": true
+          },
+          "boundStates": [
+            "closed",
+            "open",
+            "submitting"
+          ]
+        },
+        {
+          "semanticId": "users.management.create_form",
+          "intent": "form-container",
+          "component": "Form",
+          "variant": "vertical",
+          "importance": "medium",
+          "regionId": "region-modal",
+          "props": {
+            "layout": "vertical"
+          },
+          "boundStates": [
+            "default",
+            "validating",
+            "submitting"
+          ]
+        }
+      ]
+    }
+  ],
+  "components": [
+    {
+      "semanticId": "users.management.page_header",
+      "intent": "page-header",
+      "component": "PageHeader",
+      "variant": "standard",
+      "importance": "high",
+      "regionId": "region-header",
+      "label": "展示企业全量用户列表并提供新建与组合查询操作",
+      "props": {
+        "title": "展示企业全量用户列表并提供新建与组合查询操作",
+        "subtitle": "产品目标: 建设高可靠、易合规的企业级统一用户权限管理控制台，为管理员与安全审计人员提供用户生命周期管理、多角色权限配置及操作轨迹审计能力。"
+      },
+      "boundStates": [
+        "default"
+      ]
+    },
+    {
+      "semanticId": "users.management.search_input",
+      "intent": "filter-search",
+      "component": "Input.Search",
+      "variant": "search",
+      "importance": "medium",
+      "regionId": "region-toolbar",
+      "props": {
+        "placeholder": "按姓名或角色搜索...",
+        "allowClear": true
+      },
+      "boundStates": [
+        "default",
+        "focused",
+        "disabled"
+      ]
+    },
+    {
+      "semanticId": "users.management.create_btn",
+      "intent": "primary-action",
+      "component": "Button",
+      "variant": "primary",
+      "importance": "high",
+      "regionId": "region-toolbar",
+      "label": "新建用户",
+      "props": {
+        "type": "primary",
+        "text": "新建用户"
+      },
+      "boundStates": [
+        "default",
+        "loading",
+        "disabled"
+      ]
+    },
+    {
+      "semanticId": "users.management.table",
+      "intent": "data-table",
+      "component": "Table",
+      "variant": "default",
+      "importance": "high",
+      "regionId": "region-content",
+      "props": {
+        "rowKey": "id",
+        "size": "middle",
+        "pagination": {
+          "pageSize": 10,
+          "showSizeChanger": true
+        }
+      },
+      "boundStates": [
+        "loading",
+        "ready",
+        "empty",
+        "error"
+      ]
+    },
+    {
+      "semanticId": "users.management.create_modal",
+      "intent": "modal-dialog",
+      "component": "Modal",
+      "variant": "default",
+      "importance": "medium",
+      "regionId": "region-modal",
+      "props": {
+        "title": "新建用户",
+        "destroyOnClose": true
+      },
+      "boundStates": [
+        "closed",
+        "open",
+        "submitting"
+      ]
+    },
+    {
+      "semanticId": "users.management.create_form",
+      "intent": "form-container",
+      "component": "Form",
+      "variant": "vertical",
+      "importance": "medium",
+      "regionId": "region-modal",
+      "props": {
+        "layout": "vertical"
+      },
+      "boundStates": [
+        "default",
+        "validating",
+        "submitting"
+      ]
+    }
+  ],
+  "selectedDirection": "B",
+  "diagnostics": []
+}

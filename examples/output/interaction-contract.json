@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0.0",
+  "screenId": "users.management",
+  "interactions": [
+    {
+      "id": "int-click-create",
+      "event": "click:users.management.create_btn",
+      "source": "users.management.create_btn",
+      "action": "open-modal",
+      "target": "users.management.create_modal"
+    },
+    {
+      "id": "int-validate-form",
+      "event": "validation:users.management.create_form",
+      "source": "users.management.create_form",
+      "action": "validate-fields",
+      "target": "users.management.create_form",
+      "validationRules": [
+        {
+          "field": "username",
+          "rule": "required"
+        },
+        {
+          "field": "role",
+          "rule": "required"
+        }
+      ]
+    },
+    {
+      "id": "int-submit-form",
+      "event": "submit:users.management.create_form",
+      "source": "users.management.create_form",
+      "action": "submit-form",
+      "target": "users.management.create_modal"
+    },
+    {
+      "id": "int-success-form",
+      "event": "success:users.management.create_form",
+      "source": "users.management.create_form",
+      "action": "show-notification",
+      "target": "users.management.table",
+      "onSuccess": {
+        "action": "refresh-table",
+        "feedback": "保存成功",
+        "target": "users.management.table"
+      }
+    },
+    {
+      "id": "int-error-form",
+      "event": "error:users.management.create_form",
+      "source": "users.management.create_form",
+      "action": "show-notification",
+      "target": "users.management.create_form",
+      "onError": {
+        "action": "show-error-message",
+        "feedback": "提交失败，请检查填写内容",
+        "target": "users.management.create_form"
+      }
+    }
+  ],
+  "diagnostics": []
+}

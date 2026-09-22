@@ -1,0 +1,86 @@
+{
+  "primary-action": {
+    "description": "Main high-priority call to action on the screen",
+    "allowedComponents": ["Button"],
+    "allowedVariants": ["primary"],
+    "states": ["default", "loading", "disabled"],
+    "defaultComponent": "Button"
+  },
+  "secondary-action": {
+    "description": "Auxiliary action or subordinate button",
+    "allowedComponents": ["Button"],
+    "allowedVariants": ["default", "dashed", "text", "link"],
+    "states": ["default", "loading", "disabled"],
+    "defaultComponent": "Button"
+  },
+  "destructive-action": {
+    "description": "Irreversible or delete operation action",
+    "allowedComponents": ["Button"],
+    "allowedVariants": ["danger", "primary-danger"],
+    "states": ["default", "loading", "disabled"],
+    "defaultComponent": "Button"
+  },
+  "data-table": {
+    "description": "Structured tabular data display with sorting, pagination, and columns",
+    "allowedComponents": ["Table"],
+    "allowedVariants": ["default", "striped", "bordered"],
+    "states": ["ready", "loading", "empty", "error"],
+    "defaultComponent": "Table"
+  },
+  "filter-search": {
+    "description": "Search input for query filtering data",
+    "allowedComponents": ["Input.Search", "Input"],
+    "allowedVariants": ["search", "default"],
+    "states": ["default", "focused", "disabled"],
+    "defaultComponent": "Input.Search"
+  },
+  "status-indicator": {
+    "description": "Visual status tag or badge representing entity state",
+    "allowedComponents": ["Tag", "Badge"],
+    "allowedVariants": ["colored", "outline"],
+    "states": ["active", "disabled", "pending", "success", "error"],
+    "defaultComponent": "Tag"
+  },
+  "modal-dialog": {
+    "description": "Overlay modal dialog for focused tasks or confirmation",
+    "allowedComponents": ["Modal"],
+    "allowedVariants": ["default", "confirm"],
+    "states": ["closed", "open", "submitting"],
+    "defaultComponent": "Modal"
+  },
+  "form-container": {
+    "description": "Form layout managing data input submission and validation",
+    "allowedComponents": ["Form"],
+    "allowedVariants": ["vertical", "horizontal"],
+    "states": ["default", "validating", "submitting"],
+    "defaultComponent": "Form"
+  },
+  "form-field": {
+    "description": "Input element within a form",
+    "allowedComponents": ["Input", "Select", "DatePicker", "Radio.Group"],
+    "allowedVariants": ["outlined", "filled"],
+    "states": ["default", "focused", "error", "disabled"],
+    "defaultComponent": "Input"
+  },
+  "page-header": {
+    "description": "Top-level title, breadcrumb and metadata bar",
+    "allowedComponents": ["Header", "PageHeader"],
+    "allowedVariants": ["standard", "compact"],
+    "states": ["default"],
+    "defaultComponent": "PageHeader"
+  },
+  "alert-notice": {
+    "description": "Banner message conveying system state or error warnings",
+    "allowedComponents": ["Alert"],
+    "allowedVariants": ["info", "success", "warning", "error"],
+    "states": ["default", "dismissed"],
+    "defaultComponent": "Alert"
+  },
+  "empty-placeholder": {
+    "description": "Visual placeholder when data list contains zero records",
+    "allowedComponents": ["Empty"],
+    "allowedVariants": ["simple", "detailed"],
+    "states": ["default"],
+    "defaultComponent": "Empty"
+  }
+}
